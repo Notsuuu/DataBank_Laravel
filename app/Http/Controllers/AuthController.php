@@ -4,63 +4,75 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AuthController extends Controller
 {
     /**
-     * Memproses percobaan login.
+     * POST /api/auth/login
      */
-    public function authenticate(Request $request)
+    public function login(Request $request)
     {
-        // 1. Validasi input form
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
         ]);
 
-        // 2. Coba cocokkan dengan database
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        $user = User::where('email', $request->email)->first();
 
-            $user = Auth::user();
-
-            // 3. Cek apakah akun aktif (is_active)
-            if (!$user->is_active) {
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-
-                return back()->withErrors([
-                    'email' => 'Akun Anda dinonaktifkan. Silakan hubungi admin.',
-                ])->onlyInput('email');
-            }
-
-            // 4. Regenerasi session untuk mencegah Session Fixation attack
-            $request->session()->regenerate();
-
-            // 5. Redirect berdasarkan role (Gaya PHP 8)
-            return match ($user->role) {
-                'operator' => redirect()->intended('/operator/dashboard'),
-                'guru'     => redirect()->intended('/guru/dashboard'),
-                'pimpinan' => redirect()->intended('/pimpinan/dashboard'),
-                default    => redirect('/'),
-            };
+        // Cek email dan password
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Kredensial tidak valid.'
+            ], 401);
         }
 
-        // Jika gagal login
-        return back()->withErrors([
-            'email' => 'Kredensial yang diberikan tidak cocok dengan data kami.',
-        ])->onlyInput('email');
+        // Cek status aktif
+        if (!$user->is_active) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Akun dinonaktifkan.'
+            ], 403);
+        }
+
+        // Buat Token Sanctum
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Login berhasil',
+            'data' => [
+                'user' => $user,
+                'access_token' => $token,
+                'token_type' => 'Bearer'
+            ]
+        ]);
     }
 
     /**
-     * Memproses logout.
+     * POST /api/auth/logout
      */
     public function logout(Request $request)
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        // Hapus token yang sedang digunakan
+        $request->user()->currentAccessToken()->delete();
 
-        return redirect('/login');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Logout berhasil, token telah dihapus.'
+        ]);
+    }
+
+    /**
+     * GET /api/auth/me
+     */
+    public function me(Request $request)
+    {
+        return response()->json([
+            'status' => 'success',
+            'data' => $request->user()
+        ]);
     }
 }

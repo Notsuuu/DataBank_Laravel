@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('kelas', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_kelas'); // Contoh: VII A
-            $table->string('tingkat'); // 7, 8, atau 9
-            // Wali kelas bisa kosong, dan jika guru dihapus, status wali kelas jadi null
+            $table->string('nama_kelas', 50); // Contoh: "VII A"
+            $table->enum('tingkat', ['VII', 'VIII', 'IX']);
+
+            // Relasi ke tabel gurus (sebagai Wali Kelas).
+            // nullOnDelete() artinya jika guru dihapus, kelasnya tetap ada tapi wali kelasnya jadi kosong.
             $table->foreignId('wali_kelas_id')->nullable()->constrained('gurus')->nullOnDelete();
+
             $table->timestamps();
         });
     }
