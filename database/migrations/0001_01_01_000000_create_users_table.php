@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['operator', 'kepsek', 'wakasek', 'guru'])->default('guru');
+            // Tambahkan baris ini untuk mendefinisikan Role:
+            $table->enum('role', ['operator', 'guru', 'pimpinan'])->default('guru');
             $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();

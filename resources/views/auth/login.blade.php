@@ -21,18 +21,24 @@
             <p class="mt-2 text-sm text-slate-500">Silakan masuk ke akun Anda</p>
         </div>
 
-        <form action="#" method="POST" class="space-y-5">
+        <form action="/login" method="POST" class="space-y-5">
             <!-- Token Keamanan Laravel -->
             @csrf
 
             <div>
                 <label for="email" class="block text-sm font-medium text-slate-700">Alamat Email</label>
                 <input type="email" id="email" name="email" class="mt-1 block w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm outline-none transition-all focus:border-blue-600 focus:ring-1 focus:ring-blue-600" placeholder="contoh@smpn4palu.sch.id" required>
+                @error('email')
+                    <p class="mt-1.5 text-xs font-medium text-red-600">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
                 <label for="password" class="block text-sm font-medium text-slate-700">Kata Sandi</label>
                 <input type="password" id="password" name="password" class="mt-1 block w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm outline-none transition-all focus:border-blue-600 focus:ring-1 focus:ring-blue-600" placeholder="••••••••" required>
+                @error('password')
+                    <p class="mt-1.5 text-xs font-medium text-red-600">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="flex items-center justify-between">

@@ -23,10 +23,16 @@
                     <p class="text-xs text-slate-500">SMP Negeri 4 Palu</p>
                 </div>
             </div>
-            <nav class="hidden items-center gap-6 text-sm font-medium text-slate-600 md:flex">
-                <span class="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-mono text-slate-600">
-                    Laravel v13 + Tailwind v4
-                </span>
+                <nav class="flex items-center">
+                @auth
+                    <a href="/{{ auth()->user()->role }}/dashboard" class="rounded-xl bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500">
+                        Ke Dashboard &rarr;
+                    </a>
+                @else
+                    <a href="/login" class="rounded-xl bg-slate-900 px-5 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-slate-800">
+                        Masuk Sistem
+                    </a>
+                @endauth
             </nav>
         </div>
     </header>
