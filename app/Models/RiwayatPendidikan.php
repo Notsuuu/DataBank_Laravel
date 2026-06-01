@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CatatLogAktivitas;
 
 class RiwayatPendidikan extends Model
 {
-    use HasFactory;
+    use HasFactory, CatatLogAktivitas;
 
     protected $fillable = [
         'guru_id',
@@ -17,9 +18,6 @@ class RiwayatPendidikan extends Model
         'tahun_lulus'
     ];
 
-    /**
-     * Relasi balik: Riwayat Pendidikan ini milik satu Guru
-     */
     public function guru()
     {
         return $this->belongsTo(Guru::class);

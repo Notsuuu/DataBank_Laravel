@@ -6,18 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\CatatLogAktivitas;
 
-class Kelas extends Model
+class Mapel extends Model
 {
     use HasFactory, CatatLogAktivitas;
 
     protected $fillable = [
-        'nama_kelas',
-        'tingkat',
-        'wali_kelas_id'
+        'kode_mapel',
+        'nama_mapel',
+        'kelompok'
     ];
-
-    public function waliKelas()
-    {
-        return $this->belongsTo(Guru::class, 'wali_kelas_id');
-    }
 }

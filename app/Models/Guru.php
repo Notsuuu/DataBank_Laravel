@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CatatLogAktivitas; // Trait untuk mencatat log aktivitas
 
 class Guru extends Model
 {
-    use HasFactory;
+    use HasFactory, CatatLogAktivitas; // Gunakan trait untuk log aktivitas
 
     // "Satpam" yang mengizinkan kolom-kolom ini diisi melalui API
     protected $fillable = [

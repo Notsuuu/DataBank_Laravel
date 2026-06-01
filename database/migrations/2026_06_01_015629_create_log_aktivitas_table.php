@@ -13,10 +13,16 @@ return new class extends Migration
     {
         Schema::create('log_aktivitas', function (Blueprint $table) {
             $table->id();
+            // Siapa yang melakukan aksi (opsional/nullable jika by sistem)
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->string('aktivitas'); // Contoh: "Update Profil", "Hapus Data Siswa"
-            $table->text('deskripsi');
-            $table->ipAddress('ip_address')->nullable();
+
+            $table->string('aksi', 20); // Contoh: CREATE, UPDATE, DELETE
+            $table->string('entitas', 50); // Contoh: Guru, Siswa, Kelas
+
+            // Kolom JSON untuk menyimpan jejak data
+            $table->json('data_lama')->nullable();
+            $table->json('data_baru')->nullable();
+
             $table->timestamps();
         });
     }

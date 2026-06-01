@@ -6,7 +6,8 @@ use App\Http\Controllers\GuruController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\TahunAjaranController;
 use App\Http\Controllers\KelasController;
-
+use App\Http\Controllers\MapelController;
+use App\Http\Controllers\RombelController;
 
 
 Route::prefix('auth')->group(function () {
@@ -23,15 +24,11 @@ Route::prefix('auth')->group(function () {
 // ==========================================
 Route::middleware('auth:sanctum')->group(function () {
 
-    // Rute M2 - Data Guru
+    // Rute API
     Route::apiResource('guru', GuruController::class);
-
-    // Rute M3 - Data Siswa
     Route::apiResource('siswa', SiswaController::class);
-
-    // Rute M4 - Data Tahun Ajaran
     Route::apiResource('tahun-ajaran', TahunAjaranController::class);
-
-    // Rute M5 - Data Kelas
     Route::apiResource('kelas', KelasController::class);
+    Route::apiResource('mapel', MapelController::class);
+    Route::apiResource('rombel', RombelController::class)->except(['show', 'update']);
 });
