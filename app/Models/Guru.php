@@ -32,4 +32,16 @@ class Guru extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function kepegawaian()
+    {
+        // Satu Guru punya satu record Data Kepegawaian
+        return $this->hasOne(DataKepegawaian::class);
+    }
+
+    public function riwayatPendidikan()
+    {
+        // Satu Guru bisa punya banyak Riwayat Pendidikan (S1, S2, dst)
+        return $this->hasMany(RiwayatPendidikan::class);
+    }
 }

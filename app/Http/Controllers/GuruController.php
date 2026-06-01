@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Guru;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class GuruController extends Controller
 {
@@ -137,6 +139,42 @@ class GuruController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Data guru berhasil dihapus.'
+        ]);
+    }
+
+    /**
+     * POST /api/guru/{id}/foto
+     * Mengunggah atau memperbarui foto profil guru
+     */
+    public function uploadFoto(Request $request, string $id)
+    {
+        $guru = Guru::find($id);
+
+        if (!$guru) {
+            return response()->json(['status' => 'error', 'message' => 'Data guru tidak ditemukan.'], 404);
+        }
+
+        // Validasi: harus berupa gambar (jpeg/png/jpg) dan maksimal 2MB
+        $request->validate([
+            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        // Jika guru sudah punya foto sebelumnya, hapus foto lama dari folder storage
+        if ($guru->foto && Storage::disk('public')->exists($guru->foto)) {
+            Storage::disk('public')->delete($guru->foto);
+        }
+
+        // Simpan foto baru ke folder 'storage/app/public/guru_fotos'
+        $path = $request->file('foto')->store('guru_fotos', 'public');
+
+        // Simpan path-nya ke database
+        $guru->update(['foto' => $path]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Foto profil berhasil diunggah.',
+            // asset() akan menghasilkan URL lengkap: http://127.0.0.1:8000/storage/guru_fotos/namafile.jpg
+            'foto_url' => asset('storage/' . $path)
         ]);
     }
 }

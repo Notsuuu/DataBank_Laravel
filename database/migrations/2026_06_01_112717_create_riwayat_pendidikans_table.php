@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::create('riwayat_pendidikans', function (Blueprint $table) {
             $table->id();
+
+            // Relasi ke Guru. Jika data guru dihapus, riwayatnya ikut terhapus (cascade)
             $table->foreignId('guru_id')->constrained('gurus')->onDelete('cascade');
-            $table->string('jenjang'); // S1, S2, D3, dll
-            $table->string('institusi');
-            $table->string('jurusan');
+
+            $table->string('jenjang', 10); // Contoh: SMA, D3, S1, S2
+            $table->string('institusi'); // Contoh: Universitas Tadulako
+            $table->string('jurusan'); // Contoh: Teknik Informatika
             $table->year('tahun_lulus');
+
             $table->timestamps();
         });
     }
