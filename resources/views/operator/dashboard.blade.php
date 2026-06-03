@@ -16,13 +16,13 @@
             <span class="ml-3 font-bold text-slate-800">Panel Operator</span>
         </div>
         <nav class="p-4 space-y-1">
-            <a href="#" class="flex items-center rounded-lg bg-blue-50 px-4 py-2.5 text-sm font-medium text-blue-700">
+            <a href="/operator/dashboard" class="flex items-center rounded-lg bg-blue-50 px-4 py-2.5 text-sm font-medium text-blue-700">
                 Beranda
             </a>
-            <a href="#" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50">
+            <a href="/operator/guru" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50">
                 Kelola Data Guru
             </a>
-            <a href="#" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50">
+            <a href="/operator/siswa" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50">
                 Kelola Data Siswa
             </a>
         </nav>
