@@ -22,6 +22,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('role:operator')->group(function () {
     Route::get('/operator/dashboard', function () { return view('operator.dashboard'); });
     Route::resource('/operator/guru', \App\Http\Controllers\operator\GuruController::class);
+    Route::get('/operator/siswa', [App\Http\Controllers\operator\SiswaController::class, 'index']);
 });
 
 Route::middleware('role:guru')->group(function () {
