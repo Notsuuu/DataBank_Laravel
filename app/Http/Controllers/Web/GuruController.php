@@ -104,4 +104,36 @@ class GuruController extends Controller
             return back()->withInput()->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
         }
     }
+
+    public function edit($id)
+    {
+        $guru = Guru::with('user')->findOrFail($id);
+        return view('operator.guru.edit', compact('guru'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $guru = Guru::findOrFail($id);
+        $request->validate([
+            'nip'           => 'required|string|max:20|unique:gurus,nip,' . $id,
+            'jenis_kelamin' => 'required|in:L,P',
+            'tempat_lahir'  => 'required|string|max:50',
+            'tanggal_lahir' => 'required|date',
+            'agama'         => 'required|string|max:20',
+            'no_hp'         => 'required|string|max:15',
+        ]);
+        $guru->update($request->all());
+        return redirect()->route('operator.guru.index')->with('success', 'Data Guru diperbarui!');
+    }
+
+    public function destroy($id)
+    {
+        $guru = Guru::findOrFail($id);
+        if($guru->user) {
+            $guru->user->delete(); // Ini otomatis menghapus guru juga berkat relasi cascade
+        } else {
+            $guru->delete();
+        }
+        return back()->with('success', 'Data Guru dan Akunnya dihapus!');
+    }
 }

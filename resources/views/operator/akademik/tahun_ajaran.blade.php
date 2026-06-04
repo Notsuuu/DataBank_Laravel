@@ -12,17 +12,24 @@
         </div>
     @endif
 
+    <div class="mb-6 flex space-x-2 border-b border-slate-200 pb-2">
+        <a href="{{ route('akademik.tahun-ajaran') }}" class="px-4 py-2 text-sm font-medium text-blue-600 border-b-2 border-blue-600">Tahun Ajaran</a>
+        <a href="{{ route('akademik.kelas') }}" class="px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-700">Data Kelas</a>
+        <a href="{{ route('akademik.mapel') }}" class="px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-700">Mata Pelajaran</a>
+        <a href="{{ route('akademik.rombel') }}" class="px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-700">Rombongan Belajar</a>
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="md:col-span-1 bg-white p-6 rounded-xl shadow-sm border border-slate-200 h-fit">
-            <h3 class="font-bold text-slate-800 mb-4">Tambah Baru</h3>
+            <h3 class="font-bold text-slate-800 mb-4 pb-2 border-b border-slate-100">Tambah Baru</h3>
             <form action="{{ route('akademik.tahun-ajaran.store') }}" method="POST">
                 @csrf
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Tahun Ajaran</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Tahun Ajaran</label>
                     <input type="text" name="tahun_ajaran" placeholder="Contoh: 2025/2026" required class="w-full rounded-md border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                 </div>
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Semester</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Semester</label>
                     <select name="semester" required class="w-full rounded-md border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                         <option value="Ganjil">Ganjil</option>
                         <option value="Genap">Genap</option>
@@ -37,36 +44,47 @@
         </div>
 
         <div class="md:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <table class="w-full text-left text-sm text-slate-600">
-                <thead class="bg-slate-50 text-slate-800 border-b border-slate-200">
-                    <tr>
-                        <th class="px-6 py-4 font-semibold">Tahun Ajaran</th>
-                        <th class="px-6 py-4 font-semibold">Semester</th>
-                        <th class="px-6 py-4 font-semibold text-center">Status</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                    @forelse($tahunAjarans as $ta)
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-6 py-4 font-bold text-slate-800">{{ $ta->tahun }}</td>
-                        <td class="px-6 py-4 font-medium">{{ $ta->semester }}</td>
-                        <td class="px-6 py-4 text-center">
-                            @if($ta->is_active)
-                                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 shadow-sm">AKTIF</span>
-                            @else
-                                <span class="bg-slate-100 text-slate-500 px-3 py-1 rounded-full text-xs font-bold border border-slate-200">TIDAK AKTIF</span>
-                            @endif
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="3" class="px-6 py-12 text-center">
-                            <p class="text-slate-500 font-medium">Belum ada data Tahun Ajaran.</p>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-600">
+                    <thead class="bg-slate-50 text-slate-800 border-b border-slate-200">
+                        <tr>
+                            <th class="px-6 py-4 font-semibold">Tahun Ajaran</th>
+                            <th class="px-6 py-4 font-semibold">Semester</th>
+                            <th class="px-6 py-4 font-semibold text-center">Status</th>
+                            <th class="px-6 py-4 font-semibold text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @forelse($tahunAjarans as $ta)
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-slate-800">{{ $ta->tahun }}</td>
+                            <td class="px-6 py-4 font-medium">{{ $ta->semester }}</td>
+                            <td class="px-6 py-4 text-center">
+                                @if($ta->is_active)
+                                    <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 shadow-sm">AKTIF</span>
+                                @else
+                                    <span class="bg-slate-100 text-slate-500 px-3 py-1 rounded-full text-xs font-bold border border-slate-200">TIDAK AKTIF</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex justify-end items-center gap-3">
+                                    <a href="{{ route('akademik.tahun-ajaran.edit', $ta->id) }}" class="text-blue-600 hover:text-blue-800 text-xs font-bold">Edit</a>
+                                    <form action="{{ route('akademik.tahun-ajaran.destroy', $ta->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus Tahun Ajaran ini?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700 text-xs font-bold">Hapus</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="4" class="px-6 py-12 text-center text-slate-500">Belum ada data Tahun Ajaran.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

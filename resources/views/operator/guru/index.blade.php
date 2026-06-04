@@ -12,7 +12,7 @@
     <div class="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
         <div class="p-6 border-b border-slate-200 flex justify-between items-center bg-white">
             <h2 class="text-xl font-bold text-slate-800">Daftar Guru SMPN 4 Palu</h2>
-            <a href="{{ route('operator.guru.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg text-sm shadow-sm">
+            <a href="{{ route('operator.guru.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg text-sm shadow-sm transition-colors">
                 + Tambah Guru Baru
             </a>
         </div>
@@ -30,14 +30,21 @@
                 </thead>
                 <tbody class="divide-y divide-slate-200">
                     @forelse($gurus as $guru)
-                    <tr class="hover:bg-slate-50">
+                    <tr class="hover:bg-slate-50 transition-colors">
                         <td class="px-6 py-4 font-mono text-xs">{{ $guru->nip ?? '-' }}</td>
                         <td class="px-6 py-4 font-bold text-slate-900">{{ $guru->gelar_depan }} {{ $guru->nama_lengkap }} {{ $guru->gelar_belakang }}</td>
                         <td class="px-6 py-4 text-center">{{ $guru->jenis_kelamin }}</td>
                         <td class="px-6 py-4 text-center">{{ $guru->no_hp ?? '-' }}</td>
                         <td class="px-6 py-4 text-center">
-                            <button class="text-blue-600 hover:text-blue-800 mx-2 font-medium">Edit</button>
-                            <button class="text-red-600 hover:text-red-800 mx-2 font-medium">Hapus</button>
+                            <div class="flex justify-center items-center gap-3">
+                                <a href="{{ route('operator.guru.edit', $guru->id) }}" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">Edit</a>
+
+                                <form action="{{ route('operator.guru.destroy', $guru->id) }}" method="POST" onsubmit="return confirm('Peringatan: Yakin ingin menghapus data Guru ini beserta akun loginnya?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-800 font-medium transition-colors">Hapus</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @empty

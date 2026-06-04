@@ -20,7 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // ==========================================
+// ==========================================
     // BENTENG 1: KHUSUS OPERATOR
     // ==========================================
     Route::middleware('role:operator')->group(function () {
@@ -33,23 +33,40 @@ Route::middleware('auth')->group(function () {
         Route::get('/operator/guru', [GuruController::class, 'index'])->name('operator.guru.index');
         Route::get('/operator/guru/create', [GuruController::class, 'create'])->name('operator.guru.create');
         Route::post('/operator/guru', [GuruController::class, 'store'])->name('operator.guru.store');
+        Route::get('/operator/guru/{id}/edit', [GuruController::class, 'edit'])->name('operator.guru.edit');
+        Route::put('/operator/guru/{id}', [GuruController::class, 'update'])->name('operator.guru.update');
+        Route::delete('/operator/guru/{id}', [GuruController::class, 'destroy'])->name('operator.guru.destroy');
 
         // M3: Manajemen Data Siswa
         Route::get('/operator/siswa', [SiswaController::class, 'index'])->name('operator.siswa.index');
         Route::get('/operator/siswa/create', [SiswaController::class, 'create'])->name('operator.siswa.create');
         Route::post('/operator/siswa', [SiswaController::class, 'store'])->name('operator.siswa.store');
+        Route::get('/operator/siswa/{id}/edit', [SiswaController::class, 'edit'])->name('operator.siswa.edit');
+        Route::put('/operator/siswa/{id}', [SiswaController::class, 'update'])->name('operator.siswa.update');
+        Route::delete('/operator/siswa/{id}', [SiswaController::class, 'destroy'])->name('operator.siswa.destroy');
 
         // M4: Manajemen Data Akademik
         Route::get('/operator/akademik/tahun-ajaran', [AkademikController::class, 'tahunAjaran'])->name('akademik.tahun-ajaran');
         Route::post('/operator/akademik/tahun-ajaran', [AkademikController::class, 'storeTahunAjaran'])->name('akademik.tahun-ajaran.store');
+        Route::get('/operator/akademik/tahun-ajaran/{id}/edit', [AkademikController::class, 'editTahunAjaran'])->name('akademik.tahun-ajaran.edit');
+        Route::put('/operator/akademik/tahun-ajaran/{id}', [AkademikController::class, 'updateTahunAjaran'])->name('akademik.tahun-ajaran.update');
+        Route::delete('/operator/akademik/tahun-ajaran/{id}', [AkademikController::class, 'destroyTahunAjaran'])->name('akademik.tahun-ajaran.destroy');
 
         Route::get('/operator/akademik/kelas', [AkademikController::class, 'kelas'])->name('akademik.kelas');
         Route::post('/operator/akademik/kelas', [AkademikController::class, 'storeKelas'])->name('akademik.kelas.store');
+        Route::get('/operator/akademik/kelas/{id}/edit', [AkademikController::class, 'editKelas'])->name('akademik.kelas.edit');
+        Route::put('/operator/akademik/kelas/{id}', [AkademikController::class, 'updateKelas'])->name('akademik.kelas.update');
+        Route::delete('/operator/akademik/kelas/{id}', [AkademikController::class, 'destroyKelas'])->name('akademik.kelas.destroy');
 
         Route::get('/operator/akademik/mapel', [AkademikController::class, 'mapel'])->name('akademik.mapel');
         Route::post('/operator/akademik/mapel', [AkademikController::class, 'storeMapel'])->name('akademik.mapel.store');
+        Route::get('/operator/akademik/mapel/{id}/edit', [AkademikController::class, 'editMapel'])->name('akademik.mapel.edit');
+        Route::put('/operator/akademik/mapel/{id}', [AkademikController::class, 'updateMapel'])->name('akademik.mapel.update');
+        Route::delete('/operator/akademik/mapel/{id}', [AkademikController::class, 'destroyMapel'])->name('akademik.mapel.destroy');
 
         Route::get('/operator/akademik/rombel', [AkademikController::class, 'rombel'])->name('akademik.rombel');
+        Route::post('/operator/akademik/rombel/store', [AkademikController::class, 'storeRombel'])->name('akademik.rombel.store');
+        Route::delete('/operator/akademik/rombel/{id}', [AkademikController::class, 'hapusRombel'])->name('akademik.rombel.destroy');
 
     });
 

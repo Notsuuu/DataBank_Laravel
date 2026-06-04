@@ -20,6 +20,7 @@ class Siswa extends Model
         'agama',
         'alamat',
         'nama_wali',
-        'no_hp_wali'
+        'no_hp_wali',
+        'foto'
     ];
 }
