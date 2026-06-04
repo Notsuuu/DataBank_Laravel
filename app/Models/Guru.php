@@ -45,4 +45,9 @@ class Guru extends Model
         // Satu Guru bisa punya banyak Riwayat Pendidikan (S1, S2, dst)
         return $this->hasMany(RiwayatPendidikan::class);
     }
+
+    public function berkas()
+    {
+        return $this->hasMany(BerkasGuru::class);
+    }
 }

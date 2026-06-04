@@ -22,6 +22,14 @@
                     </div>
                 @endif
 
+                {{-- TAMBAHKAN BLOK INI: Penangkap error sistem/database --}}
+                @if(session('error'))
+                    <div class="mb-6 bg-red-100 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                        <strong class="font-bold">Gagal Menyimpan Database:</strong>
+                        <p class="mt-1 text-sm">{{ session('error') }}</p>
+                    </div>
+                @endif
+
                 <form action="{{ route('operator.guru.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
@@ -100,6 +108,11 @@
                         <div>
                             <label class="block text-sm font-medium text-slate-700">No. HP / WhatsApp</label>
                             <input type="text" name="no_hp" value="{{ old('no_hp') }}" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-slate-700">Alamat Lengkap *</label>
+                            <textarea name="alamat" required rows="3" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">{{ old('alamat') }}</textarea>
                         </div>
 
                         <div class="md:col-span-2 mt-2">

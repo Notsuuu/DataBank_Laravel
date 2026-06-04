@@ -52,9 +52,14 @@ Route::middleware('auth')->group(function () {
     // ==========================================
     Route::middleware('role:guru')->group(function () {
 
-        Route::get('/guru/dashboard', function () {
-            return view('guru.dashboard');
-        })->name('guru.dashboard');
+        // PERBAIKAN: Mengarah langsung ke Controller agar data $user terkirim ke View
+        Route::get('/guru/dashboard', [GuruDashboard::class, 'index'])->name('guru.dashboard');
+        Route::get('/guru/pendidikan', [GuruDashboard::class, 'pendidikan'])->name('guru.pendidikan');
+        Route::get('/guru/pendidikan/tambah', [GuruDashboard::class, 'createPendidikan'])->name('guru.pendidikan.create');
+        Route::post('/guru/pendidikan', [GuruDashboard::class, 'storePendidikan'])->name('guru.pendidikan.store');
+        Route::get('/guru/berkas', [GuruDashboard::class, 'berkas'])->name('guru.berkas');
+        Route::get('/guru/berkas', [GuruDashboard::class, 'berkas'])->name('guru.berkas');
+        Route::post('/guru/berkas/upload', [GuruDashboard::class, 'uploadBerkas'])->name('guru.berkas.upload');
 
         // Nanti menu seperti Input Nilai (M5) atau Presensi (M6) untuk web bisa ditaruh di sini
 
