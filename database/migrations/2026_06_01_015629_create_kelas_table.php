@@ -13,17 +13,16 @@ return new class extends Migration
     {
         Schema::create('kelas', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_kelas', 50); // Contoh: "VII A"
-            $table->enum('tingkat', ['VII', 'VIII', 'IX']);
+            $table->string('tingkat_kelas'); // Contoh: "VII", "VIII", "IX"
+            $table->string('nama_kelas'); // Contoh: "VII-A", "VII-B"
 
-            // Relasi ke tabel gurus (sebagai Wali Kelas).
-            // nullOnDelete() artinya jika guru dihapus, kelasnya tetap ada tapi wali kelasnya jadi kosong.
-            $table->foreignId('wali_kelas_id')->nullable()->constrained('gurus')->nullOnDelete();
+            // Relasi ke tabel gurus untuk Wali Kelas.
+            // Pakai nullOnDelete agar kalau guru dihapus, kelasnya tidak ikut terhapus (hanya wali kelasnya jadi kosong).
+            $table->foreignId('guru_id')->nullable()->constrained('gurus')->nullOnDelete();
 
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */

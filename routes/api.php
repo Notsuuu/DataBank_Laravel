@@ -1,13 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\GuruController;
-use App\Http\Controllers\SiswaController;
-use App\Http\Controllers\TahunAjaranController;
-use App\Http\Controllers\KelasController;
-use App\Http\Controllers\MapelController;
-use App\Http\Controllers\RombelController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\GuruController;
+use App\Http\Controllers\Api\SiswaController;
+use App\Http\Controllers\Api\TahunAjaranController;
+use App\Http\Controllers\Api\KelasController;
+use App\Http\Controllers\Api\MapelController;
+use App\Http\Controllers\Api\RombelController;
 
 
 Route::prefix('auth')->group(function () {

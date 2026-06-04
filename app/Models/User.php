@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens; // <-- 1. Ini wajib di-import untuk API
 
-#[Fillable(['name', 'email', 'password', 'role', 'is_active'])] // <-- 2. Typo kutipan sudah diperbaiki!
+#[Fillable(['name', 'email', 'password', 'role', 'is_active'])] // <-- 2. Typo kutipan sudah diperbaiki
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -29,5 +29,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relasi: Satu User (jika rolenya guru) memiliki satu profil Guru.
+     */
+    public function guru()
+    {
+        return $this->hasOne(Guru::class);
     }
 }

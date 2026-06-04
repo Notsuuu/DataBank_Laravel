@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('mapels', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_mapel', 20)->unique();
-            $table->string('nama_mapel');
-            $table->enum('kelompok', ['A', 'B', 'C'])->default('A');
+            $table->string('kode_mapel')->unique(); // Contoh: "MAT", "BING"
+            $table->string('nama_mapel'); // Contoh: "Matematika"
+            $table->string('kelompok_mapel')->nullable(); // Opsional: Muatan Nasional, Muatan Lokal, dll
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
