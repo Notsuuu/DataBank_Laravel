@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\Guru\DashboardController as GuruDashboard;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\GuruController;
 use App\Http\Controllers\Web\SiswaController;
