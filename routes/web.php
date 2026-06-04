@@ -41,8 +41,14 @@ Route::middleware('auth')->group(function () {
 
         // M4: Manajemen Data Akademik
         Route::get('/operator/akademik/tahun-ajaran', [AkademikController::class, 'tahunAjaran'])->name('akademik.tahun-ajaran');
+        Route::post('/operator/akademik/tahun-ajaran', [AkademikController::class, 'storeTahunAjaran'])->name('akademik.tahun-ajaran.store');
+
         Route::get('/operator/akademik/kelas', [AkademikController::class, 'kelas'])->name('akademik.kelas');
+        Route::post('/operator/akademik/kelas', [AkademikController::class, 'storeKelas'])->name('akademik.kelas.store');
+
         Route::get('/operator/akademik/mapel', [AkademikController::class, 'mapel'])->name('akademik.mapel');
+        Route::post('/operator/akademik/mapel', [AkademikController::class, 'storeMapel'])->name('akademik.mapel.store');
+
         Route::get('/operator/akademik/rombel', [AkademikController::class, 'rombel'])->name('akademik.rombel');
 
     });

@@ -11,13 +11,14 @@ class Kelas extends Model
     use HasFactory, CatatLogAktivitas;
 
     protected $fillable = [
+        'tingkat_kelas',
         'nama_kelas',
-        'tingkat',
-        'wali_kelas_id'
+        'guru_id'
     ];
 
+    // Relasi untuk mengambil data wali kelas
     public function waliKelas()
     {
-        return $this->belongsTo(Guru::class, 'wali_kelas_id');
+        return $this->belongsTo(Guru::class, 'guru_id');
     }
 }

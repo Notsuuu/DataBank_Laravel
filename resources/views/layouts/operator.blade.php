@@ -25,6 +25,9 @@
             <a href="{{ route('operator.siswa.index') }}" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium {{ request()->routeIs('operator.siswa.*') ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50' }}">
                 Kelola Data Siswa
             </a>
+            <a href="{{ route('akademik.tahun-ajaran') }}" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium {{ request()->routeIs('akademik.*') ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                Kelola Data Akademik
+            </a>
         </nav>
     </aside>
 
