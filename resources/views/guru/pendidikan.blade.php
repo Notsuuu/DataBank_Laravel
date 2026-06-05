@@ -4,7 +4,7 @@
 
 @section('content')
     @if(session('success'))
-        <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-lg relative">
+        <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-lg relative shadow-sm">
             <span class="block sm:inline font-medium">{{ session('success') }}</span>
         </div>
     @endif
@@ -23,10 +23,10 @@
     </div>
 
     <div class="rounded-xl border border-slate-200 bg-white shadow-sm p-8">
-        @if($user->guru && $user->guru->riwayatPendidikan->count() > 0)
+            @if($riwayats->count() > 0)
             <div class="relative border-l-2 border-slate-200 ml-3 md:ml-4 space-y-8">
 
-                @foreach($user->guru->riwayatPendidikan as $index => $riwayat)
+                @foreach($riwayats as $index => $riwayat)
                 <div class="relative pl-8">
                     <div class="absolute -left-[9px] top-1 h-4 w-4 rounded-full {{ $index === 0 ? 'bg-emerald-500' : 'bg-slate-300' }} border-4 border-white shadow"></div>
 
@@ -40,10 +40,17 @@
                         </div>
                         <div class="text-left md:text-right">
                             <p class="text-sm font-bold text-slate-700">Tahun Lulus: {{ $riwayat->tahun_lulus }}</p>
-                            <div class="mt-2 flex gap-3 text-sm">
-                                <button class="text-blue-600 hover:text-blue-800 font-medium">Edit</button>
-                                <button class="text-red-600 hover:text-red-800 font-medium">Hapus</button>
+
+                            <div class="mt-2 flex sm:justify-end gap-3 text-sm">
+                                <a href="{{ route('guru.pendidikan.edit', $riwayat->id) }}" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">Edit</a>
+
+                                <form action="{{ route('guru.pendidikan.destroy', $riwayat->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus riwayat pendidikan ini?');">
+                                        @csrf
+                                        @method('DELETE')
+                                    <button type="submit" class="text-red-500 hover:text-red-700 font-medium transition-colors">Hapus</button>
+                                </form>
                             </div>
+
                         </div>
                     </div>
                 </div>

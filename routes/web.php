@@ -82,6 +82,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/guru/berkas', [GuruDashboard::class, 'berkas'])->name('guru.berkas');
         Route::post('/guru/berkas/upload', [GuruDashboard::class, 'uploadBerkas'])->name('guru.berkas.upload');
 
+        // PERBAIKAN: Menggunakan GuruDashboard untuk Edit & Delete (M4)
+        Route::get('/guru/pendidikan/{id}/edit', [GuruDashboard::class, 'editPendidikan'])->name('guru.pendidikan.edit');
+        Route::put('/guru/pendidikan/{id}', [GuruDashboard::class, 'updatePendidikan'])->name('guru.pendidikan.update');
+        Route::delete('/guru/pendidikan/{id}', [GuruDashboard::class, 'destroyPendidikan'])->name('guru.pendidikan.destroy');
     });
 
     // ==========================================

@@ -12,10 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('gurus', function (Blueprint $table) {
-            // Menambahkan 3 kolom baru bertipe string (nullable karena opsional/bisa kosong)
-            $table->string('file_ktp')->nullable()->after('nip');
-            $table->string('file_ijazah')->nullable()->after('file_ktp');
-            $table->string('file_sk')->nullable()->after('file_ijazah');
+            //
         });
     }
 
@@ -25,8 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('gurus', function (Blueprint $table) {
-            // Menghapus kolom jika di-rollback
-            $table->dropColumn(['file_ktp', 'file_ijazah', 'file_sk']);
+            //
         });
     }
 };
