@@ -1,5 +1,7 @@
 <?php
+
 namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use App\Models\Kelas;
 use App\Models\Guru;
@@ -10,18 +12,18 @@ class KelasSeeder extends Seeder {
         $guruIds = Guru::pluck('id')->toArray();
 
         $data = [
-            ['nama_kelas' => 'VII A', 'tingkat' => '7'],
-            ['nama_kelas' => 'VII B', 'tingkat' => '7'],
-            ['nama_kelas' => 'VIII A', 'tingkat' => '8'],
-            ['nama_kelas' => 'IX A', 'tingkat' => '9'],
+            ['tingkat' => 'VII', 'nama' => 'VII-A'],
+            ['tingkat' => 'VII', 'nama' => 'VII-B'],
+            ['tingkat' => 'VIII', 'nama' => 'VIII-A'],
+            ['tingkat' => 'IX', 'nama' => 'IX-A'],
         ];
 
         foreach ($data as $index => $k) {
             Kelas::create([
-                'nama_kelas' => $k['nama_kelas'], 
-                'tingkat' => $k['tingkat'], 
-                // Gunakan modulo agar ID wali kelas berputar di antara guru yang ada
-                'wali_kelas_id' => $guruIds[$index % count($guruIds)]
+                'tingkat_kelas' => $k['tingkat'],
+                'nama_kelas'    => $k['nama'],
+                // Gunakan 'guru_id' sesuai migrasi temanmu
+                'guru_id'       => !empty($guruIds) ? $guruIds[$index % count($guruIds)] : null
             ]);
         }
     }

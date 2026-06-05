@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('riwayat_pendidikans', function (Blueprint $table) {
+        Schema::create('tahun_ajarans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('guru_id')->constrained('gurus')->onDelete('cascade');
-            $table->string('jenjang'); // S1, S2, D3, dll
-            $table->string('institusi');
-            $table->string('jurusan');
-            $table->year('tahun_lulus');
+            $table->string('tahun', 9); // Contoh: "2026/2027"
+            $table->enum('semester', ['Ganjil', 'Genap']);
+            $table->boolean('is_active')->default(false); // Penentu tahun ajaran mana yang sedang berjalan
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('riwayat_pendidikans');
+        Schema::dropIfExists('tahun_ajarans');
     }
 };

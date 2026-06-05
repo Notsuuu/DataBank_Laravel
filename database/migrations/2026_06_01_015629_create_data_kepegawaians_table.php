@@ -13,11 +13,16 @@ return new class extends Migration
     {
         Schema::create('data_kepegawaians', function (Blueprint $table) {
             $table->id();
+
+            // Relasi ke tabel gurus
             $table->foreignId('guru_id')->constrained('gurus')->onDelete('cascade');
-            $table->string('status_pegawai'); // PNS, PPPK, Honorer, GTY
-            $table->string('golongan')->nullable();
-            $table->string('jabatan');
-            $table->date('tmt_kerja'); // Terhitung Mulai Tanggal (TMT)
+
+            $table->string('status_pegawai', 20);
+            $table->string('nip', 25)->nullable();
+            $table->string('golongan', 10)->nullable();
+            $table->string('jabatan', 50);
+            $table->string('sk_pengangkatan')->nullable();
+
             $table->timestamps();
         });
     }
