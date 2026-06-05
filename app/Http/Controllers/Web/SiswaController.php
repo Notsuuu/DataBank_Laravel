@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
-use App\Models\Kelas; // Tambahkan ini untuk mengambil data dropdown kelas
+use App\Models\Kelas;
+use App\Models\TahunAjaran; // Wajib ditambahkan untuk mengecek tahun aktif
 use Illuminate\Support\Facades\Storage;
 
 class SiswaController extends Controller
@@ -18,30 +19,42 @@ class SiswaController extends Controller
         // 1. Ambil parameter dari URL
         $keyword = $request->input('q');
         $kelasFilter = $request->input('kelas');
-        
-        // 2. Ambil data semua kelas untuk mengisi dropdown di View
-        $semuaKelas = Kelas::all(); 
 
-        // 3. Buat query dasar dengan urutan abjad (bawaan temanmu)
-        $query = Siswa::orderBy('nama_lengkap', 'asc');
+        // 2. Ambil data master untuk kebutuhan View dan Query
+        $semuaKelas = Kelas::all();
+        $tahunAktif = TahunAjaran::where('is_active', true)->first();
 
-        // 4. Logika Pencarian (Nama Lengkap atau NISN)
+        // 3. Buat query dasar: Wajib sertakan relasi 'rombels' agar UI "Belum ada kelas" teratasi
+        $query = Siswa::with(['rombels' => function($q) use ($tahunAktif) {
+            if ($tahunAktif) {
+                $q->where('tahun_ajaran_id', $tahunAktif->id)->with('kelas');
+            }
+        }]);
+
+        // 4. Logika Pencarian (Nama Lengkap, NISN, atau NIS)
         if ($keyword) {
             $query->where(function($q) use ($keyword) {
                 $q->where('nama_lengkap', 'LIKE', "%{$keyword}%")
-                  ->orWhere('nisn', 'LIKE', "%{$keyword}%");
+                  ->orWhere('nisn', 'LIKE', "%{$keyword}%")
+                  ->orWhere('nis', 'LIKE', "%{$keyword}%"); // Ekstra: Bisa cari pakai NIS juga
             });
         }
-        
-        // 5. Logika Filter Kelas
-        if ($kelasFilter) {
-            $query->where('kelas_id', $kelasFilter);
+
+        // 5. Logika Filter Kelas (DIperbaiki: Menggunakan whereHas karena relasi melalui Rombel)
+        if ($kelasFilter && $tahunAktif) {
+            $query->whereHas('rombels', function($q) use ($kelasFilter, $tahunAktif) {
+                $q->where('kelas_id', $kelasFilter)
+                  ->where('tahun_ajaran_id', $tahunAktif->id);
+            });
         }
 
-        // 6. Eksekusi query (Menggunakan paginate dari kamu agar tabel rapi, variabel dari temanmu)
-        $siswas = $query->paginate(10);
+        // 6. Urutkan berdasarkan abjad
+        $query->orderBy('nama_lengkap', 'asc');
 
-        // 7. Arahkan ke view milik temanmu, kirimkan juga parameter filternya
+        // 7. Eksekusi query dengan paginate (DIperbaiki: Tambahkan appends agar filter tidak hilang di Page 2)
+        $siswas = $query->paginate(10)->appends($request->query());
+
+        // 8. Arahkan ke view
         return view('operator.siswa.index', compact('siswas', 'keyword', 'kelasFilter', 'semuaKelas'));
     }
 

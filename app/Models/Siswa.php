@@ -34,4 +34,9 @@ class Siswa extends Model
     {
         return $this->belongsTo(Kelas::class, 'kelas_id');
     }
+
+    public function rombels()
+    {
+        return $this->hasMany(Rombel::class, 'siswa_id');
+    }
 }
