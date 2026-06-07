@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\CatatLogAktivitas;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Siswa extends Model
 {
-    use HasFactory, CatatLogAktivitas;
+    use HasFactory, CatatLogAktivitas, SoftDeletes;
 
+    protected $guarded = ['id'];
     // Menggabungkan semua kolom fillable dari kedua versi
     protected $fillable = [
         'nis',

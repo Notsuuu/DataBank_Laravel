@@ -5,16 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\CatatLogAktivitas;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Guru extends Model
 {
-    use HasFactory, CatatLogAktivitas;
+    use HasFactory, CatatLogAktivitas, SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'nip', 'nuptk', 'nama_lengkap', 'gelar_depan', 'gelar_belakang', 
-        'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 'agama', 'no_hp', 'alamat', 
+        'user_id', 'nip', 'nuptk', 'nama_lengkap', 'gelar_depan', 'gelar_belakang',
+        'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 'agama', 'no_hp', 'alamat',
         'foto', 'status_aktif'
     ];
+
+    protected $guarded = ['id'];
 
     public function user() { return $this->belongsTo(User::class); }
     public function kepegawaian() { return $this->hasOne(DataKepegawaian::class); }
