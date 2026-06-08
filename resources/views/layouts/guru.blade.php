@@ -12,7 +12,6 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
-
         /* Kustomisasi scrollbar halus untuk konten utama */
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;

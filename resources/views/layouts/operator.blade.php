@@ -53,10 +53,10 @@
 
             <div class="mt-4 mx-2 rounded-xl bg-slate-50 border border-slate-100 p-3">
                 <div class="flex items-center gap-2">
-                    <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                        stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2-2V16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="currentColor">
+                        <path d="M224 128v704h576V128H224zm-32-64h640a32 32 0 0 1 32 32v768a32 32 0 0 1-32 32H192a32 32 0 0 1-32-32V96a32 32 0 0 1 32-32z"></path>
+                        <path d="M64 832h896v64H64zm256-640h128v96H320z"></path>
+                        <path d="M384 832h256v-64a128 128 0 1 0-256 0v64zm128-256a192 192 0 0 1 192 192v128H320V768a192 192 0 0 1 192-192zM320 384h128v96H320zm256-192h128v96H576zm0 192h128v96H576z"></path>
                     </svg>
                     <span class="text-xs font-bold text-slate-700">SMP Negeri 4 Palu</span>
                 </div>
@@ -65,10 +65,10 @@
             <nav class="mt-6 space-y-1.5">
                 <a href="{{ route('operator.dashboard') }}"
                     class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('operator.dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('operator.dashboard') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}"
+                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('operator.dashboard') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}" 
                         fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        <path stroke-linecap="round" stroke-linejoin="round" 
+                            d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10M9 21h6" />
                     </svg>
                     Beranda
                 </a>
@@ -138,7 +138,7 @@
             class="flex h-16 flex-shrink-0 items-center justify-between border-b border-slate-200/80 bg-white px-8 shadow-sm shadow-slate-100/40">
             <div class="flex items-center gap-3">
                 <h1 class="text-md font-bold text-slate-900 sm:text-lg tracking-tight">
-                    @yield('header', 'Ringkasan Sistem')
+                    @yield('header', 'Dashboard Operator')
                 </h1>
             </div>
 
