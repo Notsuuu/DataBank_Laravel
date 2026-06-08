@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Panel Operator - Bank Data')</title>
+    <title>@yield('title', 'Panel Pimpinan - Bank Data')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -39,15 +39,15 @@
     <div class="absolute bottom-12 left-64 -z-10 h-[300px] w-[300px] rounded-full bg-indigo-500/5 blur-[90px]"></div>
 
     <aside
-        class="w-68 flex flex-shrink-0 flex-col justify-between border-r border-slate-200/80 bg-white px-4 py-5 shadow-sm shadow-blue-900/5">
+        class="w-68 flex flex-shrink-0 flex-col justify-between border-r border-slate-200/80 bg-white px-4 py-5 shadow-sm shadow-slate-900/5">
         <div>
             <div class="flex items-center gap-3 border-b border-slate-100 pb-5 mx-2">
                 <div
                     class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 font-extrabold text-white shadow-md shadow-blue-500/20">
-                    OP
+                    PM
                 </div>
                 <div>
-                    <span class="block font-extrabold tracking-tight text-slate-900 text-md">Panel Operator</span>
+                    <span class="block font-extrabold tracking-tight text-slate-900 text-md">Panel Pimpinan</span>
                     <span class="block text-[11px] font-bold text-blue-600 uppercase tracking-wider">Bank Data
                         Sekolah</span>
                 </div>
@@ -65,9 +65,9 @@
             </div>
 
             <nav class="mt-6 space-y-1.5">
-                <a href="{{ route('operator.dashboard') }}"
-                    class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('operator.dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('operator.dashboard') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}"
+                <a href="{{ route('pimpinan.dashboard') }}"
+                    class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('pimpinan.dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('pimpinan.dashboard') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}"
                         fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -75,34 +75,14 @@
                     Beranda
                 </a>
 
-                <a href="{{ route('operator.guru.index') }}"
-                    class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('operator.guru.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('operator.guru.*') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <a href="#"
+                    class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                    <svg class="h-5 w-5 flex-shrink-0 text-slate-400 group-hover:text-slate-600" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    Kelola Data Guru
-                </a>
-
-                <a href="{{ route('operator.siswa.index') }}"
-                    class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('operator.siswa.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('operator.siswa.*') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-                    </svg>
-                    Kelola Data Siswa
-                </a>
-
-                <a href="{{ route('akademik.tahun-ajaran') }}"
-                    class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('akademik.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('akademik.*') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    Data Akademik
+                    Laporan Kinerja
                 </a>
             </nav>
         </div>
@@ -112,12 +92,12 @@
                 <div class="flex items-center gap-2.5 overflow-hidden">
                     <div
                         class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100 font-bold text-blue-700 text-sm ring-2 ring-white">
-                        {{ Str::upper(substr(auth()->user()->name ?? 'OP', 0, 2)) }}
+                        {{ Str::upper(substr(auth()->user()->name ?? 'PM', 0, 2)) }}
                     </div>
                     <div class="overflow-hidden">
                         <span
-                            class="block truncate text-xs font-bold text-slate-800">{{ auth()->user()->name ?? 'Rifaldi' }}</span>
-                        <span class="block text-[10px] font-semibold text-slate-400 truncate">Operator Utama</span>
+                            class="block truncate text-xs font-bold text-slate-800">{{ auth()->user()->name ?? 'Nama Pimpinan' }}</span>
+                        <span class="block text-[10px] font-semibold text-slate-400 truncate">Kepala Sekolah</span>
                     </div>
                 </div>
 
@@ -140,7 +120,7 @@
             class="flex h-16 flex-shrink-0 items-center justify-between border-b border-slate-200/80 bg-white px-8 shadow-sm shadow-slate-100/40">
             <div class="flex items-center gap-3">
                 <h1 class="text-md font-bold text-slate-900 sm:text-lg tracking-tight">
-                    @yield('header', 'Ringkasan Sistem')
+                    @yield('header', 'Executive Dashboard')
                 </h1>
             </div>
 

@@ -12,8 +12,11 @@ class LogAktivitas extends Model
     // Pastikan nama tabelnya tepat jika Laravel salah menebak
     protected $table = 'log_aktivitas';
 
-    protected $fillable = [
-        'user_id', 'aksi', 'entitas', 'data_lama', 'data_baru'
+    protected $fillable = ['user_id', 'aksi', 'entitas', 'data_lama', 'data_baru'];
+
+    protected $casts = [
+        'data_lama' => 'array',
+        'data_baru' => 'array',
     ];
 
     // Relasi untuk mengetahui siapa user yang beraksi
