@@ -9,12 +9,44 @@
         </div>
     @endif
 
+    @if(session('error'))
+        <div class="mb-6 bg-red-100 border border-red-200 text-red-700 px-4 py-3 rounded-lg relative" role="alert">
+            <span class="block sm:inline font-medium">{{ session('error') }}</span>
+        </div>
+    @endif
+    
+    @error('file_excel')
+        <div class="mb-6 bg-red-100 border border-red-200 text-red-700 px-4 py-3 rounded-lg relative" role="alert">
+            <span class="block sm:inline font-medium">{{ $message }}</span>
+        </div>
+    @enderror
+
     <div class="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+        
         <div class="p-6 border-b border-slate-200 flex justify-between items-center bg-white">
             <h2 class="text-xl font-bold text-slate-800">Daftar Guru SMPN 4 Palu</h2>
-            <a href="{{ route('operator.guru.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg text-sm shadow-sm transition-colors">
-                + Tambah Guru Baru
-            </a>
+            <div class="flex gap-2">
+                <a href="{{ route('operator.guru.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg text-sm shadow-sm transition-colors">
+                    + Tambah Guru Baru
+                </a>
+                <a href="{{ route('operator.laporan.guru.excel') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg text-sm shadow-sm transition-colors">
+                    Unduh Excel
+                </a>
+            </div>
+        </div>
+
+        <div class="p-6 bg-white border-b border-slate-200">
+            <form action="{{ route('operator.guru.import') }}" method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row items-center gap-4">
+                @csrf
+                <div class="flex-1 w-full">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Import Data Guru Massal</label>
+                    <input type="file" name="file_excel" accept=".xlsx, .xls, .csv" required class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-lg cursor-pointer bg-slate-50">
+                    <p class="mt-1 text-xs text-slate-500">Format yang didukung: .xlsx, .csv. Maksimal: 5MB.</p>
+                </div>
+                <button type="submit" class="mt-6 sm:mt-0 bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2 px-6 rounded-lg text-sm shadow-sm transition-colors">
+                    Upload & Import
+                </button>
+            </form>
         </div>
 
         <div class="p-6 bg-slate-50 border-b border-slate-200">

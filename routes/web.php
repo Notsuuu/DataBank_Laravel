@@ -4,6 +4,7 @@ use App\Http\Controllers\Web\Guru\DashboardController as GuruDashboard;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\GuruController;
 use App\Http\Controllers\Web\SiswaController;
+use App\Http\Controllers\Web\LaporanController;
 use App\Http\Controllers\Web\AkademikController;
 use Illuminate\Support\Facades\Route;
 
@@ -67,6 +68,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/operator/akademik/rombel', [AkademikController::class, 'rombel'])->name('akademik.rombel');
         Route::post('/operator/akademik/rombel/store', [AkademikController::class, 'storeRombel'])->name('akademik.rombel.store');
         Route::delete('/operator/akademik/rombel/{id}', [AkademikController::class, 'hapusRombel'])->name('akademik.rombel.destroy');
+
+        Route::get('/operator/laporan/guru/excel', [LaporanController::class, 'exportGuruExcel'])->name('operator.laporan.guru.excel');
+        Route::post('/operator/guru/import', [LaporanController::class, 'importGuru'])->name('operator.guru.import');
 
     });
 

@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens; // <-- 1. Ini wajib di-import untuk API
 
-#[Fillable(['name', 'email', 'password', 'role', 'is_active'])] // <-- 2. Typo kutipan sudah diperbaiki
+#[Fillable(['name', 'email', 'password', 'role', 'is_active'])] 
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
