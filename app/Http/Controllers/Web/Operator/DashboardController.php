@@ -24,9 +24,9 @@ class DashboardController extends Controller
             $q->whereNull('nip')->orWhere('nip', '');
         })->count();
 
-        $siswaKelas7 = Siswa::whereHas('kelas', function($q) { $q->where('tingkat_kelas', '7'); })->count();
-        $siswaKelas8 = Siswa::whereHas('kelas', function($q) { $q->where('tingkat_kelas', '8'); })->count();
-        $siswaKelas9 = Siswa::whereHas('kelas', function($q) { $q->where('tingkat_kelas', '9'); })->count();
+        $siswaKelas7 = Siswa::whereHas('kelas', function($q) { $q->where('tingkat_kelas', 'VII'); })->count();
+        $siswaKelas8 = Siswa::whereHas('kelas', function($q) { $q->where('tingkat_kelas', 'VIII'); })->count();
+        $siswaKelas9 = Siswa::whereHas('kelas', function($q) { $q->where('tingkat_kelas', 'IX'); })->count();
 
         $chartGuru = [$guruPns, $guruHonorer];
         $chartSiswa = [$siswaKelas7, $siswaKelas8, $siswaKelas9];

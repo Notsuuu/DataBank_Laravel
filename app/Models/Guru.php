@@ -4,12 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\CatatLogAktivitas;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Guru extends Model
 {
-    use HasFactory, CatatLogAktivitas, SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'user_id', 'nip', 'nuptk', 'nama_lengkap', 'gelar_depan', 'gelar_belakang',
@@ -24,7 +23,6 @@ class Guru extends Model
     public function riwayatPendidikan() { return $this->hasMany(RiwayatPendidikan::class); }
     public function berkas() { return $this->hasMany(BerkasGuru::class); }
 
-    // RELASI DIPERBAIKI: Menggunakan guru_id
     public function kelas()
     {
         return $this->hasOne(Kelas::class, 'guru_id', 'id');

@@ -67,8 +67,8 @@
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Filter Status</label>
                     <select name="status" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 transition-colors">
                         <option value="">-- Semua Status --</option>
-                        <option value="Aktif" {{ request('status') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
-                        <option value="Tidak Aktif" {{ request('status') == 'Tidak Aktif' ? 'selected' : '' }}>Tidak Aktif</option>
+                        <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Aktif</option>
+                        <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Nonaktif</option>
                     </select>
                 </div>
 
@@ -76,9 +76,9 @@
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Filter Tingkat Kelas</label>
                     <select name="kelas" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 transition-colors">
                         <option value="">-- Semua Tingkat --</option>
-                        <option value="VII" {{ ($tingkatKelas ?? '') == 'VII' ? 'selected' : '' }}>Kelas 7</option>
-                        <option value="VIII" {{ ($tingkatKelas ?? '') == 'VIII' ? 'selected' : '' }}>Kelas 8</option>
-                        <option value="IX" {{ ($tingkatKelas ?? '') == 'IX' ? 'selected' : '' }}>Kelas 9</option>
+                        <option value="7" {{ request('kelas') == '7' ? 'selected' : '' }}>Kelas 7</option>
+                        <option value="8" {{ request('kelas') == '8' ? 'selected' : '' }}>Kelas 8</option>
+                        <option value="9" {{ request('kelas') == '9' ? 'selected' : '' }}>Kelas 9</option>
                     </select>
                 </div>
 
@@ -87,7 +87,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                         Cari & Filter
                     </button>
-                    @if (request('q') || request('status') || request('kelas'))
+                    @if (request('q') || request('status') != '' || request('kelas'))
                         <a href="{{ route('operator.guru.index') }}" class="rounded-lg bg-slate-200 px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-300 transition-colors flex justify-center items-center">
                             Reset
                         </a>
@@ -98,32 +98,64 @@
 
         <div class="overflow-x-auto">
             <table class="w-full text-left text-sm text-slate-600">
-                <thead class="bg-white text-slate-700 border-b border-slate-200">
+                <thead class="bg-slate-50 text-slate-700 border-b border-slate-200">
                     <tr>
-                        <th class="px-6 py-4 font-semibold">NIP</th>
-                        <th class="px-6 py-4 font-semibold">Nama Lengkap</th>
-                        <th class="px-6 py-4 font-semibold text-center">L/P</th>
-                        <th class="px-6 py-4 font-semibold text-center">No HP</th>
-                        <th class="px-6 py-4 font-semibold text-center">Aksi</th>
+                        <th class="px-6 py-4 font-extrabold tracking-tight">Guru / Identitas</th>
+                        <th class="px-6 py-4 font-extrabold tracking-tight text-center">L/P</th>
+                        <th class="px-6 py-4 font-extrabold tracking-tight">Kontak</th>
+                        <th class="px-6 py-4 font-extrabold tracking-tight text-center">Status</th>
+                        <th class="px-6 py-4 font-extrabold tracking-tight text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     @forelse($para_guru as $guru)
-                        <tr class="hover:bg-slate-50 transition-colors">
-                            <td class="px-6 py-4 font-mono text-xs">{{ $guru->nip ?? '-' }}</td>
-                            <td class="px-6 py-4 font-bold text-slate-900">
-                                {{ $guru->gelar_depan }} {{ $guru->nama_lengkap }} {{ $guru->gelar_belakang }}
+                        <tr class="hover:bg-blue-50/50 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="h-10 w-10 flex-shrink-0">
+                                        @if($guru->foto)
+                                            <img class="h-10 w-10 rounded-full object-cover border border-slate-200 shadow-sm" src="{{ asset('storage/' . $guru->foto) }}" alt="Foto">
+                                        @else
+                                            <div class="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold border border-slate-200 shadow-sm">
+                                                {{ substr($guru->nama_lengkap, 0, 1) }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-slate-900">
+                                            {{ $guru->gelar_depan }} {{ $guru->nama_lengkap }} {{ $guru->gelar_belakang }}
+                                        </div>
+                                        <div class="text-[11px] font-semibold text-slate-500 mt-0.5">
+                                            NIP: <span class="font-mono text-slate-700">{{ $guru->nip ?? 'Honorer' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
+                            
                             <td class="px-6 py-4 text-center">
                                 @if($guru->jenis_kelamin == 'L')
-                                    <span class="bg-blue-100 text-blue-700 px-2.5 py-1 rounded text-xs font-bold">L</span>
+                                    <span class="px-2.5 py-1 rounded text-xs font-bold text-slate-600 border border-slate-200 bg-slate-50">L</span>
                                 @elseif($guru->jenis_kelamin == 'P')
-                                    <span class="bg-pink-100 text-pink-700 px-2.5 py-1 rounded text-xs font-bold">P</span>
-                                @else
-                                    {{ $guru->jenis_kelamin }}
+                                    <span class="px-2.5 py-1 rounded text-xs font-bold text-slate-600 border border-slate-200 bg-slate-50">P</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-center">{{ $guru->no_hp ?? '-' }}</td>
+                            
+                            <td class="px-6 py-4">
+                                <div class="text-xs font-bold text-slate-700">{{ $guru->no_hp ?? '-' }}</div>
+                            </td>
+
+                            <td class="px-6 py-4 text-center">
+                                @if($guru->status_aktif)
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold text-slate-600 border border-slate-200 bg-white shadow-sm">
+                                        <span class="h-2 w-2 rounded-full bg-emerald-400"></span> Aktif
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold text-slate-500 border border-slate-200 bg-slate-50 shadow-sm">
+                                        <span class="h-2 w-2 rounded-full bg-slate-300"></span> Nonaktif
+                                    </span>
+                                @endif
+                            </td>
+                            
                             <td class="px-6 py-4 text-center">
                                 <div class="flex justify-center items-center gap-3">
                                     <a href="{{ route('operator.guru.edit', $guru->id) }}" class="text-blue-600 hover:text-blue-800 font-bold transition-colors">Edit</a>
@@ -137,10 +169,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-16 text-center text-slate-500">Data guru tidak ditemukan.</td>
-                        </tr>
-                    @endforelse
+                        @endforelse
                 </tbody>
             </table>
         </div>

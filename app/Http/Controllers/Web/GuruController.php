@@ -33,14 +33,12 @@ class GuruController extends Controller
             $query->where('status_aktif', $status);
         }
 
-        // Filter Kelas (Menggunakan nama 'tingkat_kelas' sesuai database)
         if ($tingkatKelas) {
             $query->whereHas('kelas', function ($q) use ($tingkatKelas) {
                 $q->where('tingkat_kelas', $tingkatKelas);
             });
         }
 
-        // Variabel dikirim sebagai 'para_guru' agar sesuai dengan file blade kamu
         return view('operator.guru.index', [
             'para_guru' => $query->get(),
             'keyword' => $keyword,
@@ -74,7 +72,6 @@ class GuruController extends Controller
         DB::beginTransaction();
 
         try {
-            // Tentukan password default: NIP, atau 'guru123' jika NIP kosong (honorer)
             $defaultPassword = $request->nip ? $request->nip : 'guru123';
 
             $user = User::create([
@@ -83,7 +80,7 @@ class GuruController extends Controller
                 'password' => Hash::make($defaultPassword),
                 'role' => 'guru',
                 'is_active' => true,
-                'force_change_password' => true, // Menjebak guru agar wajib ganti sandi saat login
+                'force_change_password' => true, 
             ]);
 
             $fotoPath = null;
@@ -116,36 +113,49 @@ class GuruController extends Controller
         }
     }
 
-    // PERBAIKAN: Menambahkan tipe data 'string' pada $id
     public function edit(string $id)
     {
         $guru = Guru::with('user')->findOrFail($id);
         return view('operator.guru.edit', compact('guru'));
     }
-
-    // PERBAIKAN: Menambahkan tipe data 'string' pada $id
     public function update(Request $request, string $id)
     {
         $guru = Guru::findOrFail($id);
+        
         $request->validate([
-            'nip' => 'required|string|max:20|unique:gurus,nip,' . $id,
+            'nip' => 'nullable|string|max:20|unique:gurus,nip,' . $id,
+            'nama_lengkap' => 'required|string|max:255',
+            'gelar_depan' => 'nullable|string|max:50',
+            'gelar_belakang' => 'nullable|string|max:50',
             'jenis_kelamin' => 'required|in:L,P',
             'tempat_lahir' => 'required|string|max:50',
             'tanggal_lahir' => 'required|date',
-            'agama' => 'required|string|max:20',
-            'no_hp' => 'required|string|max:15',
+            'agama' => 'required|string|max:50',
+            'alamat' => 'nullable|string',
+            'no_hp' => 'nullable|string|max:15',
+            'status_aktif' => 'required|boolean',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
-        $guru->update($request->all());
-        return redirect()->route('operator.guru.index')->with('success', 'Data Guru diperbarui!');
+
+        $data = $request->except(['foto']);
+
+        if ($request->hasFile('foto')) {
+            if ($guru->foto && Storage::disk('public')->exists($guru->foto)) {
+                Storage::disk('public')->delete($guru->foto);
+            }
+            $data['foto'] = $request->file('foto')->store('foto_guru', 'public');
+        }
+
+        $guru->update($data);
+
+        return redirect()->route('operator.guru.index');
     }
 
-    // PERBAIKAN: Menambahkan tipe data 'string' pada $id
     public function destroy(string $id)
     {
-        // PERBAIKAN: Mengganti \App\Models\Guru menjadi Guru karena sudah di-import di atas
+
         $guru = Guru::findOrFail($id);
 
-        // Hapus data (Observer di latar belakang akan otomatis mencatat 1 log DELETE dengan aman)
         $guru->delete();
 
         return redirect()->route('operator.guru.index')->with('success', 'Data guru berhasil dihapus dari sistem!');
