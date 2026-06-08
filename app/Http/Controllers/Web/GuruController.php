@@ -58,7 +58,6 @@ class GuruController extends Controller
     {
         $request->validate([
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8',
             'nip' => 'nullable|unique:gurus,nip',
             'nama_lengkap' => 'required|string|max:255',
             'gelar_depan' => 'nullable|string|max:50',
@@ -75,12 +74,16 @@ class GuruController extends Controller
         DB::beginTransaction();
 
         try {
+            // Tentukan password default: NIP, atau 'guru123' jika NIP kosong (honorer)
+            $defaultPassword = $request->nip ? $request->nip : 'guru123';
+
             $user = User::create([
                 'name' => $request->nama_lengkap,
                 'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'password' => Hash::make($defaultPassword),
                 'role' => 'guru',
                 'is_active' => true,
+                'force_change_password' => true, // Menjebak guru agar wajib ganti sandi saat login
             ]);
 
             $fotoPath = null;
@@ -104,7 +107,7 @@ class GuruController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route('operator.guru.index')->with('success', 'Data Guru berhasil ditambahkan!');
+            return redirect()->route('operator.guru.index')->with('success', 'Data Guru berhasil ditambahkan! Akun login otomatis dibuat.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()
@@ -113,13 +116,15 @@ class GuruController extends Controller
         }
     }
 
-    public function edit($id)
+    // PERBAIKAN: Menambahkan tipe data 'string' pada $id
+    public function edit(string $id)
     {
         $guru = Guru::with('user')->findOrFail($id);
         return view('operator.guru.edit', compact('guru'));
     }
 
-    public function update(Request $request, $id)
+    // PERBAIKAN: Menambahkan tipe data 'string' pada $id
+    public function update(Request $request, string $id)
     {
         $guru = Guru::findOrFail($id);
         $request->validate([
@@ -134,10 +139,11 @@ class GuruController extends Controller
         return redirect()->route('operator.guru.index')->with('success', 'Data Guru diperbarui!');
     }
 
-    public function destroy($id)
+    // PERBAIKAN: Menambahkan tipe data 'string' pada $id
+    public function destroy(string $id)
     {
-        // Cari data guru
-        $guru = \App\Models\Guru::findOrFail($id);
+        // PERBAIKAN: Mengganti \App\Models\Guru menjadi Guru karena sudah di-import di atas
+        $guru = Guru::findOrFail($id);
 
         // Hapus data (Observer di latar belakang akan otomatis mencatat 1 log DELETE dengan aman)
         $guru->delete();

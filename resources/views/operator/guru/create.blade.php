@@ -22,7 +22,6 @@
                     </div>
                 @endif
 
-                {{-- TAMBAHKAN BLOK INI: Penangkap error sistem/database --}}
                 @if(session('error'))
                     <div class="mb-6 bg-red-100 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
                         <strong class="font-bold">Gagal Menyimpan Database:</strong>
@@ -37,16 +36,14 @@
 
                         <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2">
                             <h3 class="text-lg font-semibold text-slate-700">1. Informasi Akun Login</h3>
+                            <div class="mt-2 bg-blue-50 text-blue-700 px-4 py-3 rounded-lg text-sm border border-blue-200">
+                                <strong>Catatan Sistem:</strong> Kata sandi akan dibuat otomatis menggunakan <b>NIP</b> (atau <b>'guru123'</b> jika statusnya honorer/tanpa NIP). Guru diwajibkan mengganti kata sandi tersebut saat pertama kali masuk ke sistem.
+                            </div>
                         </div>
 
-                        <div>
+                        <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-slate-700">Email Guru *</label>
-                            <input type="email" name="email" value="{{ old('email') }}" required class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700">Password Sementara *</label>
-                            <input type="password" name="password" required class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                            <input type="email" name="email" value="{{ old('email') }}" required class="mt-1 block w-full md:w-1/2 rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                         </div>
 
                         <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2 mt-4">

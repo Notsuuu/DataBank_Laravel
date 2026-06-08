@@ -5,7 +5,7 @@
         </div>
         <h2 class="text-2xl font-bold text-slate-800">Wajib Ganti Kata Sandi</h2>
         <p class="text-sm font-medium text-slate-500 mt-2 leading-relaxed">
-            Demi keamanan sistem akademik, Anda diwajibkan untuk mengganti kata sandi bawaan (NIP) dengan kata sandi baru yang lebih aman.
+            Demi keamanan sistem akademik, Anda diwajibkan untuk mengganti kata sandi bawaan dengan kata sandi baru yang lebih aman.
         </p>
     </div>
 
