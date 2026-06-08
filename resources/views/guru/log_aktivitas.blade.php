@@ -28,7 +28,7 @@
                         @endif
 
                         @php
-                            // Logika pewarnaan badge dinamis berdasarkan jenis aksi data
+                            /** @var \App\Models\LogAktivitas $log */
                             $colorClass = 'bg-slate-50 border-slate-200 text-slate-600';
                             $badgeClass = 'bg-slate-100 text-slate-700';
 

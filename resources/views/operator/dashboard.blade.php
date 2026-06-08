@@ -1,50 +1,64 @@
 @extends('layouts.operator')
 
-@section('header', 'Ringkasan Sistem')
+@section('header', 'Dashboard Operator')
 
 @section('content')
     <div class="space-y-6">
-        <div
-            class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm border-t-4 border-t-blue-600 animate-[fadeIn_0.3s_ease-out]">
+        <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm border-t-4 border-t-blue-600 animate-[fadeIn_0.3s_ease-out]">
             <h2 class="text-xl font-bold text-slate-800">Selamat datang, Operator!</h2>
-            <p class="mt-2 text-sm font-medium text-slate-500">Gunakan menu di sebelah kiri untuk mengelola Bank Data SMPN 4
-                Palu.</p>
+            <p class="mt-2 text-sm font-medium text-slate-500">Gunakan menu di sebelah kiri untuk mengelola Bank Data SMPN 4 Palu.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div
-                class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 group">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 group">
                 <div>
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Guru</p>
                     <p class="text-3xl font-extrabold text-slate-800 mt-1 tracking-tight">{{ $totalGuru ?? 0 }}</p>
                 </div>
-                <div
-                    class="h-11 w-11 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center font-black text-base border border-blue-100/70 transition-colors duration-300 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 shadow-sm">
+                <div class="h-11 w-11 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center font-black text-base border border-blue-100/70 transition-colors duration-300 group-hover:bg-blue-600 group-hover:text-white shadow-sm">
                     G
                 </div>
             </div>
 
-            <div
-                class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 group">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 group">
                 <div>
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Siswa</p>
                     <p class="text-3xl font-extrabold text-slate-800 mt-1 tracking-tight">{{ $totalSiswa ?? 0 }}</p>
                 </div>
-                <div
-                    class="h-11 w-11 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-black text-base border border-indigo-100/70 transition-colors duration-300 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 shadow-sm">
+                <div class="h-11 w-11 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-black text-base border border-indigo-100/70 transition-colors duration-300 group-hover:bg-indigo-600 group-hover:text-white shadow-sm">
                     S
                 </div>
             </div>
 
-            <div
-                class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 group">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 group">
                 <div>
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Rombongan Belajar</p>
                     <p class="text-3xl font-extrabold text-slate-800 mt-1 tracking-tight">{{ $totalKelas ?? 0 }}</p>
                 </div>
-                <div
-                    class="h-11 w-11 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center font-black text-base border border-emerald-100/70 transition-colors duration-300 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-600 shadow-sm">
+                <div class="h-11 w-11 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center font-black text-base border border-emerald-100/70 transition-colors duration-300 group-hover:bg-emerald-600 group-hover:text-white shadow-sm">
                     K
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
+                <div class="border-b border-slate-100 pb-4">
+                    <h3 class="text-sm font-extrabold text-slate-900 tracking-tight">Status Kepegawaian Guru</h3>
+                    <p class="text-xs font-semibold text-slate-400 mt-0.5">Perbandingan jumlah Guru PNS dan Guru Honorer</p>
+                </div>
+                <div class="mt-6 flex justify-center items-center h-[240px]">
+                    <canvas id="guruChart"></canvas>
+                </div>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
+                <div class="border-b border-slate-100 pb-4">
+                    <h3 class="text-sm font-extrabold text-slate-900 tracking-tight">Penyebaran Siswa per Tingkatan</h3>
+                    <p class="text-xs font-semibold text-slate-400 mt-0.5">Jumlah aktif siswa di jenjang kelas 7, 8, dan 9</p>
+                </div>
+                <div class="mt-6 h-[240px]">
+                    <canvas id="siswaChart"></canvas>
                 </div>
             </div>
         </div>
@@ -53,13 +67,12 @@
             <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div>
                     <h3 class="text-sm font-extrabold text-slate-900 tracking-tight">Radar Monitor Aktivitas Data</h3>
-                    <p class="text-xs font-semibold text-slate-400 mt-0.5">Menampilkan jejak operasi manipulasi data terbaru
-                        yang terjadi di dalam aplikasi secara berkala</p>
+                    <p class="text-xs font-semibold text-slate-400 mt-0.5">Menampilkan jejak operasi manipulasi data terbaru secara berkala</p>
                 </div>
                 <span class="flex h-2 w-2 rounded-full bg-blue-600 animate-pulse"></span>
             </div>
 
-            <div class="mt-6 space-y-5 max-h-[350px] overflow-y-auto custom-scrollbar pr-1">
+            <div class="mt-6 space-y-5 max-h-[300px] overflow-y-auto custom-scrollbar pr-1">
                 @forelse($logs ?? [] as $log)
                     <div class="relative flex gap-4 pb-1">
                         @if (!$loop->last)
@@ -67,6 +80,7 @@
                         @endif
 
                         @php
+                            /** @var \App\Models\LogAktivitas $log */
                             $colorClass = 'bg-slate-50 border-slate-200 text-slate-600';
                             $badgeClass = 'bg-slate-100 text-slate-700';
 
@@ -82,12 +96,9 @@
                             }
                         @endphp
 
-                        <div
-                            class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl border shadow-sm {{ $colorClass }}">
-                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                stroke-width="2.5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl border shadow-sm {{ $colorClass }}">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                             </svg>
                         </div>
 
@@ -97,24 +108,12 @@
                                     <span class="font-extrabold text-blue-600">{{ $log->user->name ?? 'Sistem' }}</span>
                                     memproses Modul <span class="text-slate-900 font-extrabold">[{{ $log->entitas }}]</span>
                                 </p>
-                                <span
-                                    class="text-[10px] font-bold text-slate-400 whitespace-nowrap bg-slate-50 border border-slate-100 rounded-md px-1.5 py-0.5 shadow-sm">{{ $log->created_at->diffForHumans() }}</span>
+                                <span class="text-[10px] font-bold text-slate-400 whitespace-nowrap bg-slate-50 border border-slate-100 rounded-md px-1.5 py-0.5 shadow-sm">{{ $log->created_at->diffForHumans() }}</span>
                             </div>
 
                             <p class="mt-0.5 text-xs font-semibold text-slate-500">
-                                Mengeksekusi operasi data berbentuk
-                                <span
-                                    class="inline-block text-[9px] font-black uppercase px-1.5 py-0.5 rounded tracking-wider {{ $badgeClass }}">{{ $log->aksi }}</span>
-                                secara permanen.
+                                Mengeksekusi operasi data berbentuk <span class="inline-block text-[9px] font-black uppercase px-1.5 py-0.5 rounded tracking-wider {{ $badgeClass }}">{{ $log->aksi }}</span> secara permanen.
                             </p>
-
-                            @if (is_array($log->data_baru) && isset($log->data_baru['nama']))
-                                <p class="mt-1 text-[11px] text-slate-400 font-bold italic">Nama Terkait:
-                                    "{{ $log->data_baru['nama'] }}"</p>
-                            @elseif(is_array($log->data_lama) && isset($log->data_lama['nama']))
-                                <p class="mt-1 text-[11px] text-rose-400 font-bold italic">Nama Terhapus:
-                                    "{{ $log->data_lama['nama'] }}"</p>
-                            @endif
 
                             <div class="text-[9px] font-bold text-slate-400 mt-1">
                                 {{ $log->created_at->format('d M Y, H:i') }} WITA
@@ -123,11 +122,76 @@
                     </div>
                 @empty
                     <div class="flex flex-col items-center justify-center py-12 text-center">
-                        <p class="text-xs font-bold text-slate-400 italic">Belum ada rekaman log riwayat manipulasi data
-                            dari operator maupun guru.</p>
+                        <p class="text-xs font-bold text-slate-400 italic">Belum ada rekaman log riwayat manipulasi data dari operator maupun guru.</p>
                     </div>
                 @endforelse
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Font Family Global bawaan tema kita
+            const globalFont = { family: "'Plus Jakarta Sans', sans-serif", size: 11, weight: 'bold' };
+
+            // --- CHART 1: GURU (DOUGHNUT) ---
+            const ctxGuru = document.getElementById('guruChart').getContext('2d');
+            new Chart(ctxGuru, {
+                type: 'doughnut',
+                data: {
+                    labels: ['PNS / P3K', 'Honorer'],
+                    datasets: [{
+                        data: @json($chartGuru ?? [0, 0]),
+                        backgroundColor: ['#2563eb', '#94a3b8'],
+                        borderWidth: 4,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: globalFont, usePointStyle: true, padding: 15 }
+                        }
+                    }
+                }
+            });
+
+            // --- CHART 2: SISWA (BAR) ---
+            const ctxSiswa = document.getElementById('siswaChart').getContext('2d');
+            new Chart(ctxSiswa, {
+                type: 'bar',
+                data: {
+                    labels: ['Kelas 7', 'Kelas 8', 'Kelas 9'],
+                    datasets: [{
+                        label: 'Jumlah Siswa',
+                        data: @json($chartSiswa ?? [0, 0, 0]),
+                        backgroundColor: '#6366f1', // Indigo-500
+                        borderRadius: 6,
+                        barThickness: 32
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false } 
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1, font: { family: "'Plus Jakarta Sans', sans-serif", size: 10 } },
+                            grid: { color: '#f1f5f9' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: "'Plus Jakarta Sans', sans-serif", size: 11, weight: '600' } }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 @endsection

@@ -9,7 +9,6 @@ class LogAktivitas extends Model
 {
     use HasFactory;
 
-    // Pastikan nama tabelnya tepat jika Laravel salah menebak
     protected $table = 'log_aktivitas';
 
     protected $fillable = ['user_id', 'aksi', 'entitas', 'data_lama', 'data_baru'];
@@ -19,7 +18,6 @@ class LogAktivitas extends Model
         'data_baru' => 'array',
     ];
 
-    // Relasi untuk mengetahui siapa user yang beraksi
     public function user()
     {
         return $this->belongsTo(User::class);
