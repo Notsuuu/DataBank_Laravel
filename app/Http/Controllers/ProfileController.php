@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
@@ -56,5 +58,24 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function forceChangePasswordForm(): View
+    {
+        return view('auth.force-change-password');
+    }
+
+    public function forceUpdatePassword(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'password' => ['required', 'confirmed', Password::defaults()],
+        ]);
+
+        $request->user()->update([
+            'password' => Hash::make($request->password),
+            'force_change_password' => false,
+        ]);
+
+        return redirect()->intended('/')->with('success', 'Kata sandi berhasil diamankan. Selamat datang!');
     }
 }

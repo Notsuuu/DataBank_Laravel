@@ -18,6 +18,7 @@ class GuruImport implements ToModel, WithHeadingRow
             'password' => Hash::make($row['nip']),
             'role' => 'guru',
             'is_active' => true,
+            'force_change_password' => true,
         ]);
 
         return new Guru([

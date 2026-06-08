@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\AkademikController;
 use App\Http\Controllers\Web\Guru\DashboardController as GuruDashboard;
 use App\Http\Controllers\Web\Pimpinan\DashboardController as PimpinanDashboard;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\ForceChangePassword;
 
 // Rute Halaman Utama (Welcome)
 Route::get('/', function () {
@@ -20,6 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/wajib-ganti-sandi', [ProfileController::class, 'forceChangePasswordForm'])->name('password.force.change');
+    Route::post('/wajib-ganti-sandi', [ProfileController::class, 'forceUpdatePassword'])->name('password.force.update');
 
     // ==========================================
     // BENTENG 1: KHUSUS OPERATOR
@@ -75,7 +78,7 @@ Route::middleware('auth')->group(function () {
     // ==========================================
     // BENTENG 2: KHUSUS GURU
     // ==========================================
-    Route::middleware('role:guru')
+    Route::middleware(['role:guru', ForceChangePassword::class])
         ->prefix('guru')
         ->name('guru.')
         ->group(function () {
@@ -100,7 +103,7 @@ Route::middleware('auth')->group(function () {
     // ==========================================
     // BENTENG 3: KHUSUS PIMPINAN (Kepala Sekolah)
     // ==========================================
-    Route::middleware('role:pimpinan')
+        Route::middleware(['role:pimpinan', ForceChangePassword::class])
         ->prefix('pimpinan')
         ->name('pimpinan.')
         ->group(function () {
