@@ -140,6 +140,28 @@
         </div>
     </main>
 
+    <script>
+        let idleTime = 0;
+        const maxIdleTime = 30; 
+
+        const idleInterval = setInterval(function() {
+            idleTime++;
+            if (idleTime >= maxIdleTime) {
+                clearInterval(idleInterval);
+                alert('Sesi Anda telah berakhir karena tidak ada aktivitas selama 30 menit. Sistem otomatis keluar demi keamanan.');
+                document.getElementById('logout-form').submit();
+            }
+        }, 60000); 
+
+        function resetTimer() {
+            idleTime = 0;
+        }
+
+        ['mousemove', 'keydown', 'mousedown', 'scroll'].forEach(event => {
+            window.addEventListener(event, resetTimer, true);
+        });
+    </script>
+
 </body>
 
 </html>

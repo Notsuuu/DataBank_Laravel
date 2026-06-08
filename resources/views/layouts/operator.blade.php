@@ -13,7 +13,6 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        /* Kustomisasi scrollbar halus untuk konten utama */
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
@@ -48,8 +47,7 @@
                 </div>
                 <div>
                     <span class="block font-extrabold tracking-tight text-slate-900 text-md">Panel Operator</span>
-                    <span class="block text-[11px] font-bold text-blue-600 uppercase tracking-wider">Bank Data
-                        Sekolah</span>
+                    <span class="block text-[11px] font-bold text-blue-600 uppercase tracking-wider">Bank Data Sekolah</span>
                 </div>
             </div>
 
@@ -121,7 +119,7 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logout') }}" method="POST" class="inline flex-shrink-0">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="inline flex-shrink-0">
                     @csrf
                     <button type="submit" title="Keluar Sistem"
                         class="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition-all duration-200 hover:bg-red-50 hover:text-red-600">
@@ -160,6 +158,27 @@
         </div>
     </main>
 
+    <script>
+        let idleTime = 0;
+        const maxIdleTime = 30;
+
+        const idleInterval = setInterval(function() {
+            idleTime++;
+            if (idleTime >= maxIdleTime) {
+                clearInterval(idleInterval);
+                alert('Sesi Anda telah berakhir karena tidak ada aktivitas selama 30 menit. Sistem otomatis keluar demi keamanan.');
+                document.getElementById('logout-form').submit();
+            }
+        }, 60000);
+
+        function resetTimer() {
+            idleTime = 0;
+        }
+
+        ['mousemove', 'keydown', 'mousedown', 'scroll'].forEach(event => {
+            window.addEventListener(event, resetTimer, true);
+        });
+    </script>
 </body>
 
 </html>
