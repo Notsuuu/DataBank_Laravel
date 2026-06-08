@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\GuruExport;
 use App\Imports\GuruImport;
+use App\Exports\SiswaExport;
+use App\Imports\SiswaImport;
 
 class LaporanController extends Controller
 {
@@ -29,6 +31,29 @@ class LaporanController extends Controller
             Excel::import(new GuruImport, $request->file('file_excel'));
             
             return back()->with('success', 'Data guru berhasil diimpor!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal mengimpor data. Error: ' . $e->getMessage());
+        }
+    }
+
+    public function exportSiswaExcel()
+    {
+        return Excel::download(new SiswaExport, 'Data_Siswa_SMPN4Palu.xlsx');
+    }
+
+    public function importSiswa(Request $request)
+    {
+        $request->validate([
+            'file_excel' => 'required|mimes:xlsx,xls,csv|max:5120',
+        ], [
+            'file_excel.required' => 'Pilih file terlebih dahulu.',
+            'file_excel.mimes'    => 'Format file harus berupa .xlsx, .xls, atau .csv.',
+            'file_excel.max'      => 'Ukuran file tidak boleh lebih dari 5MB.'
+        ]);
+
+        try {
+            Excel::import(new SiswaImport, $request->file('file_excel'));
+            return back()->with('success', 'Data siswa berhasil diimpor!');
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal mengimpor data. Error: ' . $e->getMessage());
         }

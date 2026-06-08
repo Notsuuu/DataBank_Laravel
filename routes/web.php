@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/operator/guru/{id}/edit', [GuruController::class, 'edit'])->name('operator.guru.edit');
         Route::put('/operator/guru/{id}', [GuruController::class, 'update'])->name('operator.guru.update');
         Route::delete('/operator/guru/{id}', [GuruController::class, 'destroy'])->name('operator.guru.destroy');
+        Route::get('/operator/laporan/guru/excel', [LaporanController::class, 'exportGuruExcel'])->name('operator.laporan.guru.excel');
+        Route::post('/operator/guru/import', [LaporanController::class, 'importGuru'])->name('operator.guru.import');
 
         // M3: Manajemen Data Siswa
         Route::get('/operator/siswa', [SiswaController::class, 'index'])->name('operator.siswa.index');
@@ -42,6 +44,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/operator/siswa/{id}/edit', [SiswaController::class, 'edit'])->name('operator.siswa.edit');
         Route::put('/operator/siswa/{id}', [SiswaController::class, 'update'])->name('operator.siswa.update');
         Route::delete('/operator/siswa/{id}', [SiswaController::class, 'destroy'])->name('operator.siswa.destroy');
+        Route::get('/operator/laporan/siswa/excel', [LaporanController::class, 'exportSiswaExcel'])->name('operator.laporan.siswa.excel');
+        Route::post('/operator/siswa/import', [LaporanController::class, 'importSiswa'])->name('operator.siswa.import');
 
         // M4: Manajemen Data Akademik
         Route::get('/operator/akademik/tahun-ajaran', [AkademikController::class, 'tahunAjaran'])->name('akademik.tahun-ajaran');
