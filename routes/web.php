@@ -84,6 +84,9 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/dashboard', [GuruDashboard::class, 'index'])->name('dashboard');
 
+            Route::get('/profil', [GuruDashboard::class, 'profil'])->name('profil');
+            Route::put('/profil/update', [GuruDashboard::class, 'updateProfil'])->name('profil.update');
+
             // CRUD Riwayat Pendidikan
             Route::get('/pendidikan', [GuruDashboard::class, 'pendidikan'])->name('pendidikan');
             Route::get('/pendidikan/tambah', [GuruDashboard::class, 'createPendidikan'])->name('pendidikan.create');

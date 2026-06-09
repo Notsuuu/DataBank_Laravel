@@ -56,7 +56,7 @@ class DashboardController extends Controller
         return redirect()->route('guru.pendidikan')->with('success', 'Riwayat pendidikan berhasil ditambahkan!');
     }
 
-    public function editPendidikan($id)
+    public function editPendidikan(string $id)
     {
         $pendidikan = RiwayatPendidikan::where('id', $id)
             ->where('guru_id', Auth::user()->guru->id)
@@ -65,7 +65,7 @@ class DashboardController extends Controller
         return view('guru.pendidikan_edit', compact('pendidikan'));
     }
 
-    public function updatePendidikan(Request $request, $id)
+    public function updatePendidikan(Request $request, string$id)
     {
         $pendidikan = RiwayatPendidikan::where('id', $id)
             ->where('guru_id', Auth::user()->guru->id)
@@ -83,7 +83,7 @@ class DashboardController extends Controller
         return redirect()->route('guru.pendidikan')->with('success', 'Riwayat pendidikan berhasil diperbarui!');
     }
 
-    public function destroyPendidikan($id)
+    public function destroyPendidikan(string$id)
     {
         $pendidikan = RiwayatPendidikan::where('id', $id)
             ->where('guru_id', Auth::user()->guru->id)
@@ -155,5 +155,53 @@ class DashboardController extends Controller
     {
         $logs = LogAktivitas::where('user_id', Auth::id())->latest()->get();
         return view('guru.log_aktivitas', compact('logs'));
+    }
+
+    // ==========================================
+    // 5. KELOLA PROFIL GURU
+    // ==========================================
+    public function profil()
+    {
+        $user = Auth::user();
+        return view('guru.profil', compact('user'));
+    }
+
+    public function updateProfil(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $guru = $user->guru;
+
+        $request->validate([
+            'nama_lengkap' => 'required|string|max:255',
+            'gelar_depan' => 'nullable|string|max:50',
+            'gelar_belakang' => 'nullable|string|max:50',
+            'jenis_kelamin' => 'required|in:L,P',
+            'tempat_lahir' => 'required|string|max:100',
+            'tanggal_lahir' => 'required|date',
+            'agama' => 'required|string|max:50',
+            'no_hp' => 'nullable|string|max:20',
+            'alamat' => 'nullable|string',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $dataUpdate = $request->only([
+            'nama_lengkap', 'gelar_depan', 'gelar_belakang', 
+            'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 
+            'agama', 'no_hp', 'alamat'
+        ]);
+
+        if ($request->hasFile('foto')) {
+            if ($guru->foto && Storage::disk('public')->exists($guru->foto)) {
+                Storage::disk('public')->delete($guru->foto);
+            }
+            $dataUpdate['foto'] = $request->file('foto')->store('foto_guru', 'public');
+        }
+
+        $guru->update($dataUpdate);
+
+        $user->update(['name' => $request->nama_lengkap]);
+
+        return back()->with('success', 'Data profil dan biodata berhasil diperbarui!');
     }
 }
