@@ -30,16 +30,16 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        
+
         <div class="lg:col-span-4 space-y-6">
-            
+
             <form action="{{ route('guru.profil.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                
+
                 <div class="bg-white rounded-2xl shadow-sm shadow-slate-200/50 border border-slate-200/80 p-6 flex flex-col items-center text-center relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-emerald-50 to-white"></div>
-                    
+
                     <div class="relative group mb-4 mt-4">
                         @if($user->guru->foto)
                             <img src="{{ asset('storage/' . $user->guru->foto) }}" class="h-32 w-32 rounded-full object-cover border-4 border-white shadow-md bg-slate-100 relative z-10">
@@ -48,7 +48,7 @@
                                 {{ Str::upper(substr($user->name, 0, 2)) }}
                             </div>
                         @endif
-                        
+
                         <label class="absolute inset-0 bg-slate-900/60 rounded-full flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity z-20 backdrop-blur-sm">
                             <svg class="w-8 h-8 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                             <span class="text-[10px] font-bold tracking-wider uppercase">Pilih Foto</span>
@@ -65,7 +65,7 @@
             <form action="{{ route('password.update') }}" method="POST" class="bg-white rounded-2xl shadow-sm shadow-slate-200/50 border border-slate-200/80 p-6">
                 @csrf
                 @method('PUT')
-                
+
                 <h3 class="font-bold text-slate-800 mb-5 pb-3 border-b border-slate-100 flex items-center gap-2">
                     <svg class="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                     Ubah Password
@@ -107,7 +107,7 @@
             <form action="{{ route('guru.profil.update') }}" method="POST" class="bg-white rounded-2xl shadow-sm shadow-slate-200/50 border border-slate-200/80 p-6 md:p-8">
                 @csrf
                 @method('PUT')
-                
+
                 <h3 class="font-bold text-slate-800 mb-6 pb-3 border-b border-slate-100 flex items-center gap-2">
                     <svg class="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg>
                     Data Pribadi

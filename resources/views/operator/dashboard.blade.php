@@ -9,37 +9,39 @@
             <p class="mt-2 text-sm font-medium text-slate-500">Gunakan menu di sebelah kiri untuk mengelola Bank Data SMPN 4 Palu.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 group">
-                <div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Guru</p>
-                    <p class="text-3xl font-extrabold text-slate-800 mt-1 tracking-tight">{{ $totalGuru ?? 0 }}</p>
-                </div>
-                <div class="h-11 w-11 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center font-black text-base border border-blue-100/70 transition-colors duration-300 group-hover:bg-blue-600 group-hover:text-white shadow-sm">
-                    G
-                </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 group">
+            <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pimpinan Aktif</p>
+                <p class="text-3xl font-extrabold text-slate-800 mt-1 tracking-tight">{{ $totalPimpinan ?? 0 }}</p>
             </div>
-
-            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 group">
-                <div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Siswa</p>
-                    <p class="text-3xl font-extrabold text-slate-800 mt-1 tracking-tight">{{ $totalSiswa ?? 0 }}</p>
-                </div>
-                <div class="h-11 w-11 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-black text-base border border-indigo-100/70 transition-colors duration-300 group-hover:bg-indigo-600 group-hover:text-white shadow-sm">
-                    S
-                </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 group">
-                <div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Rombongan Belajar</p>
-                    <p class="text-3xl font-extrabold text-slate-800 mt-1 tracking-tight">{{ $totalKelas ?? 0 }}</p>
-                </div>
-                <div class="h-11 w-11 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center font-black text-base border border-emerald-100/70 transition-colors duration-300 group-hover:bg-emerald-600 group-hover:text-white shadow-sm">
-                    K
-                </div>
-            </div>
+            <div class="h-11 w-11 bg-violet-50 text-violet-600 rounded-xl flex items-center justify-center font-black text-base border border-violet-100/70 transition-colors duration-300 group-hover:bg-violet-600 group-hover:text-white shadow-sm">P</div>
         </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 group">
+            <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Guru</p>
+                <p class="text-3xl font-extrabold text-slate-800 mt-1 tracking-tight">{{ $totalGuru ?? 0 }}</p>
+            </div>
+            <div class="h-11 w-11 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center font-black text-base border border-blue-100/70 transition-colors duration-300 group-hover:bg-blue-600 group-hover:text-white shadow-sm">G</div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 group">
+            <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Siswa</p>
+                <p class="text-3xl font-extrabold text-slate-800 mt-1 tracking-tight">{{ $totalSiswa ?? 0 }}</p>
+            </div>
+            <div class="h-11 w-11 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-black text-base border border-indigo-100/70 transition-colors duration-300 group-hover:bg-indigo-600 group-hover:text-white shadow-sm">S</div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 group">
+            <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Rombel</p>
+                <p class="text-3xl font-extrabold text-slate-800 mt-1 tracking-tight">{{ $totalKelas ?? 0 }}</p>
+            </div>
+            <div class="h-11 w-11 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center font-black text-base border border-emerald-100/70 transition-colors duration-300 group-hover:bg-emerald-600 group-hover:text-white shadow-sm">K</div>
+        </div>
+    </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
@@ -177,7 +179,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { display: false } 
+                        legend: { display: false }
                     },
                     scales: {
                         y: {

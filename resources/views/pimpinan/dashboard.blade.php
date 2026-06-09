@@ -35,7 +35,7 @@
 
     <!-- MONITORING AKTIVITAS & QUICK ACTIONS -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
+
         <!-- Riwayat Aktivitas (Span 2) -->
         <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
             <h3 class="font-black text-slate-800 mb-6">Aktivitas Terbaru</h3>
@@ -46,7 +46,7 @@
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
                     <div>
-                        <p class="text-sm font-bold text-slate-800">{{ $log->user->name }}</p>
+                        <p class="text-sm font-bold text-slate-800">{{ $log->user->name ?? 'Sistem/Anonim' }}</p>
                         <p class="text-xs text-slate-500">{{ $log->aksi }} pada modul {{ $log->entitas }}</p>
                     </div>
                 </div>
@@ -57,12 +57,31 @@
         <!-- Quick Actions (Span 1) -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
             <h3 class="font-black text-slate-800 mb-4">Aksi Cepat</h3>
+
             <div class="space-y-3">
-                <a href="#" class="block w-full p-4 rounded-xl border border-slate-100 hover:border-orange-500 hover:bg-orange-50 transition-all font-bold text-slate-700 text-sm">
-                    Unduh Rekap Guru (Excel)
+                <a href="{{ route('pimpinan.laporan.pimpinan.excel') }}" class="block w-full text-center bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold py-3 rounded-lg transition-colors border border-slate-200 text-sm">
+                    📊 Unduh Data Pimpinan (Excel)
                 </a>
-                <a href="#" class="block w-full p-4 rounded-xl border border-slate-100 hover:border-orange-500 hover:bg-orange-50 transition-all font-bold text-slate-700 text-sm">
-                    Unduh Data Siswa (Excel)
+                <a href="{{ route('pimpinan.laporan.pimpinan.pdf') }}" target="_blank" class="block w-full text-center bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold py-3 rounded-lg transition-colors border border-slate-200 text-sm">
+                    📕 Cetak Data Pimpinan (PDF)
+                </a>
+
+                <hr class="border-slate-100 my-4">
+
+                <a href="{{ route('pimpinan.laporan.guru.excel') }}" class="block w-full text-center bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold py-3 rounded-lg transition-colors border border-slate-200 text-sm">
+                    📊 Unduh Rekap Guru (Excel)
+                </a>
+                <a href="{{ route('pimpinan.laporan.guru.pdf') }}" target="_blank" class="block w-full text-center bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold py-3 rounded-lg transition-colors border border-slate-200 text-sm">
+                    📕 Cetak Rekap Guru (PDF)
+                </a>
+
+                <hr class="border-slate-100 my-4">
+
+                <a href="{{ route('pimpinan.laporan.siswa.excel') }}" class="block w-full text-center bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold py-3 rounded-lg transition-colors border border-slate-200 text-sm">
+                    📊 Unduh Data Siswa (Excel)
+                </a>
+                <a href="{{ route('pimpinan.laporan.siswa.pdf') }}" target="_blank" class="block w-full text-center bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold py-3 rounded-lg transition-colors border border-slate-200 text-sm">
+                    📘 Cetak Data Siswa (PDF)
                 </a>
             </div>
         </div>

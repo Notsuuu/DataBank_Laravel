@@ -66,13 +66,23 @@
             <nav class="mt-6 space-y-1.5">
                 <a href="{{ route('guru.dashboard') }}"
                     class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('guru.dashboard') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('guru.dashboard') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}" 
+                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('guru.dashboard') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}"
                         fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" 
+                        <path stroke-linecap="round" stroke-linejoin="round"
                             d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10M9 21h6" />
                     </svg>
                     Beranda
                 </a>
+
+                <a href="{{ route('guru.profil') }}"
+                    class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('guru.profil') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('guru.profil') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    Profil Saya
+                </a>
+
 
                 <a href="{{ route('guru.pendidikan') }}"
                     class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('guru.pendidikan*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
@@ -103,25 +113,16 @@
                     </svg>
                     Log Aktivitas Saya
                 </a>
-
-                <a href="{{ route('guru.profil') }}"
-                    class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('guru.profil') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('guru.profil') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}" 
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    Profil Saya
-                </a>
             </nav>
         </div>
 
         <div class="border-t border-slate-100 pt-4 mx-2">
             <div class="flex items-center justify-between rounded-xl bg-slate-50 p-3 border border-slate-100">
                 <div class="flex items-center gap-2.5 overflow-hidden">
-                    
+
                     @if(auth()->user()->guru && auth()->user()->guru->foto)
-                        <img src="{{ asset('storage/' . auth()->user()->guru->foto) }}" 
-                            alt="Foto Profil" 
+                        <img src="{{ asset('storage/' . auth()->user()->guru->foto) }}"
+                            alt="Foto Profil"
                             class="h-9 w-9 flex-shrink-0 rounded-lg object-cover ring-2 ring-white shadow-sm">
                     @else
                         <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-100 font-bold text-emerald-700 text-sm ring-2 ring-white shadow-sm">
@@ -182,7 +183,7 @@
 
     <script>
         let idleTime = 0;
-        const maxIdleTime = 30; 
+        const maxIdleTime = 30;
 
         const idleInterval = setInterval(function() {
             idleTime++;
@@ -191,7 +192,7 @@
                 alert('Sesi Anda telah berakhir karena tidak ada aktivitas selama 30 menit. Sistem otomatis keluar demi keamanan.');
                 document.getElementById('logout-form').submit();
             }
-        }, 60000); 
+        }, 60000);
 
         function resetTimer() {
             idleTime = 0;

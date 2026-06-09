@@ -5,8 +5,10 @@ use App\Http\Controllers\Web\GuruController;
 use App\Http\Controllers\Web\SiswaController;
 use App\Http\Controllers\Web\LaporanController;
 use App\Http\Controllers\Web\AkademikController;
+use App\Http\Controllers\Web\PimpinanController; // Sudah ditambahkan
 use App\Http\Controllers\Web\Guru\DashboardController as GuruDashboard;
 use App\Http\Controllers\Web\Pimpinan\DashboardController as PimpinanDashboard;
+use App\Http\Controllers\Web\Pimpinan\KinerjaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\ForceChangePassword;
 
@@ -38,6 +40,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/operator/guru/{id}', [GuruController::class, 'update'])->name('operator.guru.update');
         Route::delete('/operator/guru/{id}', [GuruController::class, 'destroy'])->name('operator.guru.destroy');
         Route::get('/operator/laporan/guru/excel', [LaporanController::class, 'exportGuruExcel'])->name('operator.laporan.guru.excel');
+        Route::get('/operator/laporan/guru/pdf', [LaporanController::class, 'exportGuruPDF'])->name('operator.laporan.guru.pdf');
         Route::post('/operator/guru/import', [LaporanController::class, 'importGuru'])->name('operator.guru.import');
 
         // M3: Manajemen Data Siswa
@@ -48,6 +51,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/operator/siswa/{id}', [SiswaController::class, 'update'])->name('operator.siswa.update');
         Route::delete('/operator/siswa/{id}', [SiswaController::class, 'destroy'])->name('operator.siswa.destroy');
         Route::get('/operator/laporan/siswa/excel', [LaporanController::class, 'exportSiswaExcel'])->name('operator.laporan.siswa.excel');
+        Route::get('/operator/laporan/siswa/pdf', [LaporanController::class, 'exportSiswaPDF'])->name('operator.laporan.siswa.pdf');
         Route::post('/operator/siswa/import', [LaporanController::class, 'importSiswa'])->name('operator.siswa.import');
 
         // M4: Manajemen Data Akademik
@@ -73,6 +77,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/operator/akademik/rombel/store', [AkademikController::class, 'storeRombel'])->name('akademik.rombel.store');
         Route::delete('/operator/akademik/rombel/{id}', [AkademikController::class, 'hapusRombel'])->name('akademik.rombel.destroy');
 
+        // M5: Manajemen Data Pimpinan (Kepala Sekolah & Wakil)
+        Route::get('/operator/pimpinan', [PimpinanController::class, 'index'])->name('operator.pimpinan.index');
+        Route::get('/operator/pimpinan/create', [PimpinanController::class, 'create'])->name('operator.pimpinan.create');
+        Route::post('/operator/pimpinan', [PimpinanController::class, 'store'])->name('operator.pimpinan.store');
+        Route::get('/operator/pimpinan/{id}/edit', [PimpinanController::class, 'edit'])->name('operator.pimpinan.edit');
+        Route::put('/operator/pimpinan/{id}', [PimpinanController::class, 'update'])->name('operator.pimpinan.update');
+        Route::delete('/operator/pimpinan/{id}', [PimpinanController::class, 'destroy'])->name('operator.pimpinan.destroy');
+        Route::get('/operator/laporan/pimpinan/excel', [LaporanController::class, 'exportPimpinanExcel'])->name('operator.laporan.pimpinan.excel');
+        Route::get('/operator/laporan/pimpinan/pdf', [LaporanController::class, 'exportPimpinanPDF'])->name('operator.laporan.pimpinan.pdf');
     });
 
     // ==========================================
@@ -83,37 +96,37 @@ Route::middleware('auth')->group(function () {
         ->name('guru.')
         ->group(function () {
             Route::get('/dashboard', [GuruDashboard::class, 'index'])->name('dashboard');
-
             Route::get('/profil', [GuruDashboard::class, 'profil'])->name('profil');
             Route::put('/profil/update', [GuruDashboard::class, 'updateProfil'])->name('profil.update');
-
-            // CRUD Riwayat Pendidikan
             Route::get('/pendidikan', [GuruDashboard::class, 'pendidikan'])->name('pendidikan');
             Route::get('/pendidikan/tambah', [GuruDashboard::class, 'createPendidikan'])->name('pendidikan.create');
             Route::post('/pendidikan', [GuruDashboard::class, 'storePendidikan'])->name('pendidikan.store');
             Route::get('/pendidikan/{id}/edit', [GuruDashboard::class, 'editPendidikan'])->name('pendidikan.edit');
             Route::put('/pendidikan/{id}', [GuruDashboard::class, 'updatePendidikan'])->name('pendidikan.update');
             Route::delete('/pendidikan/{id}', [GuruDashboard::class, 'destroyPendidikan'])->name('pendidikan.destroy');
-
-            // Kelola Berkas Dokumen
             Route::get('/berkas', [GuruDashboard::class, 'berkas'])->name('berkas');
             Route::post('/berkas/upload', [GuruDashboard::class, 'uploadBerkas'])->name('berkas.upload');
-
-            // Log Aktivitas Personal Guru (Disamakan strukturnya dengan menu layouts)
             Route::get('/log-aktivitas', [GuruDashboard::class, 'logAktivitas'])->name('log-aktivitas');
         });
 
     // ==========================================
-    // BENTENG 3: KHUSUS PIMPINAN (Kepala Sekolah)
+    // BENTENG 3: KHUSUS PIMPINAN
     // ==========================================
-        Route::middleware(['role:pimpinan', ForceChangePassword::class])
+    Route::middleware(['role:pimpinan', ForceChangePassword::class])
         ->prefix('pimpinan')
         ->name('pimpinan.')
         ->group(function () {
-            // PERBAIKAN FIXED: Mengarahkan kueri ke PimpinanDashboard agar data terhitung riil
             Route::get('/dashboard', [PimpinanDashboard::class, 'index'])->name('dashboard');
+            Route::get('/laporan-kinerja', [KinerjaController::class, 'index'])->name('laporan_kinerja');
+            Route::get('/profile', [PimpinanDashboard::class, 'profile'])->name('profile');
+            Route::post('/profile/update', [PimpinanDashboard::class, 'updateProfile'])->name('profile.update');
+            Route::get('/laporan/pimpinan/excel', [App\Http\Controllers\Web\LaporanController::class, 'exportPimpinanExcel'])->name('laporan.pimpinan.excel');
+            Route::get('/laporan/pimpinan/pdf', [App\Http\Controllers\Web\LaporanController::class, 'exportPimpinanPDF'])->name('laporan.pimpinan.pdf');
+            Route::get('/laporan/guru/excel', [LaporanController::class, 'exportGuruExcel'])->name('laporan.guru.excel');
+            Route::get('/laporan/siswa/excel', [LaporanController::class, 'exportSiswaExcel'])->name('laporan.siswa.excel');
+            Route::get('/laporan/guru/pdf', [LaporanController::class, 'exportGuruPDF'])->name('laporan.guru.pdf');
+            Route::get('/laporan/siswa/pdf', [LaporanController::class, 'exportSiswaPDF'])->name('laporan.siswa.pdf');
         });
 });
 
-// Memanggil sistem Routing Auth bawaan Breeze
 require __DIR__ . '/auth.php';

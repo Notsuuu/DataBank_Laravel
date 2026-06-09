@@ -53,9 +53,10 @@
                     </svg>
                     Beranda
                 </a>
-
-                <a href="#" class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
-                    <svg class="h-5 w-5 flex-shrink-0 text-slate-400 group-hover:text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <a href="{{ route('pimpinan.laporan_kinerja') }}"
+                    class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('pimpinan.laporan_kinerja') ? 'bg-orange-600 text-white shadow-md shadow-orange-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('pimpinan.laporan_kinerja') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                     Laporan Kinerja
@@ -109,7 +110,7 @@
 
     <script>
         let idleTime = 0;
-        const maxIdleTime = 30; 
+        const maxIdleTime = 30;
         const idleInterval = setInterval(function() {
             idleTime++;
             if (idleTime >= maxIdleTime) {
@@ -117,7 +118,7 @@
                 alert('Sesi berakhir otomatis demi keamanan.');
                 document.getElementById('logout-form').submit();
             }
-        }, 60000); 
+        }, 60000);
         function resetTimer() { idleTime = 0; }
         ['mousemove', 'keydown', 'mousedown', 'scroll'].forEach(event => { window.addEventListener(event, resetTimer, true); });
     </script>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Operator;
 use App\Http\Controllers\Controller;
 use App\Models\Guru;
 use App\Models\Siswa;
+use App\Models\Pimpinan; // <-- Import model Pimpinan
 use App\Models\LogAktivitas;
 use Illuminate\Support\Facades\DB;
 
@@ -18,6 +19,8 @@ class DashboardController extends Controller
         $totalGuru = Guru::count();
         $totalSiswa = Siswa::count();
         $totalKelas = DB::table('kelas')->count();
+        // Menghitung pimpinan yang aktif saja
+        $totalPimpinan = Pimpinan::where('status_aktif', 'Aktif')->count();
 
         $guruPns = Guru::whereNotNull('nip')->where('nip', '!=', '')->count();
         $guruHonorer = Guru::where(function($q) {
@@ -34,11 +37,12 @@ class DashboardController extends Controller
         $logs = LogAktivitas::with('user')->latest()->take(5)->get();
 
         return view('operator.dashboard', compact(
-            'totalGuru', 
-            'totalSiswa', 
-            'totalKelas', 
-            'chartGuru', 
-            'chartSiswa', 
+            'totalGuru',
+            'totalSiswa',
+            'totalKelas',
+            'totalPimpinan', // <-- Tambahkan ini
+            'chartGuru',
+            'chartSiswa',
             'logs'
         ));
     }

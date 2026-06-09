@@ -15,7 +15,7 @@ use App\Models\Mapel;
 use App\Models\Rombel;
 use App\Models\DataKepegawaian;
 use App\Models\RiwayatPendidikan;
-use App\Models\BerkasGuru;
+use App\Models\Pimpinan;
 
 class DummyDataSeeder extends Seeder
 {
@@ -30,7 +30,7 @@ class DummyDataSeeder extends Seeder
             // 1. SEEDER TAHUN AJARAN & MAPEL
             // ==========================================
             $taGanjil = TahunAjaran::create(['tahun' => '2025/2026', 'semester' => 'Ganjil', 'is_active' => 0]);
-            $taGenap  = TahunAjaran::create(['tahun' => '2025/2026', 'semester' => 'Genap', 'is_active' => 1]); // Yang aktif saat ini
+            $taGenap  = TahunAjaran::create(['tahun' => '2025/2026', 'semester' => 'Genap', 'is_active' => 1]);
 
             $daftarMapel = [
                 ['kode_mapel' => 'MPL01', 'nama_mapel' => 'Pendidikan Agama Islam', 'kelompok_mapel' => 'A (Wajib)'],
@@ -50,12 +50,31 @@ class DummyDataSeeder extends Seeder
             User::create(['name' => 'Muhammad Ali Mubaraq', 'email' => 'operator1@smpn4.com', 'password' => $passwordStandar, 'role' => 'operator', 'is_active' => 1]);
             User::create(['name' => 'Operator Utama 2', 'email' => 'operator2@smpn4.com', 'password' => $passwordStandar, 'role' => 'operator', 'is_active' => 1]);
 
+            // Seeder Pimpinan dengan Tabel Terpisah (DITAMBAHKAN no_hp)
             for ($i = 1; $i <= 5; $i++) {
-                User::create(['name' => 'Pimpinan ' . $i, 'email' => 'pimpinan' . $i . '@smpn4.com', 'password' => $passwordStandar, 'role' => 'pimpinan', 'is_active' => 1]);
+                $userPimpinan = User::create([
+                    'name' => 'Pimpinan ' . $i,
+                    'email' => 'pimpinan' . $i . '@smpn4.com',
+                    'password' => $passwordStandar,
+                    'role' => 'pimpinan',
+                    'is_active' => 1
+                ]);
+
+                Pimpinan::create([
+                    'user_id' => $userPimpinan->id,
+                    'nama_lengkap' => $userPimpinan->name,
+                    'nip' => $faker->unique()->numerify('198#########'),
+                    'jenis_kelamin' => 'L',
+                    'agama' => 'Islam',
+                    'tempat_lahir' => 'Palu',
+                    'tanggal_lahir' => '1985-05-20',
+                    'no_hp' => $faker->numerify('08##########'), // <-- PENAMBAHAN NO HP DI SINI
+                    'status_aktif' => 'Aktif',
+                ]);
             }
 
             // ==========================================
-            // 3. SEEDER GURU LENGKAP (Data Pegawai, Pendidikan, Berkas)
+            // 3. SEEDER GURU LENGKAP
             // ==========================================
             $guruIds = [];
 
@@ -63,7 +82,6 @@ class DummyDataSeeder extends Seeder
                 $isAktif = $i <= 35;
                 $statusEnum = $isAktif ? 'Aktif' : 'Tidak Aktif';
 
-                // Akun
                 $userGuru = User::create([
                     'name'      => $faker->name,
                     'email'     => 'guru' . $i . '@smpn4.com',
@@ -72,7 +90,6 @@ class DummyDataSeeder extends Seeder
                     'is_active' => $isAktif,
                 ]);
 
-                // Profil Guru
                 $nip = $faker->unique()->numerify('198#########');
                 $guru = Guru::create([
                     'user_id'        => $userGuru->id,
@@ -89,7 +106,6 @@ class DummyDataSeeder extends Seeder
                     'status_aktif'   => $statusEnum,
                 ]);
 
-                // Detail Kepegawaian
                 DataKepegawaian::create([
                     'guru_id'         => $guru->id,
                     'status_pegawai'  => $faker->randomElement(['PNS', 'PPPK', 'Honorer']),
@@ -99,7 +115,6 @@ class DummyDataSeeder extends Seeder
                     'sk_pengangkatan' => 'SK.DISDIK/' . $faker->year . '/' . $faker->numerify('####'),
                 ]);
 
-                // Riwayat Pendidikan
                 RiwayatPendidikan::create([
                     'guru_id'     => $guru->id,
                     'jenjang'     => 'S1',
@@ -108,22 +123,15 @@ class DummyDataSeeder extends Seeder
                     'tahun_lulus' => $faker->numberBetween(2010, 2023),
                 ]);
 
-                // Berkas (Dummy path)
-                //BerkasGuru::create([
-                //    'guru_id'      => $guru->id,
-                //    'jenis_berkas' => 'Ijazah S1',
-                //    'file_path'    => 'berkas/ijazah_dummy.pdf',
-                //]);
-
                 if ($isAktif) {
                     $guruIds[] = $guru->id;
                 } else {
-                    $guru->delete(); // Soft Delete 5 guru
+                    $guru->delete();
                 }
             }
 
             // ==========================================
-            // 4. SEEDER KELAS
+            // 4. SEEDER KELAS & SISWA
             // ==========================================
             $kelasIds = [];
             $namaKelas = ['VII Diponegoro', 'VII Pattimura', 'VIII Melati', 'VIII Mawar', 'IX Mangga'];
@@ -138,12 +146,8 @@ class DummyDataSeeder extends Seeder
                 $kelasIds[] = $kelas->id;
             }
 
-            // ==========================================
-            // 5. SEEDER SISWA & ROMBEL
-            // ==========================================
             for ($i = 1; $i <= 150; $i++) {
                 $idKelasAcak = $faker->randomElement($kelasIds);
-
                 $siswa = Siswa::create([
                     'nis'           => $faker->unique()->numerify('24###'),
                     'nisn'          => $faker->unique()->numerify('01########'),
@@ -157,14 +161,12 @@ class DummyDataSeeder extends Seeder
                     'no_hp_wali'    => $faker->numerify('08##########'),
                     'kelas_id'      => $idKelasAcak,
                 ]);
-
-                // Daftarkan siswa ke Rombel di Tahun Ajaran Ganjil & Genap
                 Rombel::create(['siswa_id' => $siswa->id, 'kelas_id' => $idKelasAcak, 'tahun_ajaran_id' => $taGanjil->id]);
                 Rombel::create(['siswa_id' => $siswa->id, 'kelas_id' => $idKelasAcak, 'tahun_ajaran_id' => $taGenap->id]);
             }
 
             DB::commit();
-            $this->command->info('Data Dummy Ultimate berhasil di-seed: Operator, Pimpinan, Guru (Pendidikan, Karir, Berkas), Kelas, Siswa, Rombel, & Mapel!');
+            $this->command->info('Data Dummy Ultimate berhasil di-seed (Pimpinan di tabel pimpinans)!');
 
         } catch (\Exception $e) {
             DB::rollBack();

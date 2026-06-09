@@ -17,7 +17,7 @@
                 <span class="font-medium">{{ session('error') }}</span>
             </div>
         @endif
-        
+
         @error('file_excel')
             <div class="mb-6 bg-red-50 text-red-700 px-4 py-3 border border-red-200 rounded-lg flex items-center gap-2 shadow-sm">
                 <span class="font-medium">{{ $message }}</span>
@@ -25,7 +25,7 @@
         @enderror
 
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            
+
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <h2 class="text-xl font-bold text-slate-800">Daftar Guru SMPN 4 Palu</h2>
                 <div class="flex gap-2">
@@ -33,10 +33,15 @@
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                         Tambah Guru Baru
                     </a>
-                    
+
                     <a href="{{ route('operator.laporan.guru.excel') }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                         Unduh Excel
+                    </a>
+
+                    <a href="{{ route('operator.laporan.guru.pdf') }}" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Cetak PDF
                     </a>
                 </div>
             </div>
@@ -131,7 +136,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                
+
                                 <td class="px-6 py-4 text-center">
                                     @if($guru->jenis_kelamin == 'L')
                                         <span class="px-2.5 py-1 rounded text-xs font-bold text-slate-600 border border-slate-200 bg-slate-50">L</span>
@@ -139,7 +144,7 @@
                                         <span class="px-2.5 py-1 rounded text-xs font-bold text-slate-600 border border-slate-200 bg-slate-50">P</span>
                                     @endif
                                 </td>
-                                
+
                                 <td class="px-6 py-4">
                                     <div class="text-xs font-bold text-slate-700">{{ $guru->no_hp ?? '-' }}</div>
                                 </td>
@@ -155,7 +160,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                
+
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex justify-center items-center gap-3">
                                         <a href="{{ route('operator.guru.edit', $guru->id) }}" class="text-blue-600 hover:text-blue-800 font-bold transition-colors">Edit</a>

@@ -36,11 +36,16 @@
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     Tambah Siswa Baru
                 </a>
-                
+
                 <a href="{{ route('operator.laporan.siswa.excel') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                     Unduh Excel
                 </a>
+
+                <a href="{{ route('operator.laporan.siswa.pdf') }}" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Cetak PDF
+                    </a>
             </div>
         </div>
 
@@ -119,13 +124,13 @@
                                         </div>
                                     @endif
                                 </div>
-                                
+
                                 <div>
                                     <div class="font-bold text-slate-900">{{ $s->nama_lengkap }}</div>
                                     <div class="text-[11px] font-semibold text-slate-500 mt-0.5">
                                         {{ $s->tempat_lahir }}, {{ \Carbon\Carbon::parse($s->tanggal_lahir)->format('d M Y') }}
                                     </div>
-                                    
+
                                     @if($s->kelas)
                                         <div class="inline-flex items-center gap-1 text-[11px] font-extrabold text-blue-700 bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded mt-1 shadow-sm">
                                             Kelas {{ $s->kelas->nama_kelas }}
@@ -138,7 +143,7 @@
                                 </div>
                             </div>
                         </td>
-                        
+
                         <td class="px-6 py-4">
                             <div class="font-mono text-xs font-bold text-slate-700 bg-white border border-slate-200 shadow-sm px-2 py-0.5 rounded inline-block mb-1">
                                 {{ $s->nis }}
@@ -147,7 +152,7 @@
                                 NISN: <span class="font-bold text-slate-600">{{ $s->nisn ?? '-' }}</span>
                             </div>
                         </td>
-                        
+
                         <td class="px-6 py-4 text-center">
                             @if($s->jenis_kelamin == 'L')
                                 <span class="px-2.5 py-1 rounded text-xs font-extrabold text-slate-600 border border-slate-200 bg-slate-50 shadow-sm">L</span>
@@ -155,16 +160,16 @@
                                 <span class="px-2.5 py-1 rounded text-xs font-extrabold text-slate-600 border border-slate-200 bg-slate-50 shadow-sm">P</span>
                             @endif
                         </td>
-                        
+
                         <td class="px-6 py-4">
                             <div class="text-xs font-extrabold text-slate-800">{{ $s->nama_wali ?? '-' }}</div>
                             <div class="text-[11px] font-semibold text-slate-500 mt-0.5">{{ $s->no_hp_wali ?? 'Tidak ada kontak' }}</div>
                         </td>
-                        
+
                         <td class="px-6 py-4 text-center">
                             <div class="flex justify-center items-center gap-3">
                                 <a href="{{ route('operator.siswa.edit', $s->id) }}" class="text-blue-600 hover:text-blue-800 font-bold transition-colors">Edit</a>
-                                
+
                                 <form action="{{ route('operator.siswa.destroy', $s->id) }}" method="POST" onsubmit="return confirm('Peringatan: Yakin ingin menghapus data Siswa ini secara permanen?');">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="text-rose-500 hover:text-rose-700 font-bold transition-colors">Hapus</button>

@@ -3,29 +3,27 @@
 namespace App\Http\Controllers\Web\Pimpinan;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\Guru;
-use App\Models\Siswa;
-use App\Models\LogAktivitas;
+use Illuminate\Support\Facades\DB;
 
-class DashboardController extends Controller
+class KinerjaController extends Controller
 {
     public function index()
     {
-        $totalGuru = Guru::count();
-        $totalSiswa = Siswa::count();
-        $logs = LogAktivitas::with('user')->latest()->take(5)->get();
-
+        // Ambil semua data guru
         $gurus = Guru::all();
         $totalSkorKeseluruhan = 0;
 
+        // Lakukan pemetaan data untuk kalkulasi skor secara real-time
         $daftarGuru = $gurus->map(function($guru) use (&$totalSkorKeseluruhan) {
-            // Cek Riwayat Pendidikan
-            $hasPendidikan = DB::table('riwayat_pendidikans')->where('guru_id', $guru->id)->exists();
 
+            // Cek apakah guru ini sudah mengisi riwayat pendidikan minimum 1 data
+            $hasPendidikan = DB::table('riwayat_pendidikans')
+                ->where('guru_id', $guru->id)
+                ->exists();
+
+            // Algoritma Bobot Kepatuhan Administrasi (Masing-masing poin bernilai 25%)
             $skor = 0;
-            // PERBAIKAN: Langsung cek kolom di tabel gurus, BUKAN query ke tabel berkas_gurus!
             if (!empty($guru->file_ktp)) $skor += 25;
             if (!empty($guru->file_ijazah)) $skor += 25;
             if (!empty($guru->file_sk)) $skor += 25;
@@ -34,7 +32,7 @@ class DashboardController extends Controller
             $guru->skor_kinerja = $skor;
             $totalSkorKeseluruhan += $skor;
 
-            // Penentuan Warna Badge
+            // Klasifikasi Predikat secara Visual
             if ($skor === 100) {
                 $guru->predikat = 'Sangat Disiplin';
                 $guru->badge = 'bg-emerald-100 text-emerald-700 border-emerald-200';
@@ -49,17 +47,9 @@ class DashboardController extends Controller
             return $guru;
         });
 
-        // Hitung rata-rata persentase kelengkapan seluruh sekolah
-        $persenKelengkapan = $totalGuru > 0 ? ($totalSkorKeseluruhan / $totalGuru) : 0;
+        // Hitung nilai rata-rata makro untuk sekolah
+        $rataRata = $gurus->count() > 0 ? ($totalSkorKeseluruhan / $gurus->count()) : 0;
 
-        return view('pimpinan.dashboard', compact('totalGuru', 'totalSiswa', 'persenKelengkapan', 'logs', 'daftarGuru'));
+        return view('pimpinan.laporan_kinerja', compact('daftarGuru', 'rataRata'));
     }
-
-    public function profile()
-    {
-        $user = \Illuminate\Support\Facades\Auth::user();
-        return view('pimpinan.profile', compact('user'));
-    }
-
-    // Fungsi updateProfile tetap sama seperti sebelumnya...
 }

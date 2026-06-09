@@ -67,12 +67,22 @@
             <nav class="mt-6 space-y-1.5">
                 <a href="{{ route('operator.dashboard') }}"
                     class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('operator.dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('operator.dashboard') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}" 
+                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('operator.dashboard') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}"
                         fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" 
+                        <path stroke-linecap="round" stroke-linejoin="round"
                             d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10M9 21h6" />
                     </svg>
                     Beranda
+                </a>
+
+                <a href="{{ route('operator.pimpinan.index') }}"
+                    class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('operator.pimpinan.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('operator.pimpinan.*') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    Kelola Pimpinan
                 </a>
 
                 <a href="{{ route('operator.guru.index') }}"
@@ -116,7 +126,7 @@
                     </div>
                     <div class="overflow-hidden">
                         <span
-                            class="block truncate text-xs font-bold text-slate-800">{{ auth()->user()->name ?? 'Rifaldi' }}</span>
+                            class="block truncate text-xs font-bold text-slate-800">{{ auth()->user()->name ?? 'Muhammad Ali Mubaraq' }}</span>
                         <span class="block text-[10px] font-semibold text-slate-400 truncate">Operator Utama</span>
                     </div>
                 </div>
