@@ -13,7 +13,8 @@ class Guru extends Model
     protected $fillable = [
         'user_id', 'nip', 'nuptk', 'nama_lengkap', 'gelar_depan', 'gelar_belakang',
         'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 'agama', 'no_hp', 'alamat',
-        'foto', 'status_aktif'
+        'foto', 'status_aktif', 
+        'file_ktp', 'file_ijazah', 'file_sk'
     ];
 
     protected $guarded = ['id'];
@@ -21,10 +22,10 @@ class Guru extends Model
     public function user() { return $this->belongsTo(User::class); }
     public function kepegawaian() { return $this->hasOne(DataKepegawaian::class); }
     public function riwayatPendidikan() { return $this->hasMany(RiwayatPendidikan::class); }
-    public function berkas() { return $this->hasMany(BerkasGuru::class); }
+    
 
     public function kelas()
     {
         return $this->hasOne(Kelas::class, 'guru_id', 'id');
     }
-}   
+}

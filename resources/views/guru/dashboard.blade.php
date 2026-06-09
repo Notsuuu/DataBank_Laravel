@@ -1,84 +1,145 @@
 @extends('layouts.guru')
 
-@section('title', 'Ringkasan Profil - Panel Guru')
+@section('title', 'Dashboard Utama - Panel Guru')
 
 @section('content')
-    <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm border-t-4 border-t-emerald-500 mb-6">
-        <h2 class="text-xl font-bold text-slate-800">Selamat datang, Bapak/Ibu Guru!</h2>
-        <p class="mt-2 text-slate-500">Anda dapat memantau data pribadi dan riwayat karier Anda secara mandiri di portal ini.</p>
+<div class="space-y-6">
+
+    <div class="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-2xl shadow-md shadow-emerald-500/10 overflow-hidden relative border border-emerald-500/20">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+        
+        <div class="relative p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-white flex-1 text-center md:text-left">
+                <h2 class="text-2xl md:text-3xl font-black tracking-tight mb-2">
+                    Selamat datang kembali, {{ $user->guru->gelar_depan ?? '' }} {{ $user->name }} {{ $user->guru->gelar_belakang ?? '' }}!
+                </h2>
+                <p class="text-emerald-50 font-medium text-sm md:text-base max-w-2xl mx-auto md:mx-0 opacity-90">
+                    Kelola biodata, perbarui riwayat pendidikan, dan pastikan kelengkapan berkas administrasimu di sini.
+                </p>
+            </div>
+            <div class="flex-shrink-0">
+                @if($user->guru->foto)
+                    <img src="{{ asset('storage/' . $user->guru->foto) }}" class="h-24 w-24 rounded-full object-cover border-4 border-white/20 shadow-xl" alt="Foto Profil">
+                @else
+                    <div class="h-24 w-24 rounded-full bg-white/10 border-4 border-white/20 flex items-center justify-center text-3xl font-black text-white shadow-xl backdrop-blur-sm">
+                        {{ Str::upper(substr($user->name, 0, 1)) }}
+                    </div>
+                @endif
+            </div>
+        </div>
     </div>
 
-    <div class="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-        @if($user->guru)
-            <div class="flex items-center gap-6 p-6 border-b border-slate-200 bg-slate-50/50">
-                <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-full border-4 border-white shadow-md bg-slate-200 flex items-center justify-center">
-                    @if($user->guru->foto)
-                        <img src="{{ asset('storage/' . $user->guru->foto) }}" alt="Foto Profil" class="h-full w-full object-cover">
-                    @else
-                        <span class="text-3xl font-bold text-slate-400">{{ substr($user->guru->nama_lengkap, 0, 1) }}</span>
-                    @endif
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div class="bg-white p-6 rounded-xl shadow-sm shadow-slate-200/50 border border-slate-200/80 flex flex-col justify-between transition-all hover:shadow-md">
+            <div class="flex items-start justify-between mb-4">
+                <div class="h-10 w-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center border border-slate-200">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg>
+                </div>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-600 uppercase tracking-wider">Kepegawaian</span>
+            </div>
+            <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Status Keaktifan</p>
+                <div class="flex items-baseline gap-2">
+                    <h3 class="text-2xl font-black text-slate-800">{{ $user->guru->status_aktif == 'Aktif' ? 'Aktif Mengajar' : 'Nonaktif' }}</h3>
+                </div>
+                <p class="text-xs font-semibold text-slate-500 mt-2">NIP: <span class="text-slate-800 font-bold">{{ $user->guru->nip ?? 'Guru Honorer (Tanpa NIP)' }}</span></p>
+            </div>
+        </div>
+
+        @php
+            $berkasDiisi = 0;
+            if($user->guru->file_ktp) $berkasDiisi++;
+            if($user->guru->file_ijazah) $berkasDiisi++;
+            if($user->guru->file_sk) $berkasDiisi++;
+            $persentase = round(($berkasDiisi / 3) * 100);
+        @endphp
+        <div class="bg-white p-6 rounded-xl shadow-sm shadow-slate-200/50 border border-slate-200/80 flex flex-col justify-between transition-all hover:shadow-md">
+            <div class="flex items-start justify-between mb-4">
+                <div class="h-10 w-10 rounded-xl {{ $persentase == 100 ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-amber-50 text-amber-600 border-amber-200' }} flex items-center justify-center border">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                </div>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-600 uppercase tracking-wider">Dokumen</span>
+            </div>
+            <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Kelengkapan Berkas</p>
+                <div class="flex items-baseline gap-2 mb-3">
+                    <h3 class="text-2xl font-black {{ $persentase == 100 ? 'text-teal-600' : 'text-amber-600' }}">{{ $persentase }}%</h3>
+                    <span class="text-xs font-bold text-slate-500">({{ $berkasDiisi }} dari 3 Berkas)</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-1.5 mb-1 overflow-hidden">
+                    <div class="h-1.5 rounded-full transition-all duration-1000 {{ $persentase == 100 ? 'bg-teal-500' : 'bg-amber-500' }}" style="width: {{ $persentase }}%"></div>
+                </div>
+                @if($persentase < 100)
+                    <p class="text-[10px] font-bold text-amber-600 mt-2">Segera lengkapi berkas di menu Pembaruan Berkas.</p>
+                @else
+                    <p class="text-[10px] font-bold text-teal-600 mt-2">Semua berkas wajib telah terunggah.</p>
+                @endif
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm shadow-slate-200/50 border border-slate-200/80 flex flex-col justify-between transition-all hover:shadow-md">
+            <div class="flex items-start justify-between mb-4">
+                <div class="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z" /><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" stroke-linecap="round" stroke-linejoin="round" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" /></svg>
+                </div>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-600 uppercase tracking-wider">Akademik</span>
+            </div>
+            <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Riwayat Pendidikan</p>
+                <div class="flex items-baseline gap-2">
+                    @php $jumlahPendidikan = \App\Models\RiwayatPendidikan::where('guru_id', $user->guru->id)->count(); @endphp
+                    <h3 class="text-2xl font-black text-slate-800">{{ $jumlahPendidikan }}</h3>
+                    <span class="text-sm font-bold text-slate-500">Gelar Terdata</span>
+                </div>
+                <div class="mt-2 flex gap-2">
+                    <a href="{{ route('guru.pendidikan') }}" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 transition-colors">
+                        Lihat Rincian <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm shadow-slate-200/50 border border-slate-200/80 overflow-hidden mt-6">
+        <div class="p-5 border-b border-slate-100 bg-slate-50/50">
+            <h3 class="font-extrabold text-slate-800 tracking-tight">Aksi Cepat</h3>
+        </div>
+        <div class="p-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            
+            <a href="{{ route('guru.berkas') }}" class="group flex items-center p-4 rounded-xl border border-slate-100 bg-slate-50 hover:border-teal-300 hover:bg-teal-50 hover:shadow-sm transition-all duration-200">
+                <div class="h-12 w-12 rounded-xl bg-white text-teal-600 flex items-center justify-center mr-4 border border-slate-200 group-hover:border-teal-200 transition-colors shadow-sm">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                 </div>
                 <div>
-                    <h3 class="text-2xl font-bold text-slate-800">
-                        {{ $user->guru->gelar_depan ? $user->guru->gelar_depan . ' ' : '' }}{{ $user->guru->nama_lengkap }}{{ $user->guru->gelar_belakang ? ', ' . $user->guru->gelar_belakang : '' }}
-                    </h3>
-                    <p class="text-sm font-medium text-slate-500 mt-1">NIP: {{ $user->guru->nip ?? 'Tidak ada NIP (Honorer)' }}</p>
-                    <span class="mt-3 inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
-                        Akun Aktif
-                    </span>
+                    <h4 class="font-bold text-slate-800 group-hover:text-teal-700 transition-colors">Pembaruan Berkas</h4>
+                    <p class="text-xs font-semibold text-slate-500 mt-0.5">Upload KTP, Ijazah & SK</p>
                 </div>
-            </div>
+            </a>
 
-            <div class="p-6">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-5 border-b border-slate-100 pb-2">Informasi Biodata</h4>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-8">
-                    <div>
-                        <p class="text-sm text-slate-500 mb-1">Email Terdaftar</p>
-                        <p class="font-semibold text-slate-800">{{ $user->email }}</p>
-                    </div>
-
-                    <div>
-                        <p class="text-sm text-slate-500 mb-1">Nomor HP / WhatsApp</p>
-                        <p class="font-semibold text-slate-800">{{ $user->guru->no_hp ?? '-' }}</p>
-                    </div>
-
-                    <div>
-                        <p class="text-sm text-slate-500 mb-1">Jenis Kelamin</p>
-                        <p class="font-semibold text-slate-800">{{ $user->guru->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</p>
-                    </div>
-
-                    <div class="lg:col-span-2">
-                        <p class="text-sm text-slate-500 mb-1">Tempat, Tanggal Lahir</p>
-                        <p class="font-semibold text-slate-800">
-                            {{ $user->guru->tempat_lahir }},
-                            {{ \Carbon\Carbon::parse($user->guru->tanggal_lahir)->translatedFormat('d F Y') }}
-                        </p>
-                    </div>
-
-                    <div>
-                        <p class="text-sm text-slate-500 mb-1">Agama</p>
-                        <p class="font-semibold text-slate-800">{{ $user->guru->agama }}</p>
-                    </div>
-
-                    <div class="md:col-span-2 lg:col-span-3">
-                        <p class="text-sm text-slate-500 mb-1">Alamat Lengkap</p>
-                        <p class="font-semibold text-slate-800">{{ $user->guru->alamat }}</p>
-                    </div>
+            <a href="{{ route('guru.pendidikan') }}" class="group flex items-center p-4 rounded-xl border border-slate-100 bg-slate-50 hover:border-emerald-300 hover:bg-emerald-50 hover:shadow-sm transition-all duration-200">
+                <div class="h-12 w-12 rounded-xl bg-white text-emerald-600 flex items-center justify-center mr-4 border border-slate-200 group-hover:border-emerald-200 transition-colors shadow-sm">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
                 </div>
-            </div>
-        @else
-            <div class="p-6">
-                <div class="flex items-start rounded-lg bg-amber-50 p-4 border border-amber-200">
-                    <svg class="h-5 w-5 mr-3 flex-shrink-0 text-amber-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                    </svg>
-                    <div>
-                        <h3 class="text-sm font-bold text-amber-800">Biodata Fisik Belum Tersedia</h3>
-                        <p class="mt-1 text-sm text-amber-700">Akun login Anda berhasil dibuat, namun data detail profil Anda belum lengkap di sistem. Mohon hubungi Operator Sekolah untuk memperbarui data ini.</p>
-                    </div>
+                <div>
+                    <h4 class="font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">Riwayat Pendidikan</h4>
+                    <p class="text-xs font-semibold text-slate-500 mt-0.5">Tambah data gelar akademik</p>
                 </div>
-            </div>
-        @endif
+            </a>
+
+            <a href="{{ route('guru.log-aktivitas') }}" class="group flex items-center p-4 rounded-xl border border-slate-100 bg-slate-50 hover:border-emerald-300 hover:bg-emerald-50 hover:shadow-sm transition-all duration-200">
+                <div class="h-12 w-12 rounded-xl bg-white text-emerald-600 flex items-center justify-center mr-4 border border-slate-200 group-hover:border-emerald-200 transition-colors shadow-sm">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">Log Aktivitas Saya</h4>
+                    <p class="text-xs font-semibold text-slate-500 mt-0.5">Pantau riwayat aktivitasmu</p>
+                </div>
+            </a>
+
+        </div>
     </div>
-@endsection
+
+</div>
+@endsection 

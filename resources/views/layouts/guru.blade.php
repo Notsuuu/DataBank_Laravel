@@ -66,12 +66,12 @@
             <nav class="mt-6 space-y-1.5">
                 <a href="{{ route('guru.dashboard') }}"
                     class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('guru.dashboard') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('guru.dashboard') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}"
+                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('guru.dashboard') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}" 
                         fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" 
+                            d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10M9 21h6" />
                     </svg>
-                    Ringkasan Profil
+                    Beranda
                 </a>
 
                 <a href="{{ route('guru.pendidikan') }}"
@@ -120,7 +120,7 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logout') }}" method="POST" class="inline flex-shrink-0">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="inline flex-shrink-0">
                     @csrf
                     <button type="submit" title="Keluar Sistem"
                         class="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition-all duration-200 hover:bg-red-50 hover:text-red-600">

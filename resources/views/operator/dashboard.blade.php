@@ -1,6 +1,6 @@
 @extends('layouts.operator')
 
-@section('header', 'Dashboard Operator')
+@section('header', 'Beranda Operator')
 
 @section('content')
     <div class="space-y-6">
