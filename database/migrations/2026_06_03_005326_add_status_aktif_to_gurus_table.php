@@ -23,6 +23,6 @@ return new class extends Migration
     {
         Schema::table('gurus', function (Blueprint $table) {
             //
-        });
+        });     
     }
 };

@@ -18,7 +18,7 @@ class GuruController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->input('q');
-        $status = $request->input('status');
+        $status = $request->input('status'); 
         $tingkatKelas = $request->input('kelas');
 
         $query = Guru::with(['user', 'kelas'])->latest();
@@ -29,8 +29,9 @@ class GuruController extends Controller
             });
         }
 
-        if ($status) {
-            $query->where('status_aktif', $status);
+        if ($request->has('status') && $status !== null) {
+            $statusDbd = $request->input('status') == '1' ? 'Aktif' : 'Tidak Aktif';
+            $query->where('status_aktif', $statusDbd);
         }
 
         if ($tingkatKelas) {
@@ -118,6 +119,7 @@ class GuruController extends Controller
         $guru = Guru::with('user')->findOrFail($id);
         return view('operator.guru.edit', compact('guru'));
     }
+
     public function update(Request $request, string $id)
     {
         $guru = Guru::findOrFail($id);
@@ -148,16 +150,18 @@ class GuruController extends Controller
 
         $guru->update($data);
 
-        return redirect()->route('operator.guru.index');
+        return redirect()->route('operator.guru.index')->with('success', 'Data guru berhasil diperbarui!');
     }
 
     public function destroy(string $id)
     {
-
         $guru = Guru::findOrFail($id);
 
-        $guru->delete();
+        $guru->update(['status_aktif' => 'Tidak Aktif']);
+        
+        // Opsional: Hapus komentar pada baris di bawah ini HANYA jika kamu menggunakan SoftDeletes di Model Guru
+        // $guru->delete();
 
-        return redirect()->route('operator.guru.index')->with('success', 'Data guru berhasil dihapus dari sistem!');
+        return redirect()->route('operator.guru.index')->with('success', 'Data guru berhasil dinonaktifkan!');
     }
 }

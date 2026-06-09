@@ -27,4 +27,4 @@ class Guru extends Model
     {
         return $this->hasOne(Kelas::class, 'guru_id', 'id');
     }
-}
+}   
