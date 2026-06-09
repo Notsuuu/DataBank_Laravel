@@ -12,14 +12,22 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Hitung kuantitas data riil secara langsung dari database
+        // 1. Hitung jumlah total data
         $totalGuru = Guru::count();
         $totalSiswa = Siswa::count();
 
-        // Tarik 5 baris catatan aktivitas global terbaru untuk konsumsi pimpinan
-        $logs = LogAktivitas::with('user')->latest()->take(5)->get();
+        // 2. Logika persentase kelengkapan berkas
+        // Kita hitung guru yang sudah upload KTP DAN Ijazah
+        $berkasLengkap = Guru::whereNotNull('file_ktp')
+                             ->whereNotNull('file_ijazah')
+                             ->count();
+        
+        $persenKelengkapan = $totalGuru > 0 ? ($berkasLengkap / $totalGuru) * 100 : 0;
 
-        // Kirim semua variabel ke dalam file pimpinan/dashboard.blade.php
-        return view('pimpinan.dashboard', compact('totalGuru', 'totalSiswa', 'logs'));
+        // 3. Tarik log aktivitas terbaru (diperbanyak menjadi 10 agar lebih informatif)
+        $logs = LogAktivitas::with('user')->latest()->take(10)->get();
+
+        // 4. Kirim variabel ke view
+        return view('pimpinan.dashboard', compact('totalGuru', 'totalSiswa', 'logs', 'persenKelengkapan'));
     }
 }

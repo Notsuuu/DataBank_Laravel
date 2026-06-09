@@ -57,6 +57,7 @@ class GuruController extends Controller
     {
         $request->validate([
             'email' => 'required|email|unique:users,email',
+            'role' => 'required|in:guru,pimpinan',
             'nip' => 'nullable|unique:gurus,nip',
             'nama_lengkap' => 'required|string|max:255',
             'gelar_depan' => 'nullable|string|max:50',
@@ -79,7 +80,7 @@ class GuruController extends Controller
                 'name' => $request->nama_lengkap,
                 'email' => $request->email,
                 'password' => Hash::make($defaultPassword),
-                'role' => 'guru',
+                'role' => $request->role,
                 'is_active' => true,
                 'force_change_password' => true, 
             ]);

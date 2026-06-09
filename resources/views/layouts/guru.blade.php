@@ -115,7 +115,7 @@
             </nav>
         </div>
 
-       <div class="border-t border-slate-100 pt-4 mx-2">
+        <div class="border-t border-slate-100 pt-4 mx-2">
             <div class="flex items-center justify-between rounded-xl bg-slate-50 p-3 border border-slate-100">
                 <div class="flex items-center gap-2.5 overflow-hidden">
                     
