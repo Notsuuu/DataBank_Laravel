@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
 use App\Models\Kelas;
-use App\Models\TahunAjaran; // Wajib ditambahkan untuk mengecek tahun aktif
+use App\Models\TahunAjaran;
 use Illuminate\Support\Facades\Storage;
 
 class SiswaController extends Controller
@@ -16,52 +16,41 @@ class SiswaController extends Controller
      */
     public function index(Request $request)
     {
-        // 1. Ambil parameter dari URL
         $keyword = $request->input('q');
         $kelasFilter = $request->input('kelas');
 
-        // 2. Ambil data master untuk kebutuhan View dan Query
         $semuaKelas = Kelas::all();
         $tahunAktif = TahunAjaran::where('is_active', true)->first();
 
-        // 3. Buat query dasar: Wajib sertakan relasi 'rombels' agar UI "Belum ada kelas" teratasi
-        $query = Siswa::with([
-            'rombels' => function ($q) use ($tahunAktif) {
-                if ($tahunAktif) {
-                    $q->where('tahun_ajaran_id', $tahunAktif->id)->with('kelas');
-                }
-            },
-        ]);
+        $query = Siswa::with(['kelas', 'rombels' => function ($q) use ($tahunAktif) {
+            if ($tahunAktif) {
+                $q->where('tahun_ajaran_id', $tahunAktif->id)->with('kelas');
+            }
+        }]);
 
-        // 4. Logika Pencarian (Nama Lengkap, NISN, atau NIS)
         if ($keyword) {
             $query->where(function ($q) use ($keyword) {
                 $q->where('nama_lengkap', 'LIKE', "%{$keyword}%")
                     ->orWhere('nisn', 'LIKE', "%{$keyword}%")
-                    ->orWhere('nis', 'LIKE', "%{$keyword}%"); // Ekstra: Bisa cari pakai NIS juga
+                    ->orWhere('nis', 'LIKE', "%{$keyword}%");
             });
         }
 
-        // 5. Logika Filter Kelas (DIperbaiki: Menggunakan whereHas karena relasi melalui Rombel)
-        if ($kelasFilter && $tahunAktif) {
-            $query->whereHas('rombels', function ($q) use ($kelasFilter, $tahunAktif) {
-                $q->where('kelas_id', $kelasFilter)->where('tahun_ajaran_id', $tahunAktif->id);
-            });
+        if ($kelasFilter) {
+            $query->where('kelas_id', $kelasFilter);
         }
 
-        // 6. Urutkan berdasarkan abjad
         $query->orderBy('nama_lengkap', 'asc');
 
-        // 7. Eksekusi query dengan paginate (DIperbaiki: Tambahkan appends agar filter tidak hilang di Page 2)
         $siswas = $query->paginate(10)->appends($request->query());
 
-        // 8. Arahkan ke view
         return view('operator.siswa.index', compact('siswas', 'keyword', 'kelasFilter', 'semuaKelas'));
     }
 
     public function create()
     {
-        return view('operator.siswa.create');
+        $semuaKelas = Kelas::all();
+        return view('operator.siswa.create', compact('semuaKelas'));
     }
 
     public function store(Request $request)
@@ -77,10 +66,11 @@ class SiswaController extends Controller
             'alamat' => 'nullable|string',
             'nama_wali' => 'nullable|string|max:255',
             'no_hp_wali' => 'nullable|string|max:15',
+            'kelas_id' => 'nullable|exists:kelas,id', // Validasi kelas
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $data = $request->all();
+        $data = $request->except(['foto']); 
 
         if ($request->hasFile('foto')) {
             $extension = $request->file('foto')->getClientOriginalExtension();
@@ -92,13 +82,15 @@ class SiswaController extends Controller
         return redirect()->route('operator.siswa.index')->with('success', 'Data Siswa berhasil ditambahkan!');
     }
 
-    public function edit($id)
+    public function edit(string $id)
     {
         $siswa = Siswa::findOrFail($id);
-        return view('operator.siswa.edit', compact('siswa'));
+        $semuaKelas = Kelas::all(); 
+        
+        return view('operator.siswa.edit', compact('siswa', 'semuaKelas'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
         $siswa = Siswa::findOrFail($id);
 
@@ -113,13 +105,15 @@ class SiswaController extends Controller
             'alamat' => 'nullable|string',
             'nama_wali' => 'nullable|string|max:255',
             'no_hp_wali' => 'nullable|string|max:15',
+            'kelas_id' => 'nullable|exists:kelas,id',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $data = $request->all();
+        $data = $request->except(['foto']);
 
         if ($request->hasFile('foto')) {
-            if ($siswa->foto) {
+            // Hapus foto lama jika ada
+            if ($siswa->foto && Storage::disk('public')->exists($siswa->foto)) {
                 Storage::disk('public')->delete($siswa->foto);
             }
 
@@ -129,17 +123,19 @@ class SiswaController extends Controller
         }
 
         $siswa->update($data);
-        return redirect()->route('operator.siswa.index')->with('success', 'Data Siswa berhasil diperbarui!');
+        return redirect()->route('operator.siswa.index')->with('success', 'Data Profil Siswa berhasil diperbarui!');
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        // Cari data siswa
-        $siswa = \App\Models\Siswa::findOrFail($id);
+        $siswa = Siswa::findOrFail($id);
 
-        // Hapus data (Menyerahkan pencatatan log otomatis ke Observer)
+        if ($siswa->foto && Storage::disk('public')->exists($siswa->foto)) {
+            Storage::disk('public')->delete($siswa->foto);
+        }
+
         $siswa->delete();
 
-        return redirect()->route('operator.siswa.index')->with('success', 'Data siswa berhasil dihapus dari sistem!');
+        return redirect()->route('operator.siswa.index')->with('success', 'Data siswa berhasil dihapus secara permanen!');
     }
 }
