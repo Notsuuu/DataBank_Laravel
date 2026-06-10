@@ -12,6 +12,7 @@ class RiwayatPendidikan extends Model
 
     protected $fillable = [
         'guru_id',
+        'pimpinan_id',
         'jenjang',
         'institusi',
         'jurusan',
@@ -21,5 +22,10 @@ class RiwayatPendidikan extends Model
     public function guru()
     {
         return $this->belongsTo(Guru::class);
+    }
+
+    public function pimpinan()
+    {
+        return $this->belongsTo(Pimpinan::class);
     }
 }

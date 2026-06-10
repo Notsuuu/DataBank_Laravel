@@ -25,10 +25,18 @@ return new class extends Migration
             $table->string('no_hp')->nullable();
             $table->text('alamat')->nullable();
             $table->string('foto')->nullable();
+
+            // --- INI 3 KOLOM BARU UNTUK MENYIMPAN BERKAS PIMPINAN ---
+            $table->string('file_ktp')->nullable();
+            $table->string('file_ijazah')->nullable();
+            $table->string('file_sk')->nullable();
+            // ---------------------------------------------------------
+
             $table->enum('status_aktif', ['Aktif', 'Nonaktif'])->default('Aktif');
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      */

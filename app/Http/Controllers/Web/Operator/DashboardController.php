@@ -46,4 +46,29 @@ class DashboardController extends Controller
             'logs'
         ));
     }
+    // ==========================================
+    // KELOLA PROFIL OPERATOR
+    // ==========================================
+    public function profil()
+    {
+        $user = auth()->user();
+        return view('operator.profil', compact('user'));
+    }
+
+    public function updateProfil(\Illuminate\Http\Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+        ]);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        return back()->with('success', 'Data profil berhasil diperbarui!');
+    }
 }

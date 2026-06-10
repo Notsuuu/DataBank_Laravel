@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens; 
+use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password', 'role', 'is_active', 'force_change_password',])] 
+#[Fillable(['name', 'email', 'password', 'role', 'is_active', 'force_change_password',])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -37,5 +37,13 @@ class User extends Authenticatable
     public function guru()
     {
         return $this->hasOne(Guru::class);
+    }
+
+    /**
+     * Relasi: Satu User (jika rolenya pimpinan) memiliki satu profil Pimpinan.
+     */
+    public function pimpinan()
+    {
+        return $this->hasOne(Pimpinan::class);
     }
 }

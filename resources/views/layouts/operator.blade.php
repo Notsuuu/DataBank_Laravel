@@ -75,6 +75,12 @@
                     Beranda
                 </a>
 
+                <a href="{{ route('operator.profil') }}"
+                    class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('operator.profil') ? 'bg-blue-600 text-white shadow-md shadow-blue-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                    <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('operator.profil') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                    Profil Saya
+                </a>
+
                 <a href="{{ route('operator.pimpinan.index') }}"
                     class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 {{ request()->routeIs('operator.pimpinan.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-600/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
                     <svg class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('operator.pimpinan.*') ? 'text-white' : 'text-slate-400 group-hover:text-slate-600' }}"

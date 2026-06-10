@@ -5,10 +5,10 @@ use App\Http\Controllers\Web\GuruController;
 use App\Http\Controllers\Web\SiswaController;
 use App\Http\Controllers\Web\LaporanController;
 use App\Http\Controllers\Web\AkademikController;
-use App\Http\Controllers\Web\PimpinanController; // Sudah ditambahkan
+use App\Http\Controllers\Web\PimpinanController;
 use App\Http\Controllers\Web\Guru\DashboardController as GuruDashboard;
 use App\Http\Controllers\Web\Pimpinan\DashboardController as PimpinanDashboard;
-use App\Http\Controllers\Web\Pimpinan\KinerjaController;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\ForceChangePassword;
 
@@ -77,7 +77,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/operator/akademik/rombel/store', [AkademikController::class, 'storeRombel'])->name('akademik.rombel.store');
         Route::delete('/operator/akademik/rombel/{id}', [AkademikController::class, 'hapusRombel'])->name('akademik.rombel.destroy');
 
-        // M5: Manajemen Data Pimpinan (Kepala Sekolah & Wakil)
+        // M5: Manajemen Data Pimpinan
         Route::get('/operator/pimpinan', [PimpinanController::class, 'index'])->name('operator.pimpinan.index');
         Route::get('/operator/pimpinan/create', [PimpinanController::class, 'create'])->name('operator.pimpinan.create');
         Route::post('/operator/pimpinan', [PimpinanController::class, 'store'])->name('operator.pimpinan.store');
@@ -86,6 +86,10 @@ Route::middleware('auth')->group(function () {
         Route::delete('/operator/pimpinan/{id}', [PimpinanController::class, 'destroy'])->name('operator.pimpinan.destroy');
         Route::get('/operator/laporan/pimpinan/excel', [LaporanController::class, 'exportPimpinanExcel'])->name('operator.laporan.pimpinan.excel');
         Route::get('/operator/laporan/pimpinan/pdf', [LaporanController::class, 'exportPimpinanPDF'])->name('operator.laporan.pimpinan.pdf');
+
+        // M6: Kelola Profil & Password Operator
+        Route::get('/operator/profil', [App\Http\Controllers\Web\Operator\DashboardController::class, 'profil'])->name('operator.profil');
+        Route::put('/operator/profil/update', [App\Http\Controllers\Web\Operator\DashboardController::class, 'updateProfil'])->name('operator.profil.update');
     });
 
     // ==========================================
@@ -96,19 +100,26 @@ Route::middleware('auth')->group(function () {
         ->name('guru.')
         ->group(function () {
             Route::get('/dashboard', [GuruDashboard::class, 'index'])->name('dashboard');
+
+            // Self-Service Profil Guru
             Route::get('/profil', [GuruDashboard::class, 'profil'])->name('profil');
             Route::put('/profil/update', [GuruDashboard::class, 'updateProfil'])->name('profil.update');
+
+            // Self-Service Pendidikan Guru
             Route::get('/pendidikan', [GuruDashboard::class, 'pendidikan'])->name('pendidikan');
             Route::get('/pendidikan/tambah', [GuruDashboard::class, 'createPendidikan'])->name('pendidikan.create');
             Route::post('/pendidikan', [GuruDashboard::class, 'storePendidikan'])->name('pendidikan.store');
             Route::get('/pendidikan/{id}/edit', [GuruDashboard::class, 'editPendidikan'])->name('pendidikan.edit');
             Route::put('/pendidikan/{id}', [GuruDashboard::class, 'updatePendidikan'])->name('pendidikan.update');
             Route::delete('/pendidikan/{id}', [GuruDashboard::class, 'destroyPendidikan'])->name('pendidikan.destroy');
+
+            // Self-Service Berkas Guru
             Route::get('/berkas', [GuruDashboard::class, 'berkas'])->name('berkas');
             Route::post('/berkas/upload', [GuruDashboard::class, 'uploadBerkas'])->name('berkas.upload');
+
+            // Log Aktivitas
             Route::get('/log-aktivitas', [GuruDashboard::class, 'logAktivitas'])->name('log-aktivitas');
         });
-
     // ==========================================
     // BENTENG 3: KHUSUS PIMPINAN
     // ==========================================
@@ -116,17 +127,34 @@ Route::middleware('auth')->group(function () {
         ->prefix('pimpinan')
         ->name('pimpinan.')
         ->group(function () {
+            // Dashboard Utama & Kinerja
             Route::get('/dashboard', [PimpinanDashboard::class, 'index'])->name('dashboard');
-            Route::get('/laporan-kinerja', [KinerjaController::class, 'index'])->name('laporan_kinerja');
-            Route::get('/profile', [PimpinanDashboard::class, 'profile'])->name('profile');
-            Route::post('/profile/update', [PimpinanDashboard::class, 'updateProfile'])->name('profile.update');
-            Route::get('/laporan/pimpinan/excel', [App\Http\Controllers\Web\LaporanController::class, 'exportPimpinanExcel'])->name('laporan.pimpinan.excel');
-            Route::get('/laporan/pimpinan/pdf', [App\Http\Controllers\Web\LaporanController::class, 'exportPimpinanPDF'])->name('laporan.pimpinan.pdf');
+            Route::get('/laporan-kinerja', [PimpinanDashboard::class, 'laporanKinerja'])->name('laporan_kinerja');
+
+            // Self-Service Profil Pimpinan (Diarahkan ke PimpinanDashboard)
+            Route::get('/profil', [PimpinanDashboard::class, 'profil'])->name('profil');
+            Route::put('/profil/update', [PimpinanDashboard::class, 'updateProfil'])->name('profil.update');
+
+            // Self-Service Pendidikan Pimpinan (Diarahkan ke PimpinanDashboard)
+            Route::get('/pendidikan', [PimpinanDashboard::class, 'pendidikan'])->name('pendidikan');
+            Route::get('/pendidikan/tambah', [PimpinanDashboard::class, 'createPendidikan'])->name('pendidikan.create');
+            Route::post('/pendidikan', [PimpinanDashboard::class, 'storePendidikan'])->name('pendidikan.store');
+            Route::get('/pendidikan/{id}/edit', [PimpinanDashboard::class, 'editPendidikan'])->name('pendidikan.edit');
+            Route::put('/pendidikan/{id}', [PimpinanDashboard::class, 'updatePendidikan'])->name('pendidikan.update');
+            Route::delete('/pendidikan/{id}', [PimpinanDashboard::class, 'destroyPendidikan'])->name('pendidikan.destroy');
+
+            // Self-Service Berkas Pimpinan (Diarahkan ke PimpinanDashboard)
+            Route::get('/berkas', [PimpinanDashboard::class, 'berkas'])->name('berkas');
+            Route::post('/berkas/upload', [PimpinanDashboard::class, 'uploadBerkas'])->name('berkas.upload');
+
+            // Ekspor Laporan
+            Route::get('/laporan/pimpinan/excel', [LaporanController::class, 'exportPimpinanExcel'])->name('laporan.pimpinan.excel');
+            Route::get('/laporan/pimpinan/pdf', [LaporanController::class, 'exportPimpinanPDF'])->name('laporan.pimpinan.pdf');
             Route::get('/laporan/guru/excel', [LaporanController::class, 'exportGuruExcel'])->name('laporan.guru.excel');
             Route::get('/laporan/siswa/excel', [LaporanController::class, 'exportSiswaExcel'])->name('laporan.siswa.excel');
             Route::get('/laporan/guru/pdf', [LaporanController::class, 'exportGuruPDF'])->name('laporan.guru.pdf');
             Route::get('/laporan/siswa/pdf', [LaporanController::class, 'exportSiswaPDF'])->name('laporan.siswa.pdf');
         });
-});
+    });
 
 require __DIR__ . '/auth.php';
