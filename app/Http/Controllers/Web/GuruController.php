@@ -159,9 +159,7 @@ class GuruController extends Controller
         $guru = Guru::findOrFail($id);
 
         $guru->update(['status_aktif' => 'Tidak Aktif']);
-        
-        // Opsional: Hapus komentar pada baris di bawah ini HANYA jika kamu menggunakan SoftDeletes di Model Guru
-        // $guru->delete();
+
 
         return redirect()->route('operator.guru.index')->with('success', 'Data guru berhasil dinonaktifkan!');
     }

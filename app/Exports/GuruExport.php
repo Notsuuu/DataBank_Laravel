@@ -47,4 +47,4 @@ class GuruExport implements FromCollection, WithHeadings, WithMapping
             $guru->alamat,
         ];
     }
-}
+}   

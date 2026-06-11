@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Guru;
 
 class PimpinanController extends Controller
 {
@@ -94,7 +95,7 @@ class PimpinanController extends Controller
     /**
      * Menampilkan form edit untuk data Pimpinan
      */
-    public function edit($id)
+    public function edit(string $id)
     {
         $pimpinan = Pimpinan::with('user')->findOrFail($id);
 
@@ -112,7 +113,7 @@ class PimpinanController extends Controller
     /**
      * Update data pimpinan
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
         $pimpinan = Pimpinan::findOrFail($id);
 
@@ -172,7 +173,7 @@ class PimpinanController extends Controller
     /**
      * Hapus / Nonaktifkan Pimpinan
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
         $pimpinan = Pimpinan::findOrFail($id);
 
@@ -181,7 +182,32 @@ class PimpinanController extends Controller
             if ($pimpinan->user) {
                 $pimpinan->user->update([
                     'role'      => 'guru',
-                    'is_active' => false
+                    'is_active' => true
+                ]);
+            }
+
+            $guru = Guru::where('user_id', $pimpinan->user_id)->first();
+
+            if ($guru) {
+                $guru->update(['status_aktif' => 'Aktif']);
+            } else {
+                Guru::create([
+                    'user_id'        => $pimpinan->user_id,
+                    'nip'            => $pimpinan->nip,
+                    'nama_lengkap'   => $pimpinan->nama_lengkap,
+                    'gelar_depan'    => $pimpinan->gelar_depan,
+                    'gelar_belakang' => $pimpinan->gelar_belakang,
+                    'jenis_kelamin'  => $pimpinan->jenis_kelamin,
+                    'agama'          => $pimpinan->agama,
+                    'tempat_lahir'   => $pimpinan->tempat_lahir,
+                    'tanggal_lahir'  => $pimpinan->tanggal_lahir,
+                    'no_hp'          => $pimpinan->no_hp,
+                    'alamat'         => $pimpinan->alamat,
+                    'foto'           => $pimpinan->foto,
+                    'file_ktp'       => $pimpinan->file_ktp,
+                    'file_ijazah'    => $pimpinan->file_ijazah,
+                    'file_sk'        => $pimpinan->file_sk,
+                    'status_aktif'   => 'Aktif'
                 ]);
             }
 
