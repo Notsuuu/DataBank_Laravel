@@ -133,10 +133,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Font Family Global bawaan tema kita
             const globalFont = { family: "'Plus Jakarta Sans', sans-serif", size: 11, weight: 'bold' };
 
-            // --- CHART 1: GURU (DOUGHNUT) ---
             const ctxGuru = document.getElementById('guruChart').getContext('2d');
             new Chart(ctxGuru, {
                 type: 'doughnut',
@@ -161,7 +159,6 @@
                 }
             });
 
-            // --- CHART 2: SISWA (BAR) ---
             const ctxSiswa = document.getElementById('siswaChart').getContext('2d');
             new Chart(ctxSiswa, {
                 type: 'bar',
@@ -170,7 +167,7 @@
                     datasets: [{
                         label: 'Jumlah Siswa',
                         data: @json($chartSiswa ?? [0, 0, 0]),
-                        backgroundColor: '#6366f1', // Indigo-500
+                        backgroundColor: '#6366f1',
                         borderRadius: 6,
                         barThickness: 32
                     }]

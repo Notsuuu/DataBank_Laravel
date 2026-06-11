@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Web\Operator;
 use App\Http\Controllers\Controller;
 use App\Models\Guru;
 use App\Models\Siswa;
-use App\Models\Pimpinan; // <-- Import model Pimpinan
+use App\Models\Pimpinan;
 use App\Models\LogAktivitas;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -19,7 +20,6 @@ class DashboardController extends Controller
         $totalGuru = Guru::count();
         $totalSiswa = Siswa::count();
         $totalKelas = DB::table('kelas')->count();
-        // Menghitung pimpinan yang aktif saja
         $totalPimpinan = Pimpinan::where('status_aktif', 'Aktif')->count();
 
         $guruPns = Guru::whereNotNull('nip')->where('nip', '!=', '')->count();
@@ -27,9 +27,9 @@ class DashboardController extends Controller
             $q->whereNull('nip')->orWhere('nip', '');
         })->count();
 
-        $siswaKelas7 = Siswa::whereHas('kelas', function($q) { $q->where('tingkat_kelas', 'VII'); })->count();
-        $siswaKelas8 = Siswa::whereHas('kelas', function($q) { $q->where('tingkat_kelas', 'VIII'); })->count();
-        $siswaKelas9 = Siswa::whereHas('kelas', function($q) { $q->where('tingkat_kelas', 'IX'); })->count();
+        $siswaKelas7 = Siswa::whereHas('kelas', function($q) { $q->where('tingkat_kelas', '7'); })->count();
+        $siswaKelas8 = Siswa::whereHas('kelas', function($q) { $q->where('tingkat_kelas', '8'); })->count();
+        $siswaKelas9 = Siswa::whereHas('kelas', function($q) { $q->where('tingkat_kelas', '9'); })->count();
 
         $chartGuru = [$guruPns, $guruHonorer];
         $chartSiswa = [$siswaKelas7, $siswaKelas8, $siswaKelas9];
@@ -40,24 +40,23 @@ class DashboardController extends Controller
             'totalGuru',
             'totalSiswa',
             'totalKelas',
-            'totalPimpinan', // <-- Tambahkan ini
+            'totalPimpinan', 
             'chartGuru',
             'chartSiswa',
             'logs'
         ));
     }
-    // ==========================================
-    // KELOLA PROFIL OPERATOR
-    // ==========================================
+
     public function profil()
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return view('operator.profil', compact('user'));
     }
 
     public function updateProfil(\Illuminate\Http\Request $request)
     {
-        $user = auth()->user();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
 
         $request->validate([
             'name' => 'required|string|max:255',
