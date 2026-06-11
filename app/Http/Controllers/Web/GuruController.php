@@ -9,6 +9,8 @@ use App\Models\Guru;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\GuruExport;
 
 class GuruController extends Controller
 {
@@ -107,6 +109,7 @@ class GuruController extends Controller
                 'alamat' => $request->alamat,
                 'no_hp' => $request->no_hp,
                 'foto' => $fotoPath,
+                'status_aktif' => 'Aktif',
             ]);
 
             DB::commit();
@@ -152,6 +155,7 @@ class GuruController extends Controller
             }
             $data['foto'] = $request->file('foto')->store('foto_guru', 'public');
         }
+        $data['status_aktif'] = $request->status_aktif ? 'Aktif' : 'Tidak Aktif';
 
         $guru->update($data);
 
@@ -166,5 +170,21 @@ class GuruController extends Controller
 
 
         return redirect()->route('operator.guru.index')->with('success', 'Data guru berhasil dinonaktifkan!');
+    }
+
+    /**
+     * Export Data berdasarkan pilihan: Guru Saja, Pimpinan Saja, atau Keduanya
+     */
+    public function exportPegawai(Request $request)
+    {
+        $type = $request->query('type', 'all');
+
+        $prefix = 'Data_Semua_Pegawai_';
+        if ($type === 'guru') $prefix = 'Data_Khusus_Guru_';
+        if ($type === 'pimpinan') $prefix = 'Data_Khusus_Pimpinan_';
+        
+        $fileName = $prefix . date('Y-m-d') . '.xlsx';
+
+        return Excel::download(new GuruExport($type), $fileName);
     }
 }

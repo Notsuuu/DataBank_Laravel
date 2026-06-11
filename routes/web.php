@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/operator/guru/{id}/edit', [GuruController::class, 'edit'])->name('operator.guru.edit');
         Route::put('/operator/guru/{id}', [GuruController::class, 'update'])->name('operator.guru.update');
         Route::delete('/operator/guru/{id}', [GuruController::class, 'destroy'])->name('operator.guru.destroy');
-        Route::get('/operator/laporan/guru/excel', [LaporanController::class, 'exportGuruExcel'])->name('operator.laporan.guru.excel');
+        Route::get('/operator/laporan/guru/excel', [GuruController::class, 'exportPegawai'])->name('operator.laporan.guru.excel');
         Route::get('/operator/laporan/guru/pdf', [LaporanController::class, 'exportGuruPDF'])->name('operator.laporan.guru.pdf');
         Route::post('/operator/guru/import', [LaporanController::class, 'importGuru'])->name('operator.guru.import');
 

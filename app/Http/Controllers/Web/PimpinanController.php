@@ -148,7 +148,7 @@ class PimpinanController extends Controller
 
             if ($pimpinan->user) {
                 $pimpinan->user->update([
-                    'name'      => $request->nama_lengkap,
+                    'name'      => $request->nama_lengkap, 
                 ]);
             }
 
