@@ -43,52 +43,44 @@ class PimpinanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'email'          => 'required|email|unique:users,email',
-            'nama_lengkap'   => 'required|string|max:255',
-            'jenis_kelamin'  => 'required|in:L,P',
-            'agama'          => 'required|string',
-            'tempat_lahir'   => 'required|string',
-            'tanggal_lahir'  => 'required|date',
-            'foto'           => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            'guru_id' => 'required|exists:gurus,id'
         ]);
 
         DB::beginTransaction();
         try {
-            $user = User::create([
-                'name'     => $request->nama_lengkap,
-                'email'    => $request->email,
-                'password' => Hash::make($request->nip ?? 'pimpinan123'),
-                'role'     => 'pimpinan',
-                'force_change_password' => true
-            ]);
+            $guru = Guru::findOrFail($request->guru_id);
+            $cekPimpinan = Pimpinan::where('user_id', $guru->user_id)->first();
 
-            $fotoPath = null;
-            if ($request->hasFile('foto')) {
-                $fotoPath = $request->file('foto')->store('profil_pimpinan', 'public');
+            if ($cekPimpinan) {
+                $cekPimpinan->update(['status_aktif' => 'Aktif']);
+            } else {
+                Pimpinan::create([
+                    'user_id'        => $guru->user_id,
+                    'nip'            => $guru->nip,
+                    'gelar_depan'    => $guru->gelar_depan,
+                    'nama_lengkap'   => $guru->nama_lengkap,
+                    'gelar_belakang' => $guru->gelar_belakang,
+                    'jenis_kelamin'  => $guru->jenis_kelamin,
+                    'agama'          => $guru->agama,
+                    'tempat_lahir'   => $guru->tempat_lahir,
+                    'tanggal_lahir'  => $guru->tanggal_lahir,
+                    'no_hp'          => $guru->no_hp,
+                    'alamat'         => $guru->alamat,
+                    'foto'           => $guru->foto,
+                    'status_aktif'   => 'Aktif'
+                ]);
+            }   
+
+            if ($guru->user) {
+                $guru->user->update(['role' => 'pimpinan']);
             }
 
-            Pimpinan::create([
-                'user_id'        => $user->id,
-                'nip'            => $request->nip,
-                'gelar_depan'    => $request->gelar_depan,
-                'nama_lengkap'   => $request->nama_lengkap,
-                'gelar_belakang' => $request->gelar_belakang,
-                'jenis_kelamin'  => $request->jenis_kelamin,
-                'agama'          => $request->agama,
-                'tempat_lahir'   => $request->tempat_lahir,
-                'tanggal_lahir'  => $request->tanggal_lahir,
-                'no_hp'          => $request->no_hp,
-                'alamat'         => $request->alamat,
-                'foto'           => $fotoPath,
-                'status_aktif'   => 'Aktif'
-            ]);
-
             DB::commit();
-            return redirect()->route('operator.pimpinan.index')->with('success', 'Data Pimpinan berhasil ditambahkan!');
+            return redirect()->route('operator.pimpinan.index')->with('success', 'Berhasil menambahkan guru ke jajaran Pimpinan!');
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Gagal menyimpan: ' . $e->getMessage())->withInput();
+            return back()->with('error', 'Gagal memproses data: ' . $e->getMessage())->withInput();
         }
     }
 
@@ -107,7 +99,9 @@ class PimpinanController extends Controller
      */
     public function create()
     {
-        return view('operator.pimpinan.create');
+        $gurus = Guru::where('status_aktif', 'Aktif')->get();
+        
+        return view('operator.pimpinan.create', compact('gurus'));
     }
 
     /**
@@ -123,7 +117,6 @@ class PimpinanController extends Controller
             'agama'          => 'required|string',
             'tempat_lahir'   => 'required|string',
             'tanggal_lahir'  => 'required|date',
-            'status_aktif'   => 'required|in:1,0',
             'foto'           => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
@@ -151,13 +144,11 @@ class PimpinanController extends Controller
                 'no_hp'          => $request->no_hp,
                 'alamat'         => $request->alamat,
                 'foto'           => $fotoPath,
-                'status_aktif'   => $statusString
             ]);
 
             if ($pimpinan->user) {
                 $pimpinan->user->update([
                     'name'      => $request->nama_lengkap,
-                    'is_active' => $request->status_aktif == '1' ? true : false
                 ]);
             }
 

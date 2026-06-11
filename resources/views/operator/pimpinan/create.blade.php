@@ -1,141 +1,112 @@
 @extends('layouts.operator')
 
-@section('header', 'Tambah Data Pimpinan Baru')
+@section('title', 'Tambah Pimpinan - Panel Operator')
+@section('header', 'Manajemen Jajaran Pimpinan')
+
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+<style>
+    .ts-control {
+        padding: 0.875rem 1rem !important; 
+        border-radius: 0.75rem !important; 
+        border: 1px solid #cbd5e1 !important;
+        background-color: #f8fafc !important;
+        font-family: inherit;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #334155;
+    }
+    .ts-control.focus {
+        background-color: #ffffff !important;
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 2px rgba(191, 219, 254, 0.5) !important;
+    }
+    .ts-dropdown {
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        border: 1px solid #e2e8f0;
+        padding: 0.5rem 0;
+    }
+    .ts-dropdown .option {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    .ts-dropdown .option:hover, .ts-dropdown .active {
+        background-color: #eff6ff !important;
+        color: #1d4ed8 !important;
+    }
+</style>
 
 @section('content')
-<div class="max-w-4xl mx-auto">
-    <div class="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-        <div class="p-6 border-b border-slate-200 bg-slate-50 flex items-center gap-4">
-            <div class="h-14 w-14 rounded-full bg-slate-800 flex items-center justify-center text-white font-bold border-2 border-white shadow-sm">
-                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+<div class="max-w-3xl mx-auto space-y-6 animate-[fadeIn_0.3s_ease-out]">
+
+    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+        <div class="border-b border-slate-100 pb-5 mb-6 flex items-center gap-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
             </div>
             <div>
-                <h2 class="text-xl font-bold text-slate-800 tracking-tight">Pendaftaran Akun Pimpinan</h2>
-                <p class="text-sm font-semibold text-slate-500 mt-0.5">Lengkapi data untuk mendaftarkan Kepala Sekolah atau Wakil Kepala Sekolah.</p>
+                <h2 class="text-xl font-black text-slate-800">Tambah Jajaran Pimpinan</h2>
+                <p class="text-sm text-slate-500 mt-1 font-medium">Pilih guru aktif yang akan diberikan akses sebagai Kepala Sekolah atau Wakil Kepala Sekolah.</p>
             </div>
         </div>
 
-        <div class="p-6">
-            @if ($errors->any())
-                <div class="mb-6 bg-rose-50 border border-rose-200 text-rose-700 px-4 py-3 rounded-lg shadow-sm">
-                    <strong class="font-bold text-sm">Oops! Gagal menyimpan data:</strong>
-                    <ul class="mt-2 list-disc list-inside text-xs font-medium">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form action="{{ route('operator.pimpinan.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                    <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2">
-                        <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">1. Informasi Akun Login</h3>
-                        <div class="mt-3 bg-blue-50 text-blue-700 px-4 py-3 rounded-lg text-[11px] font-semibold border border-blue-100 flex gap-3 items-start">
-                            <svg class="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                            <p><strong>Sandi Otomatis:</strong> Kata sandi akan dibuat menggunakan <b>NIP</b>. Sistem ini secara otomatis akan mengatur Role pengguna menjadi <b>Pimpinan</b>.</p>
-                        </div>
+        <form action="{{ route('operator.pimpinan.store') }}" method="POST">
+            @csrf
+            
+            <div class="mb-8">
+                <label for="guru_id" class="block text-sm font-bold text-slate-700 mb-2">Cari Data Guru <span class="text-rose-500">*</span></label>
+                
+                <select name="guru_id" id="guru_id" required class="w-full cursor-pointer" placeholder="Ketik NIP atau Nama Guru untuk mencari...">
+                    <option value="">Ketik NIP atau Nama Guru untuk mencari...</option>
+                    @forelse($gurus as $guru)
+                        <option value="{{ $guru->id }}">
+                            {{ $guru->nip ? $guru->nip . ' - ' : '' }} 
+                            {{ $guru->gelar_depan }} {{ $guru->nama_lengkap }} {{ $guru->gelar_belakang }}
+                        </option>
+                    @empty
+                        <option value="" disabled>Tidak ada guru aktif yang tersedia.</option>
+                    @endforelse
+                </select>
+                
+                @error('guru_id')
+                    <div class="flex items-center gap-1 mt-2 text-rose-500">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <p class="text-xs font-bold">{{ $message }}</p>
                     </div>
+                @else
+                    <p class="text-xs font-semibold text-slate-400 mt-2">Ketik nama atau NIP, lalu klik pada hasil yang muncul.</p>
+                @enderror
+            </div>
 
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Email Dinas / Resmi *</label>
-                        <input type="email" name="email" value="{{ old('email') }}" required placeholder="contoh: kepsek@smpn4palu.sch.id" class="w-full md:w-1/2 rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
-                    </div>
-
-                    <input type="hidden" name="role" value="pimpinan">
-
-                    <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2 mt-4">
-                        <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">2. Identitas Utama</h3>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">NIP</label>
-                        <input type="text" name="nip" value="{{ old('nip') }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
-                    </div>
-
-                    <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div class="md:col-span-1">
-                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Gelar Depan</label>
-                            <input type="text" name="gelar_depan" value="{{ old('gelar_depan') }}" placeholder="Drs." class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Nama Lengkap *</label>
-                            <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap') }}" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
-                        </div>
-                        <div class="md:col-span-1">
-                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Gelar Belakang</label>
-                            <input type="text" name="gelar_belakang" value="{{ old('gelar_belakang') }}" placeholder="M.Pd." class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
-                        </div>
-                    </div>
-
-                    <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2 mt-4">
-                        <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">3. Biodata & Kontak</h3>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Jenis Kelamin *</label>
-                        <select name="jenis_kelamin" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
-                            <option value="">-- Pilih --</option>
-                            <option value="L" {{ old('jenis_kelamin') == 'L' ? 'selected' : '' }}>Laki-laki</option>
-                            <option value="P" {{ old('jenis_kelamin') == 'P' ? 'selected' : '' }}>Perempuan</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Agama *</label>
-                        <select name="agama" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
-                            <option value="">-- Pilih Agama --</option>
-                            @foreach(['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha'] as $agm)
-                                <option value="{{ $agm }}" {{ old('agama') == $agm ? 'selected' : '' }}>{{ $agm }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Tempat Lahir *</label>
-                        <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir') }}" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Tanggal Lahir *</label>
-                        <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Nomor HP / WhatsApp</label>
-                        <input type="text" name="no_hp" value="{{ old('no_hp') }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Alamat Lengkap *</label>
-                        <textarea name="alamat" required rows="3" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">{{ old('alamat') }}</textarea>
-                    </div>
-
-                    <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2 mt-4">
-                        <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">4. Berkas Media</h3>
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Unggah Foto Profil <span class="text-slate-400 font-semibold">(Opsional)</span></label>
-                        <input type="file" name="foto" accept="image/jpeg, image/png, image/jpg" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-slate-800 file:text-white hover:file:bg-slate-900 border border-slate-200 rounded-lg cursor-pointer bg-slate-50 transition-colors">
-                        <p class="mt-1.5 text-[11px] font-semibold text-slate-400">Max 2MB (JPG/PNG).</p>
-                    </div>
-                </div>
-
-                <div class="mt-8 pt-6 border-t border-slate-100 flex justify-end gap-3">
-                    <a href="{{ route('operator.pimpinan.index') }}" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold py-2.5 px-6 rounded-lg shadow-sm transition-colors">
-                        Batalkan
-                    </a>
-                    <button type="submit" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-2.5 px-6 rounded-lg shadow-sm transition-colors flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                        Simpan Data Pimpinan
-                    </button>
-                </div>
-            </form>
-        </div>
+            <div class="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-6 pt-6 border-t border-slate-100">
+                <a href="{{ route('operator.pimpinan.index') }}" class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 text-center transition-colors">
+                    Batal
+                </a>
+                <button type="submit" class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm shadow-blue-500/30 text-center transition-all flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Simpan ke Jajaran Pimpinan
+                </button>
+            </div>
+        </form>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        new TomSelect("#guru_id", {
+            create: false,       
+            maxOptions: 50,      
+            sortField: {
+                field: "text",
+                direction: "asc" 
+            }
+        });
+    });
+</script>
 @endsection

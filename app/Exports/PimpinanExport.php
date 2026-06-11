@@ -13,7 +13,6 @@ class PimpinanExport implements FromCollection, WithHeadings, WithMapping, WithC
 {
     public function collection()
     {
-        // Mengambil langsung dari tabel pimpinans
         return Pimpinan::all();
     }
 
@@ -26,7 +25,6 @@ class PimpinanExport implements FromCollection, WithHeadings, WithMapping, WithC
     {
         $nip = $pimpinan->nip;
 
-        // Format NIP menjadi standar BKN (8-6-1-3)
         if (strlen($nip) === 18) {
             $nipResmi = substr($nip, 0, 8) . ' ' . substr($nip, 8, 6) . ' ' . substr($nip, 14, 1) . ' ' . substr($nip, 15, 3);
         } else {
@@ -45,7 +43,7 @@ class PimpinanExport implements FromCollection, WithHeadings, WithMapping, WithC
     public function columnFormats(): array
     {
         return [
-            'A' => NumberFormat::FORMAT_TEXT, // Memastikan NIP tidak terpotong oleh Excel
+            'A' => NumberFormat::FORMAT_TEXT,
         ];
     }
 }

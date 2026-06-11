@@ -23,6 +23,10 @@ class GuruController extends Controller
 
         $query = Guru::with(['user', 'kelas'])->latest();
 
+        $query->whereHas('user', function ($q) {
+            $q->where('role', 'guru');
+        });
+
         if ($keyword) {
             $query->where(function ($q) use ($keyword) {
                 $q->where('nama_lengkap', 'LIKE', "%{$keyword}%")->orWhere('nip', 'LIKE', "%{$keyword}%");
@@ -30,7 +34,7 @@ class GuruController extends Controller
         }
 
         if ($request->has('status') && $status !== null) {
-            $statusDbd = $request->input('status') == '1' ? 'Aktif' : 'Tidak Aktif';
+            $statusDbd = $request->input('status') == '1' ? 'Aktif' : 'Tidak Aktif';        
             $query->where('status_aktif', $statusDbd);
         }
 
@@ -66,7 +70,7 @@ class GuruController extends Controller
             'tempat_lahir' => 'required|string|max:100',
             'tanggal_lahir' => 'required|date',
             'agama' => 'required|string|max:50',
-            'alamat' => 'required|string',
+            'alamat' => 'required|string',  
             'no_hp' => 'nullable|string|max:20',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);

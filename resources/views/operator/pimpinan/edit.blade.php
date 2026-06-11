@@ -6,7 +6,7 @@
 <div class="max-w-4xl mx-auto">
     <div class="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
         <div class="p-6 border-b border-slate-200 bg-slate-50 flex items-center gap-4">
-            <div class="h-12 w-12 rounded-full bg-slate-800 flex items-center justify-center text-white font-bold border border-slate-200 shadow-sm">
+            <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border border-blue-200">
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
             </div>
             <div>
@@ -40,14 +40,6 @@
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">NIP</label>
                         <input type="text" name="nip" value="{{ old('nip', $pimpinan->nip) }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Status Aktif *</label>
-                        <select name="status_aktif" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
-                            <option value="1" {{ old('status_aktif', $pimpinan->status_aktif) == '1' ? 'selected' : '' }}>Aktif Menjabat</option>
-                            <option value="0" {{ old('status_aktif', $pimpinan->status_aktif) == '0' ? 'selected' : '' }}>Nonaktif / Pensiun</option>
-                        </select>
                     </div>
 
                     <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -114,7 +106,7 @@
                                 <span class="text-xs text-slate-500 font-semibold">Foto saat ini</span>
                             </div>
                         @endif
-                        <input type="file" name="foto" accept="image/jpeg, image/png, image/jpg" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-slate-800 file:text-white hover:file:bg-slate-900 border border-slate-200 rounded-lg cursor-pointer bg-slate-50 transition-colors">
+                        <input type="file" name="foto" accept="image/jpeg, image/png, image/jpg" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-lg cursor-pointer bg-slate-50 transition-colors">
                         <p class="mt-1.5 text-xs text-slate-400">Biarkan kosong jika tidak ingin mengganti foto. Max 2MB (JPG/PNG).</p>
                     </div>
                 </div>
@@ -123,7 +115,7 @@
                     <a href="{{ route('operator.pimpinan.index') }}" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold py-2.5 px-6 rounded-lg shadow-sm transition-colors">
                         Batalkan
                     </a>
-                    <button type="submit" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-2.5 px-6 rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2.5 px-6 rounded-lg shadow-sm transition-colors flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                         Simpan Perubahan
                     </button>
