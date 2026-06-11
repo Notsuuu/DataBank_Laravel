@@ -19,15 +19,13 @@ class PimpinanController extends Controller
     {
         $query = Pimpinan::query();
 
-        // Filter Pencarian (Nama / NIP)
         if ($request->filled('q')) {
             $query->where(function ($q) use ($request) {
                 $q->where('nama_lengkap', 'like', '%' . $request->q . '%')
-                  ->orWhere('nip', 'like', '%' . $request->q . '%');
+                ->orWhere('nip', 'like', '%' . $request->q . '%');
             });
         }
 
-        // Filter Status Aktif
         if ($request->filled('status')) {
             $status = $request->status == '1' ? 'Aktif' : 'Nonaktif';
             $query->where('status_aktif', $status);
@@ -55,7 +53,6 @@ class PimpinanController extends Controller
 
         DB::beginTransaction();
         try {
-            // 1. Buat Akun User Pimpinan
             $user = User::create([
                 'name'     => $request->nama_lengkap,
                 'email'    => $request->email,
@@ -64,13 +61,11 @@ class PimpinanController extends Controller
                 'force_change_password' => true
             ]);
 
-            // 2. Proses Upload Foto
             $fotoPath = null;
             if ($request->hasFile('foto')) {
                 $fotoPath = $request->file('foto')->store('profil_pimpinan', 'public');
             }
 
-            // 3. Simpan ke tabel Pimpinan
             Pimpinan::create([
                 'user_id'        => $user->id,
                 'nip'            => $request->nip,
@@ -94,6 +89,24 @@ class PimpinanController extends Controller
             DB::rollBack();
             return back()->with('error', 'Gagal menyimpan: ' . $e->getMessage())->withInput();
         }
+    }
+
+    /**
+     * Menampilkan form edit untuk data Pimpinan
+     */
+    public function edit($id)
+    {
+        $pimpinan = Pimpinan::with('user')->findOrFail($id);
+
+        return view('operator.pimpinan.edit', compact('pimpinan'));
+    }
+
+    /**
+     * Menampilkan form untuk menambah data Pimpinan baru
+     */
+    public function create()
+    {
+        return view('operator.pimpinan.create');
     }
 
     /**
@@ -125,7 +138,6 @@ class PimpinanController extends Controller
 
             $statusString = $request->status_aktif == '1' ? 'Aktif' : 'Nonaktif';
 
-            // Update Tabel Pimpinan
             $pimpinan->update([
                 'nip'            => $request->nip,
                 'gelar_depan'    => $request->gelar_depan,
@@ -141,7 +153,6 @@ class PimpinanController extends Controller
                 'status_aktif'   => $statusString
             ]);
 
-            // Update Tabel User
             if ($pimpinan->user) {
                 $pimpinan->user->update([
                     'name'      => $request->nama_lengkap,
@@ -169,7 +180,7 @@ class PimpinanController extends Controller
         try {
             if ($pimpinan->user) {
                 $pimpinan->user->update([
-                    'role'      => 'guru', // Opsional: diturunkan menjadi guru atau dinonaktifkan
+                    'role'      => 'guru',
                     'is_active' => false
                 ]);
             }
