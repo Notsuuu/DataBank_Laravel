@@ -13,9 +13,7 @@ use App\Models\Rombel;
 
 class AkademikController extends Controller
 {
-    // ==========================================
-    // TAHUN AJARAN
-    // ==========================================
+
     public function tahunAjaran()
     {
         $tahunAjarans = TahunAjaran::orderBy('tahun', 'desc')->get();
@@ -77,9 +75,6 @@ class AkademikController extends Controller
         return back()->with('success', 'Data Tahun Ajaran berhasil dihapus!');
     }
 
-    // ==========================================
-    // KELAS
-    // ==========================================
     public function kelas()
     {
         $kelas = Kelas::with('waliKelas.user')->orderBy('tingkat_kelas')->orderBy('nama_kelas')->get();
@@ -125,9 +120,6 @@ class AkademikController extends Controller
         return back()->with('success', 'Data Kelas berhasil dihapus!');
     }
 
-    // ==========================================
-    // MAPEL
-    // ==========================================
     public function mapel()
     {
         $mapels = Mapel::orderBy('kelompok_mapel')->orderBy('nama_mapel')->get();
@@ -181,9 +173,7 @@ class AkademikController extends Controller
         return back()->with('success', 'Mata Pelajaran berhasil dihapus!');
     }
 
-    // ==========================================
-    // ROMBEL
-    // ==========================================
+
     public function rombel(Request $request)
     {
         $tahunAktif = TahunAjaran::where('is_active', true)->first();
@@ -194,7 +184,7 @@ class AkademikController extends Controller
         $rombels = collect();
 
         if ($tahunAktif && $kelasId) {
-            $rombels = Rombel::with(['siswa', 'kelas'])->where('tahun_ajaran_id', $tahunAktif->id)->where('kelas_id', $kelasId)->get();
+            $rombels = Rombel::with(['siswa', 'kelas'])->whereHas('siswa')->where('tahun_ajaran_id', $tahunAktif->id)->where('kelas_id', $kelasId)->get();
         }
 
         return view('operator.akademik.rombel', compact('tahunAktif', 'kelas', 'siswas', 'rombels', 'kelasId'));
