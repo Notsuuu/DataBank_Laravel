@@ -12,7 +12,6 @@ use App\Exports\SiswaExport;
 use App\Imports\SiswaImport;
 use Illuminate\Database\QueryException;
 
-// Tambahan Import Facade DomPDF dan Model
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Guru;
 use App\Models\Siswa;
@@ -20,14 +19,6 @@ use App\Models\Pimpinan;
 
 class LaporanController extends Controller
 {
-    // ==========================================
-    // 1. MANAJEMEN EKSPOR & IMPOR EXCEL GURU
-    // ==========================================
-    public function exportGuruExcel()
-    {
-        $data = Guru::all();
-        return Excel::download(new GuruExport($data), 'Data_Guru_SMPN4Palu.xlsx');
-    }
 
     public function importGuru(Request $request)
     {
@@ -40,14 +31,6 @@ class LaporanController extends Controller
         }
     }
 
-    // ==========================================
-    // 2. MANAJEMEN EKSPOR & IMPOR EXCEL SISWA
-    // ==========================================
-    public function exportSiswaExcel()
-    {
-        $data = Siswa::all();
-        return Excel::download(new SiswaExport($data), 'Data_Siswa_SMPN4Palu.xlsx');
-    }
 
     public function importSiswa(Request $request)
     {
@@ -60,20 +43,59 @@ class LaporanController extends Controller
         }
     }
 
-    // ==========================================
-    // 3. MANAJEMEN EKSPOR PDF GURU & SISWA
-    // ==========================================
 
-    public function exportGuruPDF()
+    public function exportGuruPDF(Request $request)
     {
-        $data = Guru::all()->map(function($guru) {
-            $nip = $guru->nip;
-            $guru->nip_format = (strlen($nip) === 18) ? substr($nip, 0, 8) . ' ' . substr($nip, 8, 6) . ' ' . substr($nip, 14, 1) . ' ' . substr($nip, 15, 3) : $nip;
-            return $guru;
+        $type = trim($request->query('type', 'all'));
+        $data = collect();
+
+        if ($type === 'all' || $type === 'pimpinan') {
+            $pimpinans = Pimpinan::with('user')->where('status_aktif', 'Aktif')->get();
+            foreach ($pimpinans as $p) {
+                $p->jabatan = 'Pimpinan';
+                $data->push($p);
+            }
+        }
+
+        if ($type === 'all' || $type === 'guru') {
+            $gurus = Guru::with('user')
+                ->where('status_aktif', 'Aktif')
+                ->whereHas('user', function ($q) {
+                    $q->where('role', 'guru');
+                })
+                ->get();
+            foreach ($gurus as $g) {
+                $g->jabatan = 'Guru / Tenaga Pendidik';
+                $data->push($g);
+            }
+        }
+
+        $data = $data->map(function($pegawai) {
+            $nip = $pegawai->nip;
+            $pegawai->nip_format = (strlen((string)$nip) === 18) 
+                ? substr($nip, 0, 8) . ' ' . substr($nip, 8, 6) . ' ' . substr($nip, 14, 1) . ' ' . substr($nip, 15, 3) 
+                : ($nip ? $nip : '-');
+            
+            $pegawai->nama_final = trim($pegawai->gelar_depan . ' ' . $pegawai->nama_lengkap . ' ' . $pegawai->gelar_belakang);
+            
+            return $pegawai;
         });
 
-        $pdf = Pdf::loadView('laporan.guru_pdf', compact('data'))->setPaper('a4', 'portrait');
-        return $pdf->download('Laporan_Data_Guru_SMPN4Palu.pdf');
+        $prefix = 'Laporan_Pegawai_Aktif_';
+        $judulLaporan = 'Laporan Data Pegawai (Guru & Pimpinan) Aktif';
+        
+        if ($type === 'guru') {
+            $prefix = 'Laporan_Guru_Aktif_';
+            $judulLaporan = 'Laporan Data Guru Aktif';
+        } elseif ($type === 'pimpinan') {
+            $prefix = 'Laporan_Pimpinan_Aktif_';
+            $judulLaporan = 'Laporan Data Pimpinan Aktif';
+        }
+
+        $fileName = $prefix . date('Y-m-d') . '.pdf';
+
+        $pdf = Pdf::loadView('laporan.guru_pdf', compact('data', 'judulLaporan'))->setPaper('a4', 'portrait');
+        return $pdf->download($fileName);
     }
 
     public function exportSiswaPDF()
@@ -83,15 +105,6 @@ class LaporanController extends Controller
         return $pdf->download('Laporan_Data_Siswa_SMPN4Palu.pdf');
     }
 
-    // ==========================================
-    // 4. MANAJEMEN EKSPOR PIMPINAN (EXCEL & PDF)
-    // ==========================================
-
-    public function exportPimpinanExcel()
-    {
-        $data = Pimpinan::all();
-        return Excel::download(new PimpinanExport($data), 'Data_Pimpinan_SMPN4Palu.xlsx');
-    }
 
     public function exportPimpinanPDF()
     {
@@ -103,5 +116,16 @@ class LaporanController extends Controller
 
         $pdf = Pdf::loadView('laporan.pimpinan_pdf', compact('data'))->setPaper('a4', 'portrait');
         return $pdf->download('Laporan_Data_Pimpinan_SMPN4Palu.pdf');
+    }
+
+    public function exportSiswaExcel()
+    {
+        return Excel::download(new SiswaExport(), 'Data_Siswa_SMPN4Palu.xlsx');
+    }
+
+
+    public function exportPimpinanExcel()
+    {
+        return Excel::download(new PimpinanExport(), 'Data_Pimpinan_SMPN4Palu.xlsx');
     }
 }

@@ -6,8 +6,10 @@ use App\Models\Siswa;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class SiswaExport implements FromCollection, WithHeadings, WithMapping
+class SiswaExport implements FromCollection, WithHeadings, WithMapping, WithColumnFormatting
 {
     public function collection()
     {
@@ -30,7 +32,7 @@ class SiswaExport implements FromCollection, WithHeadings, WithMapping
         ];
     }
 
-    public function map($siswa): array
+    public function map(mixed $siswa): array
     {
         return [
             $siswa->nis,
@@ -42,7 +44,16 @@ class SiswaExport implements FromCollection, WithHeadings, WithMapping
             $siswa->agama,
             $siswa->alamat,
             $siswa->nama_wali,
-            $siswa->no_hp_wali,
+            $siswa->no_hp_wali ?? '-',
+        ];
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'A' => NumberFormat::FORMAT_TEXT, 
+            'B' => NumberFormat::FORMAT_TEXT, 
+            'J' => NumberFormat::FORMAT_TEXT, 
         ];
     }
 }

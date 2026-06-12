@@ -57,10 +57,27 @@
                         </div>
                     </div>
 
-                    <a href="{{ route('operator.laporan.guru.pdf') }}" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors flex items-center gap-2 whitespace-nowrap">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        Cetak PDF
-                    </a>
+                    <div class="relative group">
+                        <button type="button" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors flex items-center gap-2 whitespace-nowrap">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            Cetak PDF
+                            <svg class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        
+                        <div class="absolute right-0 mt-1 w-60 bg-white rounded-xl shadow-lg border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
+                            <div class="py-1">
+                                <a href="{{ route('operator.laporan.guru.pdf', ['type' => 'all']) }}" class="block px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-red-50 hover:text-red-700 transition-colors">
+                                    Semua (Guru + Pimpinan Aktif)
+                                </a>
+                                <a href="{{ route('operator.laporan.guru.pdf', ['type' => 'guru']) }}" class="block px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-red-50 hover:text-red-700 transition-colors border-t border-slate-50">
+                                    Hanya Guru Aktif
+                                </a>
+                                <a href="{{ route('operator.laporan.guru.pdf', ['type' => 'pimpinan']) }}" class="block px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-red-50 hover:text-red-700 transition-colors border-t border-slate-50">
+                                    Hanya Pimpinan Aktif
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

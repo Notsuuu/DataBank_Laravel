@@ -52,14 +52,6 @@
                             <input type="email" name="email" value="{{ old('email') }}" required placeholder="contoh: guru@smpn4palu.sch.id" class="w-full md:w-1/2 rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
                         </div>
 
-                        <div>
-                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Peran Akun</label>
-                            <select name="role" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
-                                <option value="guru" selected>Guru (Default)</option>
-                                <option value="pimpinan">Pimpinan</option>
-                            </select>
-                        </div>
-
                         <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2 mt-4">
                             <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">2. Identitas Utama</h3>
                         </div>

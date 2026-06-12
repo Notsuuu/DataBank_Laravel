@@ -21,11 +21,11 @@ class PimpinanExport implements FromCollection, WithHeadings, WithMapping, WithC
         return ['NIP', 'Nama Lengkap', 'L/P', 'Nomor HP', 'Status Jabatan'];
     }
 
-    public function map($pimpinan): array
+    public function map(mixed $pimpinan): array
     {
         $nip = $pimpinan->nip;
 
-        if (strlen($nip) === 18) {
+        if (strlen((string)$nip) === 18) {
             $nipResmi = substr($nip, 0, 8) . ' ' . substr($nip, 8, 6) . ' ' . substr($nip, 14, 1) . ' ' . substr($nip, 15, 3);
         } else {
             $nipResmi = $nip ? ' ' . $nip : '-';
@@ -45,7 +45,8 @@ class PimpinanExport implements FromCollection, WithHeadings, WithMapping, WithC
     public function columnFormats(): array
     {
         return [
-            'A' => NumberFormat::FORMAT_TEXT,
+            'A' => NumberFormat::FORMAT_TEXT, 
+            'D' => NumberFormat::FORMAT_TEXT, 
         ];
     }
 }
