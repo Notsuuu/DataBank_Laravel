@@ -41,13 +41,13 @@ class AkademikController extends Controller
         return back()->with('success', 'Tahun Ajaran berhasil ditambahkan!');
     }
 
-    public function editTahunAjaran($id)
+    public function editTahunAjaran(string $id)
     {
         $ta = TahunAjaran::findOrFail($id);
         return view('operator.akademik.edit_tahun_ajaran', compact('ta'));
     }
 
-    public function updateTahunAjaran(Request $request, $id)
+    public function updateTahunAjaran(Request $request, string $id)
     {
         $ta = TahunAjaran::findOrFail($id);
         $request->validate([
@@ -69,7 +69,7 @@ class AkademikController extends Controller
         return redirect()->route('akademik.tahun-ajaran')->with('success', 'Data Tahun Ajaran diperbarui!');
     }
 
-    public function destroyTahunAjaran($id)
+    public function destroyTahunAjaran(string $id)
     {
         TahunAjaran::findOrFail($id)->delete();
         return back()->with('success', 'Data Tahun Ajaran berhasil dihapus!');
@@ -94,14 +94,14 @@ class AkademikController extends Controller
         return back()->with('success', 'Data Kelas berhasil ditambahkan!');
     }
 
-    public function editKelas($id)
+    public function editKelas(string $id)
     {
         $kelas = Kelas::findOrFail($id);
         $gurus = Guru::with('user')->get();
         return view('operator.akademik.edit_kelas', compact('kelas', 'gurus'));
     }
 
-    public function updateKelas(Request $request, $id)
+    public function updateKelas(Request $request, string $id)
     {
         $kelas = Kelas::findOrFail($id);
         $request->validate([
@@ -114,7 +114,7 @@ class AkademikController extends Controller
         return redirect()->route('akademik.kelas')->with('success', 'Data Kelas diperbarui!');
     }
 
-    public function destroyKelas($id)
+    public function destroyKelas(string $id)
     {
         Kelas::findOrFail($id)->delete();
         return back()->with('success', 'Data Kelas berhasil dihapus!');
@@ -143,13 +143,13 @@ class AkademikController extends Controller
         return back()->with('success', 'Mata Pelajaran berhasil ditambahkan!');
     }
 
-    public function editMapel($id)
+    public function editMapel(string $id)
     {
         $mapel = Mapel::findOrFail($id);
         return view('operator.akademik.edit_mapel', compact('mapel'));
     }
 
-    public function updateMapel(Request $request, $id)
+    public function updateMapel(Request $request, string $id)
     {
         $mapel = Mapel::findOrFail($id);
         $request->validate([
@@ -167,7 +167,7 @@ class AkademikController extends Controller
         return redirect()->route('akademik.mapel')->with('success', 'Mata Pelajaran diperbarui!');
     }
 
-    public function destroyMapel($id)
+    public function destroyMapel(string $id)
     {
         Mapel::findOrFail($id)->delete();
         return back()->with('success', 'Mata Pelajaran berhasil dihapus!');
@@ -178,13 +178,25 @@ class AkademikController extends Controller
     {
         $tahunAktif = TahunAjaran::where('is_active', true)->first();
         $kelas = Kelas::orderBy('tingkat_kelas')->orderBy('nama_kelas')->get();
-        $siswas = Siswa::orderBy('nama_lengkap')->get();
-
+        
         $kelasId = $request->kelas_id;
         $rombels = collect();
+        $siswas = collect(); 
 
-        if ($tahunAktif && $kelasId) {
-            $rombels = Rombel::with(['siswa', 'kelas'])->whereHas('siswa')->where('tahun_ajaran_id', $tahunAktif->id)->where('kelas_id', $kelasId)->get();
+        if ($tahunAktif) {
+            $siswaTerdaftarIds = Rombel::where('tahun_ajaran_id', $tahunAktif->id)->pluck('siswa_id');
+
+            $siswas = Siswa::whereNotIn('id', $siswaTerdaftarIds)
+                ->orderBy('nama_lengkap')
+                ->get();
+
+            if ($kelasId) {
+                $rombels = Rombel::with(['siswa', 'kelas'])
+                    ->whereHas('siswa') 
+                    ->where('tahun_ajaran_id', $tahunAktif->id)
+                    ->where('kelas_id', $kelasId)
+                    ->get();
+            }
         }
 
         return view('operator.akademik.rombel', compact('tahunAktif', 'kelas', 'siswas', 'rombels', 'kelasId'));
@@ -212,7 +224,7 @@ class AkademikController extends Controller
         return redirect()->route('akademik.rombel', ['kelas_id' => $request->kelas_id])->with('success', 'Siswa berhasil dimasukkan ke kelas!');
     }
 
-    public function hapusRombel($id)
+    public function hapusRombel(string $id)
     {
         $rombel = Rombel::findOrFail($id);
         $kelasId = $rombel->kelas_id;
