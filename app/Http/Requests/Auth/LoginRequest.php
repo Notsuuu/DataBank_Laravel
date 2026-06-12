@@ -50,6 +50,16 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+
+        if (! Auth::user()->is_active) {
+            Auth::guard('web')->logout();
+
+            throw ValidationException::withMessages([
+                'email' => 'Akun Anda telah dinonaktifkan. Silakan hubungi Operator Sekolah.',
+            ]);
+        }
+        // ====================================================
+
         RateLimiter::clear($this->throttleKey());
     }
 

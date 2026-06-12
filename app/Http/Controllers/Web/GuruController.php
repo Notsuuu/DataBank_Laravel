@@ -156,20 +156,35 @@ class GuruController extends Controller
             $data['foto'] = $request->file('foto')->store('foto_guru', 'public');
         }
         $data['status_aktif'] = $request->status_aktif ? 'Aktif' : 'Tidak Aktif';
-
         $guru->update($data);
+
+        if ($guru->user) {
+            $guru->user->update([
+                'is_active' => $request->status_aktif ? true : false
+            ]);
+        }
 
         return redirect()->route('operator.guru.index')->with('success', 'Data guru berhasil diperbarui!');
     }
 
     public function destroy(string $id)
     {
-        $guru = Guru::findOrFail($id);
+        $guru = Guru::with('user')->findOrFail($id);
+        DB::beginTransaction();
 
-        $guru->update(['status_aktif' => 'Tidak Aktif']);
+        try {
+            $guru->update(['status_aktif' => 'Tidak Aktif']);
 
+            if ($guru->user) {
+                $guru->user->update(['is_active' => false]);
+            }
 
-        return redirect()->route('operator.guru.index')->with('success', 'Data guru berhasil dinonaktifkan!');
+            DB::commit();
+            return redirect()->route('operator.guru.index')->with('success', 'Data guru dinonaktifkan dan akses login telah dicabut!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal menonaktifkan data: ' . $e->getMessage());
+        }
     }
 
     /**
