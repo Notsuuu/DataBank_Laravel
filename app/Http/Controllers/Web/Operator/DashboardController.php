@@ -17,13 +17,19 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $totalGuru = Guru::count();
+        $queryGuruAktif = Guru::where('status_aktif', 'Aktif')
+            ->whereHas('user', function ($q) {
+                $q->where('role', 'guru');
+            });
+
+        $totalGuru = (clone $queryGuruAktif)->count();
+        $totalPimpinan = Pimpinan::where('status_aktif', 'Aktif')->count();
+        
         $totalSiswa = Siswa::count();
         $totalKelas = DB::table('kelas')->count();
-        $totalPimpinan = Pimpinan::where('status_aktif', 'Aktif')->count();
 
-        $guruPns = Guru::whereNotNull('nip')->where('nip', '!=', '')->count();
-        $guruHonorer = Guru::where(function($q) {
+        $guruPns = (clone $queryGuruAktif)->whereNotNull('nip')->where('nip', '!=', '')->count();
+        $guruHonorer = (clone $queryGuruAktif)->where(function($q) {
             $q->whereNull('nip')->orWhere('nip', '');
         })->count();
 
