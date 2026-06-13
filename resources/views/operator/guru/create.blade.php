@@ -11,7 +11,7 @@
                 </div>
                 <div>
                     <h2 class="text-xl font-bold text-slate-800 tracking-tight">Formulir Pendaftaran Guru</h2>
-                    <p class="text-sm font-semibold text-slate-500 mt-0.5">Silakan lengkapi data diri, foto, dan buatkan akun login untuk guru baru.</p>
+                    <p class="text-sm font-semibold text-slate-500 mt-0.5">Silakan lengkapi data diri, kepegawaian, dan buatkan akun login untuk guru baru.</p>
                 </div>
             </div>
 
@@ -53,18 +53,13 @@
                         </div>
 
                         <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2 mt-4">
-                            <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">2. Identitas Utama</h3>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">NIP <span class="text-slate-400 font-normal">(Kosongkan jika Honorer)</span></label>
-                            <input type="text" name="nip" value="{{ old('nip') }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                            <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">2. Identitas & Kepegawaian</h3>
                         </div>
 
                         <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div class="md:col-span-1">
                                 <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Gelar Depan</label>
-                                <input type="text" name="gelar_depan" value="{{ old('gelar_depan') }}" placeholder="Drs." class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                                <input type="text" name="gelar_depan" value="{{ old('gelar_depan') }}" placeholder="Contoh: Drs." class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
                             </div>
                             <div class="md:col-span-2">
                                 <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Nama Lengkap *</label>
@@ -72,9 +67,36 @@
                             </div>
                             <div class="md:col-span-1">
                                 <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Gelar Belakang</label>
-                                <input type="text" name="gelar_belakang" value="{{ old('gelar_belakang') }}" placeholder="S.Pd." class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                                <input type="text" name="gelar_belakang" value="{{ old('gelar_belakang') }}" placeholder="Contoh: S.Pd." class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
                             </div>
                         </div>
+
+                        <div>
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Status Pegawai <span class="text-slate-400 font-normal">*</span></label>
+                            <select name="status_pegawai" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                                <option value="">-- Pilih Status --</option>
+                                @php $statusList = ['PNS', 'P3K', 'P3K PW']; @endphp
+                                @foreach($statusList as $status)
+                                    <option value="{{ $status }}" {{ old('status_pegawai') == $status ? 'selected' : '' }}>{{ $status }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">NIP <span class="text-slate-400 font-normal">(Kosongkan jika Honorer)</span></label>
+                            <input type="text" name="nip" value="{{ old('nip') }}" placeholder="18 digit angka NIP" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Pangkat / Golongan</label>
+                            <input type="text" name="pangkat_gol" value="{{ old('pangkat_gol') }}" placeholder="Contoh: Penata / III/c" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Jabatan Akademik</label>
+                            <input type="text" name="jabatan" value="{{ old('jabatan') }}" placeholder="Contoh: Guru" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                        </div>
+
 
                         <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2 mt-4">
                             <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">3. Biodata & Kontak</h3>
@@ -93,7 +115,7 @@
                             <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Agama *</label>
                             <select name="agama" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
                                 <option value="">-- Pilih Agama --</option>
-                                @php $agama_list = ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha']; @endphp
+                                @php $agama_list = ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu']; @endphp
                                 @foreach($agama_list as $agm)
                                     <option value="{{ $agm }}" {{ old('agama') == $agm ? 'selected' : '' }}>{{ $agm }}</option>
                                 @endforeach
@@ -127,9 +149,10 @@
                         <div class="md:col-span-2">
                             <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Unggah Foto Profil <span class="text-slate-400 font-semibold">(Opsional)</span></label>
                             <input type="file" name="foto" accept="image/jpeg, image/png, image/jpg" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-lg cursor-pointer bg-slate-50 transition-colors">
-                            <p class="mt-1.5 text-[11px] font-semibold text-slate-400">Max 2MB (JPG/PNG).</p>
+                            <p class="mt-1.5 text-[11px] font-semibold text-slate-400">Maksimal 2MB (Hanya format JPG/PNG).</p>
                         </div>
-                    </div>
+                        
+                        </div>
 
                     <div class="mt-8 pt-6 border-t border-slate-100 flex justify-end gap-3">
                         <a href="{{ route('operator.guru.index') }}" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold py-2.5 px-6 rounded-lg shadow-sm transition-colors">

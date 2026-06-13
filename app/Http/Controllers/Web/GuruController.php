@@ -41,8 +41,14 @@ class GuruController extends Controller
         }
 
         if ($tingkatKelas) {
-            $query->whereHas('kelas', function ($q) use ($tingkatKelas) {
-                $q->where('tingkat_kelas', $tingkatKelas);
+            $tingkatRomawi = '';
+            if ($tingkatKelas == '7') $tingkatRomawi = 'VII';
+            if ($tingkatKelas == '8') $tingkatRomawi = 'VIII';
+            if ($tingkatKelas == '9') $tingkatRomawi = 'IX';
+
+            $query->whereHas('kelas', function ($q) use ($tingkatKelas, $tingkatRomawi) {
+                $q->where('tingkat_kelas', $tingkatKelas)
+                ->orWhere('tingkat_kelas', $tingkatRomawi);
             });
         }
 

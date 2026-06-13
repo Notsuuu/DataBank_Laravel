@@ -38,11 +38,6 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">NIP <span class="text-slate-400 font-normal">(Kosongkan jika Honorer)</span></label>
-                            <input type="text" name="nip" value="{{ old('nip', $guru->nip) }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
-                        </div>
-
-                        <div>
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Status Aktif *</label>
                             <select name="status_aktif" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
                                 <option value="1" {{ old('status_aktif', $guru->status_aktif) == '1' ? 'selected' : '' }}>Aktif Mengajar</option>
@@ -50,7 +45,7 @@
                             </select>
                         </div>
 
-                        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div></div> <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div class="md:col-span-1">
                                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Gelar Depan</label>
                                 <input type="text" name="gelar_depan" value="{{ old('gelar_depan', $guru->gelar_depan) }}" placeholder="Drs." class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
@@ -66,7 +61,37 @@
                         </div>
 
                         <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2 mt-4">
-                            <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">2. Biodata & Kontak</h3>
+                            <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">2. Data Kepegawaian</h3>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Status Pegawai <span class="text-slate-400 font-normal">*</span></label>
+                            <select name="status_pegawai" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                                <option value="">-- Pilih Status --</option>
+                                @php $statusList = ['PNS', 'P3K', 'P3K PW']; @endphp
+                                @foreach($statusList as $status)
+                                    <option value="{{ $status }}" {{ old('status_pegawai', $guru->status_pegawai) == $status ? 'selected' : '' }}>{{ $status }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">NIP <span class="text-slate-400 font-normal">(Kosongkan jika Honorer)</span></label>
+                            <input type="text" name="nip" value="{{ old('nip', $guru->nip) }}" placeholder="18 digit angka NIP" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Pangkat / Golongan</label>
+                            <input type="text" name="pangkat_gol" value="{{ old('pangkat_gol', $guru->pangkat_gol) }}" placeholder="Contoh: Penata / III/c" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Jabatan Akademik</label>
+                            <input type="text" name="jabatan" value="{{ old('jabatan', $guru->jabatan) }}" placeholder="Contoh: Guru Mata Pelajaran" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                        </div>
+
+                        <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2 mt-4">
+                            <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">3. Biodata & Kontak</h3>
                         </div>
 
                         <div>
