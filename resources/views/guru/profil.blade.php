@@ -25,12 +25,13 @@
         </div>
         <div>
             <h2 class="text-2xl font-black text-slate-800 tracking-tight">Profil Saya</h2>
-            <p class="text-sm font-semibold text-slate-500 mt-0.5">Kelola identitas diri, foto profil, dan kredensial keamanan Anda.</p>
+            <p class="text-sm font-semibold text-slate-500 mt-0.5">Kelola identitas diri, data kepegawaian, dokumen, dan kredensial keamanan Anda.</p>
         </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
+        <!-- KOLOM KIRI: Foto & Password -->
         <div class="lg:col-span-4 space-y-6">
 
             <form action="{{ route('guru.profil.update') }}" method="POST" enctype="multipart/form-data">
@@ -103,11 +104,14 @@
 
         </div>
 
+        <!-- KOLOM KANAN: Data Utama -->
         <div class="lg:col-span-8">
-            <form action="{{ route('guru.profil.update') }}" method="POST" class="bg-white rounded-2xl shadow-sm shadow-slate-200/50 border border-slate-200/80 p-6 md:p-8">
+            <!-- PENTING: Tambahkan enctype="multipart/form-data" -->
+            <form action="{{ route('guru.profil.update') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-2xl shadow-sm shadow-slate-200/50 border border-slate-200/80 p-6 md:p-8">
                 @csrf
                 @method('PUT')
 
+                <!-- SEKSI 1: DATA PRIBADI -->
                 <h3 class="font-bold text-slate-800 mb-6 pb-3 border-b border-slate-100 flex items-center gap-2">
                     <svg class="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg>
                     Data Pribadi
@@ -170,10 +174,39 @@
                     </div>
                 </div>
 
-                <div class="mt-6 flex justify-end pt-5 border-t border-slate-100">
+                <!-- SEKSI 2: DATA KEPEGAWAIAN -->
+                <h3 class="font-bold text-slate-800 mb-6 mt-8 pb-3 border-b border-slate-100 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    Data Kepegawaian
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Status Pegawai</label>
+                        <select name="status_pegawai" class="w-full rounded-xl border-slate-300 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-100 transition-colors">
+                            <option value="">-- Pilih Status --</option>
+                            @php $statusList = ['PNS', 'P3K', 'P3K PW']; @endphp
+                            @foreach($statusList as $status)
+                                <option value="{{ $status }}" {{ old('status_pegawai', $user->guru->status_pegawai) == $status ? 'selected' : '' }}>{{ $status }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Pangkat / Golongan</label>
+                        <input type="text" name="pangkat_gol" value="{{ old('pangkat_gol', $user->guru->pangkat_gol) }}" placeholder="Contoh: Penata Muda / III/a" class="w-full rounded-xl border-slate-300 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-100 transition-colors">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Jabatan Akademik</label>
+                        <input type="text" name="jabatan" value="{{ old('jabatan', $user->guru->jabatan) }}" placeholder="Contoh: Guru Mata Pelajaran / Wali Kelas" class="w-full rounded-xl border-slate-300 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-100 transition-colors">
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-end pt-5 border-t border-slate-100">
                     <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-xl text-sm transition-all shadow-sm shadow-emerald-500/30 flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        Simpan Profil
+                        Simpan Profil & Dokumen
                     </button>
                 </div>
             </form>
