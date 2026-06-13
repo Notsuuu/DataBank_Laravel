@@ -1,6 +1,7 @@
 @extends('layouts.guru')
 
 @section('title', 'Profil Saya - Panel Guru')
+@section('header', 'Profil Saya')
 
 @section('content')
 <div class="max-w-6xl mx-auto space-y-6">
@@ -25,43 +26,30 @@
         </div>
         <div>
             <h2 class="text-2xl font-black text-slate-800 tracking-tight">Profil Saya</h2>
-            <p class="text-sm font-semibold text-slate-500 mt-0.5">Kelola identitas diri, data kepegawaian, dokumen, dan kredensial keamanan Anda.</p>
+            <p class="text-sm font-semibold text-slate-500 mt-0.5">Kelola identitas diri, data kepegawaian, dan kredensial keamanan Anda.</p>
         </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-        <!-- KOLOM KIRI: Foto & Password -->
         <div class="lg:col-span-4 space-y-6">
 
-            <form action="{{ route('guru.profil.update') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
+            <div class="bg-white rounded-2xl shadow-sm shadow-slate-200/50 border border-slate-200/80 p-6 flex flex-col items-center text-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-emerald-50 to-white"></div>
 
-                <div class="bg-white rounded-2xl shadow-sm shadow-slate-200/50 border border-slate-200/80 p-6 flex flex-col items-center text-center relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-emerald-50 to-white"></div>
-
-                    <div class="relative group mb-4 mt-4">
-                        @if($user->guru->foto)
-                            <img src="{{ asset('storage/' . $user->guru->foto) }}" class="h-32 w-32 rounded-full object-cover border-4 border-white shadow-md bg-slate-100 relative z-10">
-                        @else
-                            <div class="h-32 w-32 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-4xl font-black border-4 border-white shadow-md relative z-10">
-                                {{ Str::upper(substr($user->name, 0, 2)) }}
-                            </div>
-                        @endif
-
-                        <label class="absolute inset-0 bg-slate-900/60 rounded-full flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity z-20 backdrop-blur-sm">
-                            <svg class="w-8 h-8 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                            <span class="text-[10px] font-bold tracking-wider uppercase">Pilih Foto</span>
-                            <input type="file" name="foto" accept=".jpg,.jpeg,.png" class="hidden" onchange="this.form.submit()">
-                        </label>
-                    </div>
-
-                    <h3 class="font-extrabold text-slate-800 text-lg relative z-10">{{ $user->guru->gelar_depan }} {{ $user->name }} {{ $user->guru->gelar_belakang }}</h3>
-                    <p class="text-sm font-semibold text-emerald-600 mt-1 relative z-10">NIP. {{ $user->guru->nip ?? 'Non-PNS' }}</p>
-                    <p class="text-[11px] font-bold text-slate-400 mt-4 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100 relative z-10 w-full">Format: JPG/PNG (Maks. 2MB)<br>Pilih foto, sistem otomatis menyimpan.</p>
+                <div class="relative group mb-4 mt-4">
+                    @if($user->guru->foto)
+                        <img src="{{ asset('storage/' . $user->guru->foto) }}" class="h-32 w-32 rounded-full object-cover border-4 border-white shadow-md bg-slate-100 relative z-10">
+                    @else
+                        <div class="h-32 w-32 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-4xl font-black border-4 border-white shadow-md relative z-10">
+                            {{ Str::upper(substr($user->name, 0, 2)) }}
+                        </div>
+                    @endif
                 </div>
-            </form>
+
+                <h3 class="font-extrabold text-slate-800 text-lg relative z-10">{{ $user->guru->gelar_depan }} {{ $user->name }} {{ $user->guru->gelar_belakang }}</h3>
+                <p class="text-sm font-semibold text-emerald-600 mt-1 relative z-10">NIP. {{ $user->guru->nip ?? 'Non-PNS' }}</p>
+            </div>
 
             <form action="{{ route('password.update') }}" method="POST" class="bg-white rounded-2xl shadow-sm shadow-slate-200/50 border border-slate-200/80 p-6">
                 @csrf
@@ -104,20 +92,17 @@
 
         </div>
 
-        <!-- KOLOM KANAN: Data Utama -->
         <div class="lg:col-span-8">
-            <!-- PENTING: Tambahkan enctype="multipart/form-data" -->
             <form action="{{ route('guru.profil.update') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-2xl shadow-sm shadow-slate-200/50 border border-slate-200/80 p-6 md:p-8">
                 @csrf
                 @method('PUT')
 
-                <!-- SEKSI 1: DATA PRIBADI -->
                 <h3 class="font-bold text-slate-800 mb-6 pb-3 border-b border-slate-100 flex items-center gap-2">
                     <svg class="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg>
                     Data Pribadi
                 </h3>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <div class="md:col-span-2">
                         <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Nama Lengkap <span class="text-rose-500">*</span></label>
                         <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap', $user->guru->nama_lengkap) }}" required class="w-full rounded-xl border-slate-300 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-100 transition-colors">
@@ -174,13 +159,12 @@
                     </div>
                 </div>
 
-                <!-- SEKSI 2: DATA KEPEGAWAIAN -->
                 <h3 class="font-bold text-slate-800 mb-6 mt-8 pb-3 border-b border-slate-100 flex items-center gap-2">
                     <svg class="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                     Data Kepegawaian
                 </h3>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <div>
                         <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Status Pegawai</label>
                         <select name="status_pegawai" class="w-full rounded-xl border-slate-300 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-100 transition-colors">
@@ -201,6 +185,13 @@
                         <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Jabatan Akademik</label>
                         <input type="text" name="jabatan" value="{{ old('jabatan', $user->guru->jabatan) }}" placeholder="Contoh: Guru Mata Pelajaran / Wali Kelas" class="w-full rounded-xl border-slate-300 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-100 transition-colors">
                     </div>
+                        
+                    <div class="md:col-span-2 mt-4 border-t border-slate-100 pt-4">
+                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Ganti Foto Profil</label>
+                        <span class="text-slate-400 font-normal">(Opsional)</span></label>
+                        <input type="file" name="foto" accept=".jpg,.jpeg,.png" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-200 rounded-xl bg-slate-50 transition-colors">
+                        <p class="mt-1.5 text-[11px] font-bold text-slate-400">Pilih foto untuk mengganti profil. Format JPG/PNG (Max. 2MB).</p>
+                    </div>
                 </div>
 
                 <div class="mt-8 flex justify-end pt-5 border-t border-slate-100">
@@ -214,4 +205,4 @@
 
     </div>
 </div>
-@endsection
+@endsection 
