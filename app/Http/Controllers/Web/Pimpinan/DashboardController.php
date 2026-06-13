@@ -15,19 +15,22 @@ use App\Models\LogAktivitas;
 
 class DashboardController extends Controller
 {
-    // ==========================================
-    // 1. DASHBOARD & RINGKASAN
-    // ==========================================
     public function index()
     {
-        $totalGuru = Guru::count();
+        // 1. Kueri Khusus Guru Aktif
+        $gurusAktif = Guru::where('status_aktif', 'Aktif')
+            ->whereHas('user', function ($q) {
+                $q->where('role', 'guru');
+            })->get();
+        
+        $totalGuru = $gurusAktif->count();
         $totalSiswa = Siswa::count();
         $logs = LogAktivitas::with('user')->latest()->take(5)->get();
 
-        $gurus = Guru::all();
         $totalSkorKeseluruhan = 0;
 
-        $daftarGuru = $gurus->map(function($guru) use (&$totalSkorKeseluruhan) {
+        // 2. Hitung skor HANYA untuk guru yang aktif
+        $daftarGuru = $gurusAktif->map(function($guru) use (&$totalSkorKeseluruhan) {
             $hasPendidikan = DB::table('riwayat_pendidikans')->where('guru_id', $guru->id)->exists();
             $skor = 0;
 
@@ -58,9 +61,6 @@ class DashboardController extends Controller
         return view('pimpinan.dashboard', compact('totalGuru', 'totalSiswa', 'persenKelengkapan', 'logs', 'daftarGuru'));
     }
 
-    // ==========================================
-    // 2. KELOLA PROFIL PIMPINAN
-    // ==========================================
     public function profil()
     {
         $user = Auth::user();
@@ -105,12 +105,8 @@ class DashboardController extends Controller
         return back()->with('success', 'Data profil dan biodata berhasil diperbarui!');
     }
 
-    // ==========================================
-    // 3. CRUD RIWAYAT PENDIDIKAN PIMPINAN
-    // ==========================================
     public function pendidikan()
     {
-        // Pastikan model RiwayatPendidikan memiliki kolom pimpinan_id
         $riwayats = RiwayatPendidikan::where('pimpinan_id', Auth::user()->pimpinan->id)
             ->orderBy('tahun_lulus', 'desc')
             ->get();
@@ -234,19 +230,19 @@ class DashboardController extends Controller
     // ==========================================
     public function laporanKinerja()
     {
-        // Ambil semua data guru
-        $gurus = Guru::all();
+        // 1. Ganti Guru::all() dengan filter guru aktif
+        $gurusAktif = Guru::where('status_aktif', 'Aktif')
+            ->whereHas('user', function ($q) {
+                $q->where('role', 'guru');
+            })->get();
+
         $totalSkorKeseluruhan = 0;
 
-        // Lakukan pemetaan data untuk kalkulasi skor secara real-time
-        $daftarGuru = $gurus->map(function($guru) use (&$totalSkorKeseluruhan) {
-
-            // Cek apakah guru ini sudah mengisi riwayat pendidikan minimum 1 data
+        $daftarGuru = $gurusAktif->map(function($guru) use (&$totalSkorKeseluruhan) {
             $hasPendidikan = DB::table('riwayat_pendidikans')
                 ->where('guru_id', $guru->id)
                 ->exists();
 
-            // Algoritma Bobot Kepatuhan Administrasi (Masing-masing poin bernilai 25%)
             $skor = 0;
             if (!empty($guru->file_ktp)) $skor += 25;
             if (!empty($guru->file_ijazah)) $skor += 25;
@@ -256,7 +252,6 @@ class DashboardController extends Controller
             $guru->skor_kinerja = $skor;
             $totalSkorKeseluruhan += $skor;
 
-            // Klasifikasi Predikat secara Visual
             if ($skor === 100) {
                 $guru->predikat = 'Sangat Disiplin';
                 $guru->badge = 'bg-emerald-100 text-emerald-700 border-emerald-200';
@@ -271,8 +266,8 @@ class DashboardController extends Controller
             return $guru;
         });
 
-        // Hitung nilai rata-rata makro untuk sekolah
-        $rataRata = $gurus->count() > 0 ? ($totalSkorKeseluruhan / $gurus->count()) : 0;
+        // 2. Hitung rata-rata hanya dari jumlah guru aktif
+        $rataRata = $gurusAktif->count() > 0 ? ($totalSkorKeseluruhan / $gurusAktif->count()) : 0;
 
         return view('pimpinan.laporan_kinerja', compact('daftarGuru', 'rataRata'));
     }

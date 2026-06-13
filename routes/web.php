@@ -150,7 +150,7 @@ Route::middleware('auth')->group(function () {
             // Ekspor Laporan
             Route::get('/laporan/pimpinan/excel', [LaporanController::class, 'exportPimpinanExcel'])->name('laporan.pimpinan.excel');
             Route::get('/laporan/pimpinan/pdf', [LaporanController::class, 'exportPimpinanPDF'])->name('laporan.pimpinan.pdf');
-            Route::get('/laporan/guru/excel', [LaporanController::class, 'exportGuruExcel'])->name('laporan.guru.excel');
+            Route::get('/laporan/guru/excel', [GuruController::class, 'exportPegawai'])->name('laporan.guru.excel');
             Route::get('/laporan/siswa/excel', [LaporanController::class, 'exportSiswaExcel'])->name('laporan.siswa.excel');
             Route::get('/laporan/guru/pdf', [LaporanController::class, 'exportGuruPDF'])->name('laporan.guru.pdf');
             Route::get('/laporan/siswa/pdf', [LaporanController::class, 'exportSiswaPDF'])->name('laporan.siswa.pdf');
