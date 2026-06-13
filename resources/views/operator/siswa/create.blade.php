@@ -11,7 +11,7 @@
                 </div>
                 <div>
                     <h2 class="text-xl font-bold text-slate-800 tracking-tight">Form Registrasi Siswa</h2>
-                    <p class="text-sm font-semibold text-slate-500 mt-0.5">Pastikan <span class="font-bold text-slate-700">NIS</span> terisi dengan benar karena akan digunakan sebagai identitas utama.</p>
+                    <p class="text-sm font-semibold text-slate-500 mt-0.5">Pastikan <span class="font-bold text-slate-700">NIS</span> dan <span class="font-bold text-slate-700">NISN</span> terisi dengan benar karena akan digunakan sebagai identitas utama.</p>
                 </div>
             </div>
 
@@ -65,7 +65,12 @@
                             <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">2. Biodata Personal</h3>
                         </div>
 
-                        <div class="md:col-span-2">
+                        <div>
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">NIK Siswa</label>
+                            <input type="text" name="nik" value="{{ old('nik') }}" placeholder="16 digit NIK" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                        </div>
+
+                        <div>
                             <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Nama Lengkap *</label>
                             <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap') }}" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
                         </div>
@@ -83,7 +88,7 @@
                             <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Agama *</label>
                             <select name="agama" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
                                 <option value="">-- Pilih --</option>
-                                @php $agama_list = ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha']; @endphp
+                                @php $agama_list = ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu']; @endphp
                                 @foreach($agama_list as $agm)
                                     <option value="{{ $agm }}" {{ old('agama') == $agm ? 'selected' : '' }}>{{ $agm }}</option>
                                 @endforeach
@@ -99,28 +104,73 @@
                             <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Tanggal Lahir *</label>
                             <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
                         </div>
-                        
+
                         <div class="md:col-span-2">
-                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Alamat Lengkap</label>
-                            <textarea name="alamat" rows="3" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">{{ old('alamat') }}</textarea>
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Nomor HP / WhatsApp Siswa</label>
+                            <input type="text" name="no_hp_siswa" value="{{ old('no_hp_siswa') }}" placeholder="Contoh: 08123456789" class="w-full md:w-1/2 rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
                         </div>
 
                         <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2 mt-4">
-                            <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">3. Informasi Orang Tua / Wali</h3>
+                            <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">3. Detail Alamat Domisili</h3>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Jalan / Alamat Rumah</label>
+                            <textarea name="alamat" rows="2" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">{{ old('alamat') }}</textarea>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">RT</label>
+                                <input type="text" name="rt" value="{{ old('rt') }}" placeholder="001" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">RW</label>
+                                <input type="text" name="rw" value="{{ old('rw') }}" placeholder="002" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                            </div>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Nama Wali</label>
-                            <input type="text" name="nama_wali" value="{{ old('nama_wali') }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Kelurahan / Desa</label>
+                            <input type="text" name="kelurahan" value="{{ old('kelurahan') }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
                         </div>
 
                         <div>
-                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">No. Handphone Wali</label>
-                            <input type="text" name="no_hp_wali" value="{{ old('no_hp_wali') }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Kecamatan</label>
+                            <input type="text" name="kecamatan" value="{{ old('kecamatan') }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Kode Pos</label>
+                            <input type="text" name="kode_pos" value="{{ old('kode_pos') }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
                         </div>
 
                         <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2 mt-4">
-                            <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">4. Berkas Media</h3>
+                            <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">4. Informasi Orang Tua</h3>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Nama Ayah</label>
+                            <input type="text" name="nama_ayah" value="{{ old('nama_ayah') }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Pekerjaan Ayah</label>
+                            <input type="text" name="pekerjaan_ayah" value="{{ old('pekerjaan_ayah') }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Nama Ibu</label>
+                            <input type="text" name="nama_ibu" value="{{ old('nama_ibu') }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">Pekerjaan Ibu</label>
+                            <input type="text" name="pekerjaan_ibu" value="{{ old('pekerjaan_ibu') }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                        </div>
+
+                        <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2 mt-4">
+                            <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">5. Berkas Media</h3>
                         </div>
 
                         <div class="md:col-span-2">

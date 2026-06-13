@@ -38,11 +38,14 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">NIP</label>
-                        <input type="text" name="nip" value="{{ old('nip', $pimpinan->nip) }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Status Aktif *</label>
+                        <select name="status_aktif" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                            <option value="1" {{ old('status_aktif', $pimpinan->status_aktif) == '1' ? 'selected' : '' }}>Aktif Menjabat</option>
+                            <option value="0" {{ old('status_aktif', $pimpinan->status_aktif) == '0' ? 'selected' : '' }}>Nonaktif / Pensiun / Pindah</option>
+                        </select>
                     </div>
-                    
-                    <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-4 gap-4">
+
+                    <div></div> <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div class="md:col-span-1">
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Gelar Depan</label>
                             <input type="text" name="gelar_depan" value="{{ old('gelar_depan', $pimpinan->gelar_depan) }}" placeholder="Drs." class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
@@ -58,7 +61,37 @@
                     </div>
 
                     <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2 mt-4">
-                        <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">2. Biodata & Kontak</h3>
+                        <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">2. Data Kepegawaian</h3>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Status Pegawai <span class="text-slate-400 font-normal">*</span></label>
+                        <select name="status_pegawai" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                            <option value="">-- Pilih Status --</option>
+                            @php $statusList = ['PNS', 'PPPK', 'Honorer', 'GTY', 'GTT']; @endphp
+                            @foreach($statusList as $status)
+                                <option value="{{ $status }}" {{ old('status_pegawai', $pimpinan->status_pegawai) == $status ? 'selected' : '' }}>{{ $status }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">NIP</label>
+                        <input type="text" name="nip" value="{{ old('nip', $pimpinan->nip) }}" placeholder="18 digit angka NIP" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Pangkat / Golongan</label>
+                        <input type="text" name="pangkat_gol" value="{{ old('pangkat_gol', $pimpinan->pangkat_gol) }}" placeholder="Contoh: Pembina Tk. I / IV/b" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Jabatan Struktural</label>
+                        <input type="text" name="jabatan" value="{{ old('jabatan', $pimpinan->jabatan) }}" placeholder="Contoh: Kepala Sekolah" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
+                    </div>
+
+                    <div class="md:col-span-2 border-b border-slate-100 pb-2 mb-2 mt-4">
+                        <h3 class="text-sm font-extrabold text-slate-900 tracking-tight uppercase">3. Biodata & Kontak</h3>
                     </div>
 
                     <div>
@@ -72,7 +105,7 @@
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Agama *</label>
                         <select name="agama" required class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
-                            @foreach(['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha'] as $agm)
+                            @foreach(['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu'] as $agm)
                                 <option value="{{ $agm }}" {{ old('agama', $pimpinan->agama) == $agm ? 'selected' : '' }}>{{ $agm }}</option>
                             @endforeach
                         </select>
