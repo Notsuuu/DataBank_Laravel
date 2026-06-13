@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
         // Akun Operator Utama (Admin)
         User::create([
             'name' => 'Ali',
-            'email' => 'ali@smpn4palu.sch.id',
+            'email' => 'ali@smpn4palu.com',
             'password' => Hash::make('password123'),
             'role' => 'operator',
             'is_active' => true,
@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Rifaldi',
-            'email' => 'rifaldi@smpn4palu.sch.id',
+            'email' => 'rifaldi@smpn4palu.com',
             'password' => Hash::make('password123'),
             'role' => 'operator',
             'is_active' => true,
@@ -30,7 +30,7 @@ class UserSeeder extends Seeder
         // Akun Guru untuk testing
         User::create([
             'name' => 'Diyowansyah',
-            'email' => 'diyo@smpn4palu.sch.id',
+            'email' => 'diyo@smpn4palu.com',
             'password' => Hash::make('password123'),
             'role' => 'guru',
             'is_active' => true,
@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Hafizh',
-            'email' => 'hafizh@smpn4palu.sch.id',
+            'email' => 'hafizh@smpn4palu.com',
             'password' => Hash::make('password123'),
             'role' => 'guru',
             'is_active' => true,
@@ -46,7 +46,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Sofia',
-            'email' => 'sofia@smpn4palu.sch.id',
+            'email' => 'sofia@smpn4palu.com',
             'password' => Hash::make('password123'),
             'role' => 'guru',
             'is_active' => true,
@@ -54,7 +54,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Sifa',
-            'email' => 'sifa@smpn4palu.sch.id',
+            'email' => 'sifa@smpn4palu.com ',
             'password' => Hash::make('password123'),
             'role' => 'pimpinan',
             'is_active' => true,

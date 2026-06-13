@@ -19,7 +19,6 @@ use App\Models\Pimpinan;
 
 class LaporanController extends Controller
 {
-
     public function importGuru(Request $request)
     {
         $request->validate(['file_excel' => 'required|mimes:xlsx,xls,csv|max:5120']);
@@ -30,7 +29,6 @@ class LaporanController extends Controller
             return back()->with('error', 'Gagal mengimpor: ' . $e->getMessage());
         }
     }
-
 
     public function importSiswa(Request $request)
     {
@@ -43,7 +41,6 @@ class LaporanController extends Controller
         }
     }
 
-
     public function exportGuruPDF(Request $request)
     {
         $type = trim($request->query('type', 'all'));
@@ -52,7 +49,7 @@ class LaporanController extends Controller
         if ($type === 'all' || $type === 'pimpinan') {
             $pimpinans = Pimpinan::with('user')->where('status_aktif', 'Aktif')->get();
             foreach ($pimpinans as $p) {
-                $p->jabatan = 'Pimpinan';
+                $p->jabatan = $p->jabatan ?? 'Kepala Sekolah';
                 $data->push($p);
             }
         }
@@ -65,7 +62,7 @@ class LaporanController extends Controller
                 })
                 ->get();
             foreach ($gurus as $g) {
-                $g->jabatan = 'Guru / Tenaga Pendidik';
+                $g->jabatan = $g->jabatan ?? 'Guru';
                 $data->push($g);
             }
         }
@@ -105,12 +102,13 @@ class LaporanController extends Controller
         return $pdf->download('Laporan_Data_Siswa_SMPN4Palu.pdf');
     }
 
-
     public function exportPimpinanPDF()
     {
-        $data = Pimpinan::all()->map(function($pimpinan) {
-            $nip = $pimpinan->nip;
-            $pimpinan->nip_format = (strlen($nip) === 18) ? substr($nip, 0, 8) . ' ' . substr($nip, 8, 6) . ' ' . substr($nip, 14, 1) . ' ' . substr($nip, 15, 3) : $nip;
+        $data = Pimpinan::orderBy('status_aktif', 'asc')->latest()->get()->map(function($pimpinan) {
+            $nip = $pimpinan->nip;  
+            $pimpinan->nip_format = (strlen((string)$nip) === 18) 
+                ? substr($nip, 0, 8) . ' ' . substr($nip, 8, 6) . ' ' . substr($nip, 14, 1) . ' ' . substr($nip, 15, 3) 
+                : ($nip ? $nip : '-');
             return $pimpinan;
         });
 
@@ -122,7 +120,6 @@ class LaporanController extends Controller
     {
         return Excel::download(new SiswaExport(), 'Data_Siswa_SMPN4Palu.xlsx');
     }
-
 
     public function exportPimpinanExcel()
     {

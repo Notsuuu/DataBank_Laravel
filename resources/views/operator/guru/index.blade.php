@@ -140,8 +140,11 @@
                 <table class="w-full text-left text-sm text-slate-600">
                     <thead class="bg-slate-50 text-slate-700 border-b border-slate-200">
                         <tr>
-                            <th class="px-6 py-4 font-extrabold tracking-tight">Guru / Identitas</th>
-                            <th class="px-6 py-4 font-extrabold tracking-tight text-center">L/P</th>
+                            <th class="px-6 py-4 font-extrabold tracking-tight w-10 text-center">No</th>
+                            <th class="px-6 py-4 font-extrabold tracking-tight">Nama & NIP</th>
+                            <th class="px-6 py-4 font-extrabold tracking-tight">Pangkat/Gol</th>
+                            <th class="px-6 py-4 font-extrabold tracking-tight">Jabatan</th>
+                            <th class="px-6 py-4 font-extrabold tracking-tight text-center">Status ASN</th>
                             <th class="px-6 py-4 font-extrabold tracking-tight">Kontak</th>
                             <th class="px-6 py-4 font-extrabold tracking-tight text-center">Status</th>
                             <th class="px-6 py-4 font-extrabold tracking-tight text-center">Aksi</th>
@@ -150,6 +153,10 @@
                     <tbody class="divide-y divide-slate-100">
                         @forelse($para_guru as $guru)
                             <tr class="hover:bg-blue-50/50 transition-colors">
+                                <td class="px-6 py-4 text-center font-bold text-slate-400">
+                                    {{ $loop->iteration }}
+                                </td>
+
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-4">
                                         <div class="h-10 w-10 flex-shrink-0">
@@ -166,17 +173,27 @@
                                                 {{ $guru->gelar_depan }} {{ $guru->nama_lengkap }} {{ $guru->gelar_belakang }}
                                             </div>
                                             <div class="text-[11px] font-semibold text-slate-500 mt-0.5">
-                                                NIP: <span class="font-mono text-slate-700">{{ $guru->nip ?? 'Honorer' }}</span>
+                                                NIP: <span class="font-mono text-slate-700">{{ $guru->nip ?? '-' }}</span>
                                             </div>
                                         </div>
                                     </div>
                                 </td>
 
+                                <td class="px-6 py-4">
+                                    <div class="text-xs font-bold text-slate-700">{{ $guru->pangkat_gol ?? '-' }}</div>
+                                </td>
+
+                                <td class="px-6 py-4">
+                                    <div class="text-xs font-bold text-slate-700">{{ $guru->jabatan ?? '-' }}</div>
+                                </td>
+
                                 <td class="px-6 py-4 text-center">
-                                    @if($guru->jenis_kelamin == 'L')
-                                        <span class="px-2.5 py-1 rounded text-xs font-bold text-slate-600 border border-slate-200 bg-slate-50">L</span>
-                                    @elseif($guru->jenis_kelamin == 'P')
-                                        <span class="px-2.5 py-1 rounded text-xs font-bold text-slate-600 border border-slate-200 bg-slate-50">P</span>
+                                    @if($guru->status_pegawai == 'PNS')
+                                        <span class="px-2.5 py-1 rounded text-xs font-bold text-blue-700 border border-blue-200 bg-blue-50">PNS</span>
+                                    @elseif($guru->status_pegawai == 'P3K' || $guru->status_pegawai == 'P3K PW')
+                                        <span class="px-2.5 py-1 rounded text-xs font-bold text-emerald-700 border border-emerald-200 bg-emerald-50">{{ $guru->status_pegawai }}</span>
+                                    @else
+                                        <span class="px-2.5 py-1 rounded text-xs font-bold text-amber-700 border border-amber-200 bg-amber-50">{{ $guru->status_pegawai ?? 'Honorer' }}</span>
                                     @endif
                                 </td>
 
@@ -200,7 +217,7 @@
                                     <div class="flex justify-center items-center gap-3">
                                         <a href="{{ route('operator.guru.edit', $guru->id) }}" class="text-blue-600 hover:text-blue-800 font-bold transition-colors">Edit</a>
 
-                                        <form action="{{ route('operator.guru.destroy', $guru->id) }}" method="POST" onsubmit="return confirm('Peringatan: Yakin ingin menghapus data Guru ini beserta akun loginnya?');">
+                                        <form action="{{ route('operator.guru.destroy', $guru->id) }}" method="POST" onsubmit="return confirm('Peringatan: Yakin ingin menghapus/menonaktifkan data Guru ini beserta akun loginnya?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-500 hover:text-red-700 font-bold transition-colors">Hapus</button>
@@ -209,7 +226,15 @@
                                 </td>
                             </tr>
                         @empty
-                            @endforelse
+                            <tr>
+                                <td colspan="8" class="px-6 py-8 text-center text-slate-500 font-medium">
+                                    <div class="flex flex-col items-center justify-center">
+                                        <svg class="w-12 h-12 text-slate-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                                        Belum ada data guru yang ditambahkan.
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

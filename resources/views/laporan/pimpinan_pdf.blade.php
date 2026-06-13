@@ -3,18 +3,24 @@
 <head>
     <title>Laporan Data Pimpinan</title>
     <style>
-        body { font-family: 'Helvetica', 'Arial', sans-serif; font-size: 11px; color: #333; line-height: 1.4; }
+        body { font-family: 'Helvetica', 'Arial', sans-serif; font-size: 10px; color: #333; line-height: 1.4; }
+        
         .kop-surat { border-bottom: 3px solid #000; padding-bottom: 10px; margin-bottom: 20px; text-align: center; }
         .kop-surat h3 { margin: 0; text-transform: uppercase; font-size: 14px; letter-spacing: 1px; }
         .kop-surat h2 { margin: 2px 0; font-size: 18px; font-weight: bold; }
         .kop-surat p { margin: 0; font-size: 10px; font-style: italic; color: #666; }
-        .judul-laporan { text-align: center; font-size: 13px; font-weight: bold; text-transform: uppercase; margin-bottom: 15px; }
+
+        .judul-laporan { text-align: center; font-size: 12px; font-weight: bold; text-transform: uppercase; margin-bottom: 15px; }
+
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { background-color: #f2f2f2; border: 1px solid #999; padding: 6px; font-weight: bold; text-align: left; text-transform: uppercase; font-size: 10px; }
-        td { border: 1px solid #999; padding: 6px; vertical-align: top; }
+        th { background-color: #f2f2f2; border: 1px solid #999; padding: 5px; font-weight: bold; text-align: left; text-transform: uppercase; font-size: 9px; }
+        td { border: 1px solid #999; padding: 5px; vertical-align: top; }
         .text-center { text-align: center; }
+
         .ttd-container { margin-top: 40px; float: right; width: 200px; text-align: center; }
         .ttd-space { height: 50px; }
+                
+        .font-mono { font-family: monospace; font-size: 9px; }
     </style>
 </head>
 <body>
@@ -30,21 +36,30 @@
     <table>
         <thead>
             <tr>
-                <th width="5%" class="text-center">No</th>
-                <th width="30%">Nama Lengkap & Gelar</th>
-                <th width="25%">NIP</th>
-                <th width="10%" class="text-center">L/P</th>
-                <th width="30%">Kontak & Status</th>
+                <th width="3%" class="text-center">No</th>
+                <th width="22%">Nama Lengkap & Gelar</th>
+                <th width="14%">NIP</th>
+                <th width="10%">Pangkat/Gol</th>
+                <th width="16%">Jabatan</th>
+                <th width="10%" class="text-center">Status ASN</th>
+                <th width="5%" class="text-center">L/P</th>
+                <th width="20%">Kontak & Akun</th>
             </tr>
         </thead>
         <tbody>
             @foreach($data as $index => $pimpinan)
             <tr>
                 <td class="text-center">{{ $index + 1 }}</td>
-                <td><strong>{{ $pimpinan->gelar_depan }} {{ $pimpinan->nama_lengkap }} {{ $pimpinan->gelar_belakang }}</strong></td>
-                <td><code style="font-size: 11px;">{{ $pimpinan->nip_format }}</code></td>
-                <td class="text-center">{{ $pimpinan->jenis_kelamin }}</td>
-                <td>{{ $pimpinan->no_hp ?? '-' }} <br> <em>{{ $pimpinan->status_aktif }}</em></td>
+                <td><strong>{{ trim($pimpinan->gelar_depan . ' ' . $pimpinan->nama_lengkap . ' ' . $pimpinan->gelar_belakang) }}</strong></td>
+                <td><span class="font-mono">{{ $pimpinan->nip_format ?? $pimpinan->nip ?? '-' }}</span></td>
+                <td>{{ $pimpinan->pangkat_gol ?? '-' }}</td>
+                <td>{{ $pimpinan->jabatan ?? '-' }}</td>
+                <td class="text-center">{{ $pimpinan->status_pegawai ?? '-' }}</td>
+                <td class="text-center">{{ $pimpinan->jenis_kelamin ?? '-' }}</td>
+                <td>
+                    HP: {{ $pimpinan->no_hp ?? '-' }} <br> 
+                    <span style="font-size: 8px; color: #555;">Akun: {{ $pimpinan->status_aktif }}</span>
+                </td>
             </tr>
             @endforeach
         </tbody>

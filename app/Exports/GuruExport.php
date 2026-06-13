@@ -30,7 +30,7 @@ class GuruExport implements FromCollection, WithHeadings, WithMapping, WithColum
                 ->get();
                 
             foreach ($pimpinans as $p) {
-                $data->push($this->formatDataJadiArray($p, 'Pimpinan / Kepala Sekolah'));
+                $data->push($this->formatDataJadiArray($p, 'Pimpinan'));
             }
         }
 
@@ -43,7 +43,7 @@ class GuruExport implements FromCollection, WithHeadings, WithMapping, WithColum
                 ->get();
                 
             foreach ($gurus as $g) {
-                $data->push($this->formatDataJadiArray($g, 'Guru / Tenaga Pendidik'));
+                $data->push($this->formatDataJadiArray($g, 'Guru'));
             }
         }
 
@@ -51,13 +51,12 @@ class GuruExport implements FromCollection, WithHeadings, WithMapping, WithColum
     }
 
     /**
-     * @param mixed $row
-     * @param string $jabatan
-     * @return array
+     * Helper untuk merapikan data sebelum dimasukkan ke array
      */
-    private function formatDataJadiArray(mixed $row, string $jabatan): array
+    private function formatDataJadiArray(mixed $row, string $jabatanDefault): array
     {
         $nip = $row->nip;
+        
         if (strlen((string)$nip) === 18) {
             $nipResmi = substr($nip, 0, 8) . ' ' . substr($nip, 8, 6) . ' ' . substr($nip, 14, 1) . ' ' . substr($nip, 15, 3);
         } else {
@@ -67,38 +66,50 @@ class GuruExport implements FromCollection, WithHeadings, WithMapping, WithColum
         $namaFinal = trim($row->gelar_depan . ' ' . $row->nama_lengkap . ' ' . $row->gelar_belakang);
 
         return [
-            'nip'      => $nipResmi,
-            'nama'     => $namaFinal,
-            'email'    => $row->user->email ?? '-',
-            'jabatan'  => $jabatan,
-            'jk'       => $row->jenis_kelamin,
-            'tempat'   => $row->tempat_lahir,
-            'tanggal'  => $row->tanggal_lahir,
-            'agama'    => $row->agama,
-            'nohp'     => $row->no_hp ?? '-',
-            'alamat'   => $row->alamat,
+            'nip'            => $nipResmi,
+            'nama'           => $namaFinal,
+            'email'          => $row->user->email ?? '-',
+            'pangkat_gol'    => $row->pangkat_gol ?? '-',
+            
+            'jabatan'        => $row->jabatan ?? $jabatanDefault, 
+            
+            'status_pegawai' => $row->status_pegawai ?? '-',
+            'jk'             => $row->jenis_kelamin ?? '-',
+            'tempat'         => $row->tempat_lahir ?? '-',
+            'tanggal'        => $row->tanggal_lahir ?? '-',
+            'agama'          => $row->agama ?? '-',
+            'nohp'           => $row->no_hp ?? '-',
+            'alamat'         => $row->alamat ?? '-',
         ];
     }
 
     public function headings(): array
     {
         return [
-            'NIP', 'Nama Lengkap', 'Email', 'Jabatan', 'L/P', 
-            'Tempat Lahir', 'Tanggal Lahir', 'Agama', 'No HP', 'Alamat'
+            'NIP', 
+            'Nama Lengkap', 
+            'Email Akun', 
+            'Pangkat / Gol', 
+            'Jabatan', 
+            'Status Pegawai', 
+            'L/P', 
+            'Tempat Lahir', 
+            'Tanggal Lahir', 
+            'Agama', 
+            'No HP', 
+            'Alamat'
         ];
     }
 
-    /**
-     * @param mixed $row
-     * @return array
-     */
     public function map(mixed $row): array
     {
         return [
             $row['nip'],
             $row['nama'],
             $row['email'],
+            $row['pangkat_gol'],
             $row['jabatan'],
+            $row['status_pegawai'],
             $row['jk'],
             $row['tempat'],
             $row['tanggal'],
@@ -111,7 +122,8 @@ class GuruExport implements FromCollection, WithHeadings, WithMapping, WithColum
     public function columnFormats(): array
     {
         return [
-            'A' => NumberFormat::FORMAT_TEXT,
+            'A' => NumberFormat::FORMAT_TEXT, 
+            'K' => NumberFormat::FORMAT_TEXT, 
         ];
     }
 }

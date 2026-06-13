@@ -18,16 +18,31 @@ class PimpinanExport implements FromCollection, WithHeadings, WithMapping, WithC
 
     public function headings(): array
     {
-        return ['NIP', 'Nama Lengkap', 'L/P', 'Nomor HP', 'Status Jabatan'];
+        return [
+            'NIP', 
+            'Nama Lengkap', 
+            'Pangkat / Gol', 
+            'Jabatan', 
+            'Status Pegawai', 
+            'L/P', 
+            'Tempat Lahir', 
+            'Tanggal Lahir', 
+            'Agama', 
+            'Nomor HP', 
+            'Alamat', 
+            'Status Akun'
+        ];
     }
 
     public function map(mixed $pimpinan): array
     {
         $nip = $pimpinan->nip;
 
+        // Format NIP agar ada spasinya jika panjangnya pas 18 karakter
         if (strlen((string)$nip) === 18) {
             $nipResmi = substr($nip, 0, 8) . ' ' . substr($nip, 8, 6) . ' ' . substr($nip, 14, 1) . ' ' . substr($nip, 15, 3);
         } else {
+            // Tambahkan spasi di depan agar Excel tidak mengubah angka 0 di depan menjadi hilang
             $nipResmi = $nip ? ' ' . $nip : '-';
         }
 
@@ -36,8 +51,15 @@ class PimpinanExport implements FromCollection, WithHeadings, WithMapping, WithC
         return [
             $nipResmi,
             $namaFinal,
-            $pimpinan->jenis_kelamin,
+            $pimpinan->pangkat_gol ?? '-',
+            $pimpinan->jabatan ?? '-',
+            $pimpinan->status_pegawai ?? '-',
+            $pimpinan->jenis_kelamin ?? '-',
+            $pimpinan->tempat_lahir ?? '-',
+            $pimpinan->tanggal_lahir ?? '-',
+            $pimpinan->agama ?? '-',
             $pimpinan->no_hp ?? '-',
+            $pimpinan->alamat ?? '-',
             $pimpinan->status_aktif,
         ];
     }
@@ -46,7 +68,7 @@ class PimpinanExport implements FromCollection, WithHeadings, WithMapping, WithC
     {
         return [
             'A' => NumberFormat::FORMAT_TEXT, 
-            'D' => NumberFormat::FORMAT_TEXT, 
+            'J' => NumberFormat::FORMAT_TEXT, 
         ];
     }
 }

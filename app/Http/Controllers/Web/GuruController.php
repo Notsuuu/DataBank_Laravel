@@ -74,6 +74,9 @@ class GuruController extends Controller
             'agama' => 'required|string|max:50',
             'alamat' => 'required|string',  
             'no_hp' => 'nullable|string|max:20',
+            'pangkat_gol' => 'nullable|string|max:50',
+            'jabatan' => 'nullable|string|max:100',
+            'status_pegawai' => 'nullable|string|max:50',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -108,6 +111,9 @@ class GuruController extends Controller
                 'agama' => $request->agama,
                 'alamat' => $request->alamat,
                 'no_hp' => $request->no_hp,
+                'pangkat_gol' => $request->pangkat_gol,
+                'jabatan' => $request->jabatan,
+                'status_pegawai' => $request->status_pegawai,
                 'foto' => $fotoPath,
                 'status_aktif' => 'Aktif',
             ]);
@@ -143,6 +149,9 @@ class GuruController extends Controller
             'agama' => 'required|string|max:50',
             'alamat' => 'nullable|string',
             'no_hp' => 'nullable|string|max:15',
+            'pangkat_gol' => 'nullable|string|max:50',
+            'jabatan' => 'nullable|string|max:100',
+            'status_pegawai' => 'nullable|string|max:50',
             'status_aktif' => 'required|boolean',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);

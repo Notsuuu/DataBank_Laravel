@@ -11,7 +11,6 @@ class Pimpinan extends Model
 {
     use HasFactory;
 
-    // PASTIKAN SEMUA KOLOM INI MASUK KE FILLABLE
     protected $fillable = [
         'user_id',
         'nama_lengkap',
@@ -25,10 +24,13 @@ class Pimpinan extends Model
         'no_hp',
         'alamat',
         'status_aktif',
-        'foto',        // <-- Wajib untuk fitur Profil
-        'file_ktp',    // <-- Wajib untuk fitur Berkas
-        'file_ijazah', // <-- Wajib untuk fitur Berkas
-        'file_sk'      // <-- Wajib untuk fitur Berkas
+        'pangkat_gol',
+        'jabatan',
+        'status_pegawai',
+        'foto',        
+        'file_ktp',    
+        'file_ijazah', 
+        'file_sk'     
     ];
 
     public function user()

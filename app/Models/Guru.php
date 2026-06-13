@@ -13,7 +13,7 @@ class Guru extends Model
     protected $fillable = [
         'user_id', 'nip', 'nuptk', 'nama_lengkap', 'gelar_depan', 'gelar_belakang',
         'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 'agama', 'no_hp', 'alamat',
-        'foto', 'status_aktif', 
+        'foto', 'status_aktif', 'pangkat_gol', 'jabatan', 'status_pegawai',
         'file_ktp', 'file_ijazah', 'file_sk'
     ];
 

@@ -74,8 +74,11 @@
             <table class="w-full text-left text-sm text-slate-600">
                 <thead class="bg-slate-50 text-slate-700 border-b border-slate-200">
                     <tr>
-                        <th class="px-6 py-4 font-extrabold tracking-tight">Identitas Pimpinan</th>
-                        <th class="px-6 py-4 font-extrabold tracking-tight text-center">L/P</th>
+                        <th class="px-6 py-4 font-extrabold tracking-tight w-10 text-center">No</th>
+                        <th class="px-6 py-4 font-extrabold tracking-tight">Nama & NIP</th>
+                        <th class="px-6 py-4 font-extrabold tracking-tight">Pangkat/Gol</th>
+                        <th class="px-6 py-4 font-extrabold tracking-tight">Jabatan</th>
+                        <th class="px-6 py-4 font-extrabold tracking-tight text-center">Status ASN</th>
                         <th class="px-6 py-4 font-extrabold tracking-tight">Kontak</th>
                         <th class="px-6 py-4 font-extrabold tracking-tight text-center">Status</th>
                         <th class="px-6 py-4 font-extrabold tracking-tight text-center">Aksi</th>
@@ -84,6 +87,9 @@
                 <tbody class="divide-y divide-slate-100">
                     @forelse($para_pimpinan as $pimpinan)
                         <tr class="hover:bg-blue-50/50 transition-colors">
+                            <td class="px-6 py-4 text-center font-bold text-slate-400">
+                                {{ $loop->iteration }}
+                            </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-4">
                                     <div class="h-10 w-10 flex-shrink-0">
@@ -96,7 +102,7 @@
                                         @endif
                                     </div>
                                     <div>
-                                        <div class="font-bold text-slate-900">
+                                        <div class="font-bold text-slate-900 flex items-center gap-2">
                                             {{ $pimpinan->gelar_depan }} {{ $pimpinan->nama_lengkap }} {{ $pimpinan->gelar_belakang }}
                                         </div>
                                         <div class="text-[11px] font-semibold text-slate-500 mt-0.5">
@@ -106,14 +112,28 @@
                                 </div>
                             </td>
 
+                            <td class="px-6 py-4">
+                                <div class="text-xs font-bold text-slate-700">{{ $pimpinan->pangkat_gol ?? '-' }}</div>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                <div class="text-xs font-bold text-slate-700">{{ $pimpinan->jabatan ?? '-' }}</div>
+                            </td>
+
                             <td class="px-6 py-4 text-center">
-                                <span class="px-2.5 py-1 rounded text-xs font-bold text-slate-600 border border-slate-200 bg-slate-50">{{ $pimpinan->jenis_kelamin }}</span>
+                                @if($pimpinan->status_pegawai == 'PNS')
+                                    <span class="px-2.5 py-1 rounded text-xs font-bold text-blue-700 border border-blue-200 bg-blue-50">PNS</span>
+                                @elseif($pimpinan->status_pegawai == 'P3K' || $pimpinan->status_pegawai == 'P3K PW')
+                                    <span class="px-2.5 py-1 rounded text-xs font-bold text-emerald-700 border border-emerald-200 bg-emerald-50">{{ $pimpinan->status_pegawai }}</span>
+                                @else
+                                    <span class="px-2.5 py-1 rounded text-xs font-bold text-amber-700 border border-amber-200 bg-amber-50">{{ $pimpinan->status_pegawai ?? 'Honorer' }}</span>
+                                @endif
                             </td>
 
                             <td class="px-6 py-4">
                                 <div class="text-xs font-bold text-slate-700">{{ $pimpinan->no_hp ?? '-' }}</div>
                             </td>
-
+                            
                             <td class="px-6 py-4 text-center">
                                 @if($pimpinan->status_aktif == 'Aktif')
                                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold text-slate-600 border border-slate-200 bg-white shadow-sm">
