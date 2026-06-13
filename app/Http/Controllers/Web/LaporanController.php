@@ -95,11 +95,27 @@ class LaporanController extends Controller
         return $pdf->download($fileName);
     }
 
-    public function exportSiswaPDF()
+    public function exportSiswaPDF(Request $request) // Tambahkan Request di sini
     {
-        $data = Siswa::with('kelas')->get();
+        // Paksa PHP menggunakan resource maksimal
+        ini_set('max_execution_time', 300);
+        ini_set('memory_limit', '1024M'); // Limit didorong sampai 1GB
+
+        $query = Siswa::with('kelas')->orderBy('nama_lengkap', 'asc');
+
+        // Jika operator sedang memfilter kelas tertentu, terapkan ke PDF
+        if ($request->filled('kelas')) {
+            $query->where('kelas_id', $request->kelas);
+        }
+
+        $data = $query->get();
+
         $pdf = Pdf::loadView('laporan.siswa_pdf', compact('data'))->setPaper('a4', 'portrait');
-        return $pdf->download('Laporan_Data_Siswa_SMPN4Palu.pdf');
+        
+        // Buat nama file dinamis
+        $namaFile = $request->filled('kelas') ? 'Laporan_Siswa_Per_Kelas.pdf' : 'Laporan_Data_Siswa_SMPN4Palu.pdf';
+        
+        return $pdf->download($namaFile);
     }
 
     public function exportPimpinanPDF()

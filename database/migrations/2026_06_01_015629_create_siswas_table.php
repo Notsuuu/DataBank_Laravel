@@ -14,9 +14,6 @@ return new class extends Migration
         Schema::create('siswas', function (Blueprint $table) {
             $table->id();
 
-            // Berbeda dengan Guru, Siswa biasanya tidak butuh login di sistem informasi akademik dasar
-            // Jadi kita tidak perlu menghubungkannya dengan tabel users (kecuali nanti ada portal khusus siswa)
-
             $table->string('nis', 20)->unique();
             $table->string('nisn', 20)->unique()->nullable();
             $table->string('nama_lengkap');
@@ -25,10 +22,6 @@ return new class extends Migration
             $table->date('tanggal_lahir');
             $table->string('agama', 20);
             $table->text('alamat')->nullable();
-
-            // Data Orang Tua/Wali (untuk keperluan darurat/akademik)
-            $table->string('nama_wali')->nullable();
-            $table->string('no_hp_wali', 15)->nullable();
 
             $table->string('foto')->nullable();
 

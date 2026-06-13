@@ -41,7 +41,7 @@
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">NIP</label>
                         <input type="text" name="nip" value="{{ old('nip', $pimpinan->nip) }}" class="w-full rounded-lg border-slate-300 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors">
                     </div>
-
+                    
                     <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div class="md:col-span-1">
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Gelar Depan</label>

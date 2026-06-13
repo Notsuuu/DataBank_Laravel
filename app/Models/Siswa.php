@@ -11,12 +11,6 @@ class Siswa extends Model
     use HasFactory, SoftDeletes; 
 
     protected $guarded = ['id'];
-    
-    protected $fillable = [
-        'nis', 'nisn', 'nama_lengkap', 'jenis_kelamin', 'tempat_lahir', 
-        'tanggal_lahir', 'agama', 'alamat', 'nama_wali', 'no_hp_wali', 
-        'foto', 'kelas_id'
-    ];
 
     public function kelas()
     {
@@ -27,4 +21,5 @@ class Siswa extends Model
     {
         return $this->hasMany(Rombel::class, 'siswa_id');
     }
+    
 }

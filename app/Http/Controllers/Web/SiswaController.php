@@ -58,15 +58,28 @@ class SiswaController extends Controller
         $request->validate([
             'nis' => 'required|string|max:20|unique:siswas,nis',
             'nisn' => 'nullable|string|max:20|unique:siswas,nisn',
+            'nik' => 'nullable|string|max:20',
             'nama_lengkap' => 'required|string|max:255',
             'jenis_kelamin' => 'required|in:L,P',
             'tempat_lahir' => 'required|string|max:50',
             'tanggal_lahir' => 'required|date',
             'agama' => 'required|string|max:20',
+                        
             'alamat' => 'nullable|string',
-            'nama_wali' => 'nullable|string|max:255',
-            'no_hp_wali' => 'nullable|string|max:15',
-            'kelas_id' => 'nullable|exists:kelas,id', // Validasi kelas
+            'rt' => 'nullable|string|max:5',
+            'rw' => 'nullable|string|max:5',
+            'kelurahan' => 'nullable|string|max:100',
+            'kecamatan' => 'nullable|string|max:100',
+            'kode_pos' => 'nullable|string|max:10',
+            
+            'no_hp_siswa' => 'nullable|string|max:20',
+            
+            'nama_ayah' => 'nullable|string|max:255',
+            'pekerjaan_ayah' => 'nullable|string|max:100',
+            'nama_ibu' => 'nullable|string|max:255',
+            'pekerjaan_ibu' => 'nullable|string|max:100',
+            
+            'kelas_id' => 'nullable|exists:kelas,id',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -97,14 +110,27 @@ class SiswaController extends Controller
         $request->validate([
             'nis' => 'required|string|max:20|unique:siswas,nis,' . $siswa->id,
             'nisn' => 'nullable|string|max:20|unique:siswas,nisn,' . $siswa->id,
+            'nik' => 'nullable|string|max:20',
             'nama_lengkap' => 'required|string|max:255',
             'jenis_kelamin' => 'required|in:L,P',
             'tempat_lahir' => 'required|string|max:50',
             'tanggal_lahir' => 'required|date',
             'agama' => 'required|string|max:20',
+            
             'alamat' => 'nullable|string',
-            'nama_wali' => 'nullable|string|max:255',
-            'no_hp_wali' => 'nullable|string|max:15',
+            'rt' => 'nullable|string|max:5',
+            'rw' => 'nullable|string|max:5',
+            'kelurahan' => 'nullable|string|max:100',
+            'kecamatan' => 'nullable|string|max:100',
+            'kode_pos' => 'nullable|string|max:10',
+            
+            'no_hp_siswa' => 'nullable|string|max:20',
+
+            'nama_ayah' => 'nullable|string|max:255',
+            'pekerjaan_ayah' => 'nullable|string|max:100',
+            'nama_ibu' => 'nullable|string|max:255',
+            'pekerjaan_ibu' => 'nullable|string|max:100',
+            
             'kelas_id' => 'nullable|exists:kelas,id',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
@@ -112,7 +138,6 @@ class SiswaController extends Controller
         $data = $request->except(['foto']);
 
         if ($request->hasFile('foto')) {
-            // Hapus foto lama jika ada
             if ($siswa->foto && Storage::disk('public')->exists($siswa->foto)) {
                 Storage::disk('public')->delete($siswa->foto);
             }

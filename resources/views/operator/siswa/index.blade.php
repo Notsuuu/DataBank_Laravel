@@ -42,10 +42,10 @@
                     Unduh Excel
                 </a>
 
-                <a href="{{ route('operator.laporan.siswa.pdf') }}" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
+                <a href="{{ route('operator.laporan.siswa.pdf', request()->query()) }}" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                     Cetak PDF
-                    </a>
+                </a>
             </div>
         </div>
 
@@ -106,7 +106,7 @@
                         <th class="px-6 py-4 font-extrabold tracking-tight">Profil Siswa</th>
                         <th class="px-6 py-4 font-extrabold tracking-tight">NIS / NISN</th>
                         <th class="px-6 py-4 font-extrabold tracking-tight text-center">L/P</th>
-                        <th class="px-6 py-4 font-extrabold tracking-tight">Wali / Kontak</th>
+                        <th class="px-6 py-4 font-extrabold tracking-tight">Orang Tua / Kontak</th>
                         <th class="px-6 py-4 font-extrabold tracking-tight text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -128,7 +128,7 @@
                                 <div>
                                     <div class="font-bold text-slate-900">{{ $s->nama_lengkap }}</div>
                                     <div class="text-[11px] font-semibold text-slate-500 mt-0.5">
-                                        {{ $s->tempat_lahir }}, {{ \Carbon\Carbon::parse($s->tanggal_lahir)->format('d M Y') }}
+                                        {{ $s->tempat_lahir ?? '-' }}, {{ $s->tanggal_lahir ? \Carbon\Carbon::parse($s->tanggal_lahir)->format('d M Y') : '-' }}
                                     </div>
 
                                     @if($s->kelas)
@@ -146,7 +146,7 @@
 
                         <td class="px-6 py-4">
                             <div class="font-mono text-xs font-bold text-slate-700 bg-white border border-slate-200 shadow-sm px-2 py-0.5 rounded inline-block mb-1">
-                                {{ $s->nis }}
+                                {{ $s->nis ?? '-' }}
                             </div>
                             <div class="font-mono text-xs font-semibold text-slate-500 block">
                                 NISN: <span class="font-bold text-slate-600">{{ $s->nisn ?? '-' }}</span>
@@ -162,10 +162,13 @@
                         </td>
 
                         <td class="px-6 py-4">
-                            <div class="text-xs font-extrabold text-slate-800">{{ $s->nama_wali ?? '-' }}</div>
-                            <div class="text-[11px] font-semibold text-slate-500 mt-0.5">{{ $s->no_hp_wali ?? 'Tidak ada kontak' }}</div>
+                            <div class="text-xs font-extrabold text-slate-800">
+                                {{ $s->nama_ayah ?? $s->nama_ibu ?? $s->nama_wali ?? 'Data tidak ada' }}
+                            </div>
+                            <div class="text-[11px] font-semibold text-slate-500 mt-0.5">
+                                HP: {{ $s->no_hp_siswa ?? $s->no_hp_wali ?? 'Tidak ada kontak' }}
+                            </div>
                         </td>
-
                         <td class="px-6 py-4 text-center">
                             <div class="flex justify-center items-center gap-3">
                                 <a href="{{ route('operator.siswa.edit', $s->id) }}" class="text-blue-600 hover:text-blue-800 font-bold transition-colors">Edit</a>
